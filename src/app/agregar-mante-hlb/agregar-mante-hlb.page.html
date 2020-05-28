@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>+ Agregar mantenimiento hlb</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/main-mante-hlb"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="seetingsForm" (ngSubmit)="submit()">
+
+    <ion-list>
+
+      <ion-item>
+        <ion-label position="stacked">Pais</ion-label>
+        <ion-input formControlName="pais" type="text" clearOnEdit="false"></ion-input>
+      </ion-item>
+
+      <ion-radio-group formControlName="tipo" (ionChange)="changeType($event)">
+        <ion-list-header>
+          <ion-label>
+            Tipo
+          </ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Traspatio</ion-label>
+          <ion-radio value="traspatio"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Productor</ion-label>
+          <ion-radio value="productor"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Ticofrut</ion-label>
+          <ion-radio value="ticofrut"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+
+      <ion-item>
+        <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
+        <ion-input formControlName="finca_poblado" type="text" clearOnEdit="false"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
+        <ion-input formControlName="lote_propietario" type="text" clearOnEdit="false"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Latitud</ion-label>
+        <ion-input formControlName="latitud" type="number" focus></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Longitud</ion-label>
+        <ion-input formControlName="longitud" type="number" focus></ion-input>
+      </ion-item>
+
+      <ion-button (click)="openMap()">
+        <ion-icon slot="icon-only" name="location-outline"></ion-icon>
+      </ion-button><br>
+
+      <ion-button color="danger" (click)="borrarCoordenadas()">Borrar coordenadas</ion-button>
+  
+    </ion-list>
+  
+    <ion-button expand="block" type="submit">Guardar</ion-button>
+
+
+  </form>
+
+</ion-content>

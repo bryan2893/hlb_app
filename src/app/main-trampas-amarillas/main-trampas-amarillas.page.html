@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar *ngIf="!searchBarActive">
+    <ion-title>Trampas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="change()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+      <ion-back-button defaultHref="/menu-mantenimientos"></ion-back-button>
+    </ion-buttons>
+    <!--<ion-icon name="search"></ion-icon>-->
+  </ion-toolbar>
+</ion-header>
+<!-- Searchbar with a cancel button and custom cancel button text -->
+<ion-searchbar (ionCancel)="change()" #searchbar *ngIf="searchBarActive" inputmode="numeric" showCancelButton="always" cancelButtonText="Custom Cancel"></ion-searchbar>
+
+<ion-content>
+
+   <ion-list>
+    <ion-item *ngFor="let trap of traps">
+      <ion-label>
+        <h2>Trampa #{{trap.num_trampa}}</h2>
+        <h3>Tipo: {{trap.tipo}}</h3>
+        <p>{{trap.finca_poblado}}, {{trap.lote_propietario}}</p>
+      </ion-label>
+    </ion-item>
+   </ion-list>
+
+   <ion-infinite-scroll threshold="110px" (ionInfinite)="loadTraps($event)" [disabled]="pageCounter > pagesQuantity">
+     <ion-infinite-scroll-content  
+       loadingSpinner="circles"  
+       loadingText="Cargando trampas....">  
+     </ion-infinite-scroll-content>  
+   </ion-infinite-scroll>
+
+  <!--<ion-list>
+    <ion-item *ngFor="let trap of traps"></ion-item>
+  </ion-list>
+ 
+  <ion-infinite-scroll (ionInfinite)="loadTraps($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando trampas...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>-->
+
+</ion-content>
+
+ <!-- fab placed to the bottom start -->
+ <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button [routerLink]="['/agregar-trampa']">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

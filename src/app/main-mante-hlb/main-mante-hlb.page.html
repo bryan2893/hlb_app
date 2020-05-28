@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar *ngIf="!searchBarActive">
+    <ion-title>Mantenimientos hlb</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="change()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+      <ion-back-button defaultHref="/menu-mantenimientos"></ion-back-button>
+    </ion-buttons>
+    <!--<ion-icon name="search"></ion-icon>-->
+  </ion-toolbar>
+</ion-header>
+<!-- Searchbar with a cancel button and custom cancel button text -->
+<ion-searchbar (ionCancel)="change()" #searchbar *ngIf="searchBarActive" inputmode="text" showCancelButton="always" cancelButtonText="Custom Cancel"></ion-searchbar>
+
+<ion-content>
+
+   <ion-list>
+    <ion-item *ngFor="let mantain of mantains">
+      <ion-label>
+        <h2>País: {{mantain.pais}}</h2>
+        <h3>Tipo: {{mantain.tipo}}</h3>
+        <p>{{mantain.finca_poblado}}, {{mantain.lote_propietario}}</p>
+      </ion-label>
+    </ion-item>
+   </ion-list>
+
+   <ion-infinite-scroll threshold="110px" (ionInfinite)="loadMantains($event)" [disabled]="pageCounter > pagesQuantity">
+     <ion-infinite-scroll-content  
+       loadingSpinner="circles"  
+       loadingText="Cargando mantenimientos....">  
+     </ion-infinite-scroll-content>  
+   </ion-infinite-scroll>
+
+</ion-content>
+
+<!-- fab placed to the bottom start -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button [routerLink]="['/agregar-mante-hlb']">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

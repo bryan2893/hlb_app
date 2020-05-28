@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/main"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Configuración general</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="seetingsForm" (ngSubmit)="submit()">
+
+    <ion-list>
+
+      <ion-item>
+        <ion-label position="stacked">Radio de alcance</ion-label>
+        <ion-input formControlName="radio_de_alcance" type="number" clearOnEdit="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">Volumen de registros</ion-label>
+        <ion-input formControlName="volumen_de_registros" type="number"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">Link de sincronizacion</ion-label>
+        <ion-input formControlName="link_de_sincronizacion" type="url"></ion-input>
+      </ion-item>
+  
+      <ion-radio-group formControlName="pais">
+        <ion-list-header>
+          <ion-label>
+            País
+          </ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Costa Rica</ion-label>
+          <ion-radio value="costa rica"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Nicaragua</ion-label>
+          <ion-radio value="nicaragua"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+  
+      <ion-item>
+        <ion-label position="stacked">Días permitidos</ion-label>
+        <ion-input formControlName="dias_permitidos" type="number" focus></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">Versión</ion-label>
+        <ion-input formControlName="version" type="text" focus></ion-input>
+      </ion-item>
+      
+  
+    </ion-list>
+  
+    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
+
+  </form>
+
+</ion-content>

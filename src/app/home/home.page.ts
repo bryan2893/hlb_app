@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {AuthService} from '../services/auth.service';
+import User from '../../DTO/User.dto';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +10,25 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  formFields = {
+    username: "",
+    password: ""
+  };
 
+  constructor(private authService: AuthService,private router: Router) {}
+
+  loginUser(){
+
+    console.log("Puedo debuguear!!");
+    this.router.navigate(['/main']);
+    /*
+    this.authService.validateUser(this.formFields.username,this.formFields.password).then((user:User) => {
+      //alert(JSON.stringify(user));
+    }).catch((error) => {
+      alert(error.message)
+    });
+    */
+    
+  }
+  
 }
