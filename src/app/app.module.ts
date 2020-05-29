@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import {SQLite} from '@ionic-native/sqlite/ngx';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {GoogleMaps} from '@ionic-native/google-maps/ngx';
+import {HTTP} from '@ionic-native/http/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,7 +24,8 @@ import {GoogleMaps} from '@ionic-native/google-maps/ngx';
     SQLite,
     NativeStorage,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    GoogleMaps
+    GoogleMaps,
+    HTTP
   ],
   bootstrap: [AppComponent]
 })

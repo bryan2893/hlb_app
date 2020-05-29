@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import Mantenimiento_Trampa from 'src/DTO/local/mantenimiento_trampa_guardado.dto';
+//import Mantenimiento_Trampa from 'src/DTO/local/mantenimiento_trampa_guardado.dto';
+
+import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +9,8 @@ import Mantenimiento_Trampa from 'src/DTO/local/mantenimiento_trampa_guardado.dt
 export class ExternalDbService {
 
   constructor() { }
+  
+  getTrapsPage()
 
   get_fake_Traps_Mantain(): Promise<any[]>{
     return new Promise((resolve,reject)=>{
