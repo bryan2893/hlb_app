@@ -4,6 +4,7 @@ import {ActivatedRoute,Router} from '@angular/router';
 import {ModalController} from '@ionic/angular';
 import {LocalDbService as MantenimientosHlbLocalDbService} from '../services/mantenimientos_hlb/local-db.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
+import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 
 @Component({
   selector: 'app-agregar-mante-hlb',
@@ -24,9 +25,9 @@ export class AgregarManteHlbPage implements OnInit {
     public modalController:ModalController,
     private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router:Router,
-    private previousUrlHolderService: PreviousUrlHolderService) {
+    private previousUrlHolderService: PreviousUrlHolderService,
+    private almacenamientoNativoService:AlmacenamientoNativoService) {
     this.seetingsForm = this.formBuilder.group({
-      pais:['',Validators.required],
       tipo:['traspatio',Validators.required],
       finca_poblado:['',Validators.required],
       lote_propietario:['',Validators.required],
@@ -62,13 +63,22 @@ export class AgregarManteHlbPage implements OnInit {
     }
   }
 
-  submit(){
+  async submit(){
     if(this.seetingsForm.dirty){//si todos los campos estan completados...
 
       let hlbMantainRegisterToSave:any = {};
 
-      hlbMantainRegisterToSave['id_original'] = -1;
-      hlbMantainRegisterToSave['pais'] = this.seetingsForm.controls['pais'].value;
+      hlbMantainRegisterToSave['id_traspatio_finca'] = -1;
+
+      //Se obtiene el pais del almacenamiento interno del telefono.
+      let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+
+      let paisRecuperado:string;
+      if(parametrosDeConfiguracion !== null){
+        paisRecuperado = parametrosDeConfiguracion.pais;
+      }
+
+      hlbMantainRegisterToSave['pais'] = paisRecuperado;
       hlbMantainRegisterToSave['tipo'] = this.seetingsForm.controls['tipo'].value;
       hlbMantainRegisterToSave['finca_poblado'] = this.seetingsForm.controls['finca_poblado'].value;
       hlbMantainRegisterToSave['lote_propietario'] = this.seetingsForm.controls['lote_propietario'].value;
@@ -77,8 +87,8 @@ export class AgregarManteHlbPage implements OnInit {
       hlbMantainRegisterToSave['estado'] = 1;
       hlbMantainRegisterToSave['sincronizado'] = 0;
 
-      this.mantenimientosHlbLocalDbService.insertAnHlbMantain(hlbMantainRegisterToSave).then((hlbMantain)=>{
-        alert("Mantenimiento hlb insertado correctamente!");
+      this.mantenimientosHlbLocalDbService.insertATraspatioFinca(hlbMantainRegisterToSave).then((hlbMantain)=>{
+        alert("Mantenimiento hlb insertado correctamente!" + JSON.stringify(hlbMantain));
       }).catch((error)=>{
         alert(error.message);
       });

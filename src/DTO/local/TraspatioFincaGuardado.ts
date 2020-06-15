@@ -1,6 +1,7 @@
-export default interface Mantenimiento_Trampa_Nuevo{
-    id_original:Number;
-    num_trampa: Number;
+export interface TraspatioFincaGuardado{
+    id_local:Number;
+    id_traspatio_finca:Number;
+    pais: String;
     tipo:String;
     finca_poblado:String;
     lote_propietario:String;

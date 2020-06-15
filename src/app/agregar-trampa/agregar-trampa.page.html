@@ -48,9 +48,7 @@
       <ion-item *ngIf="isSelectPropietarioLoteActive">
         <ion-label>{{lote_propietario_key}}</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="lote_propietario">
-
           <ion-select-option *ngFor="let propietario_lote of propietarios_lotes" value={{propietario_lote}}>{{propietario_lote}}</ion-select-option>
-
         </ion-select>
       </ion-item>
 

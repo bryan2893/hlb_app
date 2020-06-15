@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import Settings from '../../DTO/settings.dto';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
+import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 
 @Component({
   selector: 'app-settings',
@@ -12,7 +12,7 @@ export class SettingsPage implements OnInit {
 
   seetingsForm: FormGroup;
 
-  constructor(private nativeStorage: NativeStorage, private formBuilder: FormBuilder) {
+  constructor(private almacenamientoNativoService: AlmacenamientoNativoService, private formBuilder: FormBuilder) {
 
     this.seetingsForm = this.formBuilder.group({
       radio_de_alcance:[''],
@@ -25,29 +25,50 @@ export class SettingsPage implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.nativeStorage.keys().then((data)=>{
-      if(data.length > 0){
-        this.getSettings();
-      }
-    })
+  ngOnInit(){}
+
+  
+  ionViewWillEnter(){
+    this.getSettings();
   }
 
-  saveSettings(configuracion:Settings){
-    this.nativeStorage.setItem('settings',configuracion).then(()=> {
-      alert("Cofiguraciones almacenadas!!");
-    }).catch(()=>{
-      alert("Problema al intentar guardar las configuraciones!");
-    });
+  validarParametros(parametrosDeConfiguracion:Settings){
+    if(parametrosDeConfiguracion.radio_de_alcance === null
+     || parametrosDeConfiguracion.volumen_de_registros === null 
+     || parametrosDeConfiguracion.link_de_sincronizacion === null 
+     || parametrosDeConfiguracion.pais === null 
+     || parametrosDeConfiguracion.dias_permitidos === null 
+     || parametrosDeConfiguracion.version === null){
+       return false;
+     }else{
+       return true;
+     }
+  }
+  
+
+  saveSettings(parametrosDeConfiguracion:Settings){
+
+    console.log(this.validarParametros(parametrosDeConfiguracion));
+    console.log(parametrosDeConfiguracion);
+
+    if(this.validarParametros(parametrosDeConfiguracion)){
+      this.almacenamientoNativoService.almacenarParametrosDeConfiguracion(parametrosDeConfiguracion).then((respuesta)=>{
+        alert("Cofiguraciones almacenadas!!");
+      }).catch((error)=>{
+        alert("Problema al intentar guardar las configuraciones!");
+      });
+    }else{
+      alert("Todos los campos son obligatorios!");
+    }
   }
 
   getSettings(){
-    this.nativeStorage.getItem('settings').then((data)=> {
-      let seetings:Settings;
-      seetings = data;
-      this.seetingsForm.setValue(seetings);
-    }).catch(()=>{
-      alert("Problema al intentar obtener las configuraciones!");
+    this.almacenamientoNativoService.obtenerParametrosDeConfiguracion().then((parametrosDeConfiguracion)=>{
+      if(parametrosDeConfiguracion){
+        this.seetingsForm.setValue(parametrosDeConfiguracion);
+      }
+    }).catch((error)=>{
+      alert(error.message);
     });
   }
 

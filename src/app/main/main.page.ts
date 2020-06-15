@@ -1,13 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
-import {ExternalDbService as ServicioManteTrampasAmarillasDbExterna} from '../services/mantenimiento_trampas/external-db.service';
-
-import {ExternalDbService as ServicioManteHlbDbExterna} from '../services/mantenimientos_hlb/external-db.service';
-
-import {LocalDbService as ServicioManteHlbDbInterna} from '../services/mantenimientos_hlb/local-db.service';
-
-import {LocalDbService as ServicioManteTrampasAmarillasDbInterna} from '../services/mantenimiento_trampas/local-db.service';
-
+import {SincronizacionService} from '../services/sincronizacion.service';
 import {LoaderService} from '../services/loader.service';
 
 @Component({
@@ -17,31 +9,20 @@ import {LoaderService} from '../services/loader.service';
 })
 export class MainPage implements OnInit {
 
-  constructor(
-    private loaderService: LoaderService,
-    private localDb: ServicioManteTrampasAmarillasDbInterna,
-    private servicioManteTrampasDbExterna:ServicioManteTrampasAmarillasDbExterna,
-    private servicioHlbDbInterna:ServicioManteHlbDbInterna,
-    private servicioManteHlbDbExterna:ServicioManteHlbDbExterna
-    ) { }
+  constructor(private servicioDeSincronizacion:SincronizacionService,private loaderService:LoaderService) { }
 
   ngOnInit() {}
 
-  async sincronizar(){
-
+  async sincronizarPrueba(){
     try{
-      const loading = await this.loaderService.showLoader();
-      await loading.present();
-      let trapsMantains = await this.servicioManteTrampasDbExterna.get_fake_Traps_Mantain();
-      let hlbMantains = await this.servicioManteHlbDbExterna.get_fake_hlb_mantains();
-      await this.localDb.insert_many_traps(trapsMantains);
-      await this.servicioHlbDbInterna.insert_many_hlb_mantains(hlbMantains);
+      await this.loaderService.showLoader();
+      await this.servicioDeSincronizacion.sincronizarTodo();
       await this.loaderService.hideLoader();
+      alert('sincronización completada!');
     }catch(error){
       await this.loaderService.hideLoader();
       alert(error.message);
     }
-    
   }
 
 }

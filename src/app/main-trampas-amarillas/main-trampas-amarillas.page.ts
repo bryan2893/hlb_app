@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
-import Trap from '../../DTO/local/mantenimiento_trampa_guardado.dto';
 import {LocalDbService} from '../services/mantenimiento_trampas/local-db.service';
 
 @Component({
@@ -54,7 +53,7 @@ export class MainTrampasAmarillasPage implements OnInit {
   async contarRegistros(){
 
     try{
-      let registro = await this.localDbService.count_traps();
+      let registro = await this.localDbService.countTraps();
       alert(registro.cantidad);
       return registro.cantidad;
     }catch(error){

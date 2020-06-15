@@ -4,6 +4,7 @@ import {ActivatedRoute,Router} from '@angular/router';
 import {LocalDbService as MantenimientosTrampasLocalDbService} from '../services/mantenimiento_trampas/local-db.service';
 import {LocalDbService as MantenimientosHlbLocalDbService} from '../services/mantenimientos_hlb/local-db.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
+import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 
 @Component({
   selector: 'app-agregar-trampa',
@@ -31,7 +32,8 @@ export class AgregarTrampaPage implements OnInit {
     private mantenimientosTrampasLocalDbService:MantenimientosTrampasLocalDbService,
     private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router: Router,
-    private previousUrlHolderService:PreviousUrlHolderService) {
+    private previousUrlHolderService:PreviousUrlHolderService,
+    private almacenamientoNativoService:AlmacenamientoNativoService) {
 
     this.seetingsForm = this.formBuilder.group({
       num_trampa:['',Validators.required],
@@ -78,35 +80,48 @@ export class AgregarTrampaPage implements OnInit {
       this.seetingsForm.controls['latitud'].patchValue(this.coords.latitud);
       this.seetingsForm.controls['longitud'].patchValue(this.coords.longitud);
     }
+    this.almacenamientoNativoService.obtenerParametrosDeConfiguracion().then((parametrosDeConfiguracion)=>{
+      if(parametrosDeConfiguracion === null){
+
+      }
+    });
   }
 
   ngOnInit() {
+
   }
 
-  submit(){
-    if(this.seetingsForm.dirty){//si todos los campos estan completados...
+  async submit(){
 
-      let trapMantainRegisterToSave:any = {};
+    try{
+      if(this.seetingsForm.dirty){//si todos los campos estan completados...
 
-      trapMantainRegisterToSave['id_original'] = -1;
-      trapMantainRegisterToSave['num_trampa'] = this.seetingsForm.controls['num_trampa'].value;
-      trapMantainRegisterToSave['tipo'] = this.seetingsForm.controls['tipo'].value;
-      trapMantainRegisterToSave['finca_poblado'] = this.seetingsForm.controls['finca_poblado'].value;
-
-      trapMantainRegisterToSave['lote_propietario'] = this.seetingsForm.controls['lote_propietario'].value;
-      trapMantainRegisterToSave['latitud'] = this.seetingsForm.controls['latitud'].value;
-      trapMantainRegisterToSave['longitud'] = this.seetingsForm.controls['longitud'].value;
-      trapMantainRegisterToSave['estado'] = 1;
-      trapMantainRegisterToSave['sincronizado'] = 0;
-
-      this.mantenimientosTrampasLocalDbService.insertAtrap(trapMantainRegisterToSave).then((trap)=>{
+        let pais:string;
+        let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+        if(configuracionesGenerales !== null){
+          pais = configuracionesGenerales.pais;
+        }
+  
+        let trapMantainRegisterToSave:any = {};
+  
+        trapMantainRegisterToSave['id_trampa'] = -1;
+        trapMantainRegisterToSave['num_trampa'] = this.seetingsForm.controls['num_trampa'].value;
+        trapMantainRegisterToSave['tipo'] = this.seetingsForm.controls['tipo'].value;
+        trapMantainRegisterToSave['pais'] = pais;
+        trapMantainRegisterToSave['finca_poblado'] = this.seetingsForm.controls['finca_poblado'].value;
+        trapMantainRegisterToSave['lote_propietario'] = this.seetingsForm.controls['lote_propietario'].value;
+        trapMantainRegisterToSave['latitud'] = this.seetingsForm.controls['latitud'].value;
+        trapMantainRegisterToSave['longitud'] = this.seetingsForm.controls['longitud'].value;
+        trapMantainRegisterToSave['estado'] = 1;
+        trapMantainRegisterToSave['sincronizado'] = 0;
+  
+        await  this.mantenimientosTrampasLocalDbService.insertAtrap(trapMantainRegisterToSave);
         alert("Trampa insertada correctamente!");
-      }).catch((error)=>{
-        alert(error.message);
-      });
-
-    }else{
-      alert("Verifique que los datos está completos!");
+      }else{
+        alert("Verifique que los datos están completos!");
+      }
+    }catch(error){
+      alert(error.message);
     }
   }
 

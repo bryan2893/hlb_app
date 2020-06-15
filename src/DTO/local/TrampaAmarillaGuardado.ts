@@ -1,8 +1,9 @@
-export default interface Mantenimiento_Trampa_Guardado{
+export interface TrampaAmarillaGuardado{
     id_local:Number;
-    id_original:Number;
+    id_trampa:Number;
     num_trampa: Number;
     tipo:String;
+    pais:String;
     finca_poblado:String;
     lote_propietario:String;
     latitud: Number;

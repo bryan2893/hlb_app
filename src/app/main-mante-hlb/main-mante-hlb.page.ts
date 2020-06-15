@@ -21,17 +21,13 @@ export class MainManteHlbPage implements OnInit {
   ionViewWillEnter(){
     this.mantains = [];
     this.pageCounter = 1;
-    this.localDbService.isDatabaseReady().subscribe((response)=>{
-      if(response){
-        this.localDbService.getPagesQuantity(this.rowsPerPage).then((quantity:number)=>{
-          this.pagesQuantity = quantity;
-        }).then(()=>{
-          this.localDbService.getHlbMantainPage(this.pageCounter,this.rowsPerPage).then((mantainsList)=>{
-            this.addMoreHlbMantains(mantainsList);
-            this.pageCounter += 1;
-          });
-        });
-      }
+    this.localDbService.getPagesQuantity(this.rowsPerPage).then((quantity:number)=>{
+      this.pagesQuantity = quantity;
+    }).then(()=>{
+      this.localDbService.getTraspatiosFincasPage(this.pageCounter,this.rowsPerPage).then((mantainsList)=>{
+        this.addMoreHlbMantains(mantainsList);
+        this.pageCounter += 1;
+      });
     });
   }
 
@@ -45,7 +41,7 @@ export class MainManteHlbPage implements OnInit {
   }
 
   obtenerPaginaTrampas(){
-    this.localDbService.getHlbMantainPage(1,0).then((data)=>{
+    this.localDbService.getTraspatiosFincasPage(1,0).then((data)=>{
       alert(JSON.stringify(data));
     });
   }
@@ -53,7 +49,7 @@ export class MainManteHlbPage implements OnInit {
   async contarRegistros(){
 
     try{
-      let registro = await this.localDbService.count_hlb_mantains();
+      let registro = await this.localDbService.countTraspatiosFincas();
       alert(registro.cantidad);
       return registro.cantidad;
     }catch(error){
@@ -70,7 +66,7 @@ export class MainManteHlbPage implements OnInit {
   }
 
   loadMantains(event){
-    this.localDbService.getHlbMantainPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
+    this.localDbService.getTraspatiosFincasPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
       this.addMoreHlbMantains(trapsList);
       this.pageCounter += 1;
       event.target.complete();

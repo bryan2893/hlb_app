@@ -1,41 +1,24 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {SQLite,SQLiteObject} from '@ionic-native/sqlite/ngx';
-import {Platform} from '@ionic/angular';
-import Mantenimiento_Hlb from '../../../DTO/local/mantenimiento_hlb._guardado.dto';
+import {DbServiceService} from '../../services/database/db-service.service';
+import {TraspatioFincaNuevo} from '../../../DTO/local/TraspatioFincaNuevo';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalDbService {
+  private createTableUrl = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';
 
-  private storage: SQLiteObject;
-  private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  constructor(private dbService: DbServiceService) {}
 
-  constructor(private sqlite: SQLite,private platform: Platform) {
-    this.platform.ready().then(()=>{
-      this.sqlite.create({name:'hlb_db.db',location:'default'}).then((db:SQLiteObject)=>{
-        this.storage = db;
-        this.isDbReady.next(true);
-      });
-
-    }).catch((error) => {
-      alert(error.message);
-    });
-  }
-
-  isDatabaseReady(){
-    return this.isDbReady.asObservable();
-  }
-
-  getHlbMantainPage(pageNumber:number,rowsPerPage:number){
+  getTraspatiosFincasPage(pageNumber:number,rowsPerPage:number){
 
     return new Promise((resolve,reject)=>{
-
-      this.storage.executeSql('create table IF NOT EXISTS mantenimiento_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_original INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER)', [])
+      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
+        if(isDataBaseReady){
+          this.dbService.storage.executeSql(this.createTableUrl, [])
           .then(() => {
             let offset = (pageNumber - 1) * rowsPerPage;
-            this.storage.executeSql('SELECT * FROM mantenimiento_hlb limit ?,?',[offset,rowsPerPage]).then((data)=>{
+            this.dbService.storage.executeSql('SELECT * FROM traspatios_fincas limit ?,?',[offset,rowsPerPage]).then((data)=>{
 
               let hlbMantainPage = [];
               if (data.rows.length > 0) {
@@ -43,6 +26,7 @@ export class LocalDbService {
                   hlbMantainPage.push(data.rows.item(i));
                 }
               }
+
               resolve(hlbMantainPage);
 
             }).catch((e) => {
@@ -51,14 +35,51 @@ export class LocalDbService {
           }).catch((e) => {
             reject(e);
           });
+        }else{
+
+        }
+      });
           
     });
     
   }
 
+  getNoSincronizedTraspatiosFincasPage(pageNumber:number,rowsPerPage:number){
+    
+    return new Promise((resolve,reject)=>{
+      this.dbService.isDatabaseReady().subscribe((dbIsReady)=>{
+        if(dbIsReady){
+
+          this.dbService.storage.executeSql(this.createTableUrl, [])
+          .then(() => {
+            let offset = (pageNumber - 1) * rowsPerPage;
+            this.dbService.storage.executeSql('SELECT id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado FROM traspatios_fincas where sincronizado = ? limit ?,?',[0,offset,rowsPerPage]).then((registrosTrampas)=>{
+
+              let trapsPage = [];
+              if (registrosTrampas.rows.length > 0) {
+                for (var i = 0; i < registrosTrampas.rows.length; i++) { 
+                  trapsPage.push(registrosTrampas.rows.item(i));
+                }
+              }
+              resolve(trapsPage);
+            }).catch((e) => {
+              reject(e);
+            });
+          }).catch((e) => {
+            reject(e);
+          });
+        }
+        else{
+          reject({message:"La base de datos no se ha creado aún!"});
+        }
+      });
+      
+    });
+  }
+
   getPagesQuantity(rowsPerPage:number){
     return new Promise((resolve,reject)=>{
-      this.count_hlb_mantains().then((data)=>{
+      this.countTraspatiosFincas().then((data:any)=>{
         let hlbMantainQuantity = data.cantidad;
 
         let divisionResiduo = hlbMantainQuantity % rowsPerPage;
@@ -77,12 +98,15 @@ export class LocalDbService {
     })
   }
 
-  count_hlb_mantains():any{
+  countTraspatiosFincas():any{
 
     return new Promise((resolve,reject) => {
-      this.storage.executeSql('create table IF NOT EXISTS mantenimiento_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_original INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER)', [])
+
+      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
+        if(isDataBaseReady){
+          this.dbService.storage.executeSql(this.createTableUrl, [])
           .then(() => {
-            this.storage.executeSql('SELECT COUNT(*) AS cantidad FROM mantenimiento_hlb',[]).then((data)=>{
+            this.dbService.storage.executeSql('SELECT COUNT(*) AS cantidad FROM traspatios_fincas',[]).then((data)=>{
               resolve(data.rows.item(0));
             }).catch((e) => {
               reject(e);
@@ -90,81 +114,104 @@ export class LocalDbService {
           }).catch((e) => {
             reject(e);
           });
+        }else{
+          reject(new Error("La base de datos no se ha creado aún!"));
+        }
+      });
+
     });
 
   }
 
-  get_fake_hlb_mantains(){
-    
+  countNoSincronizedTraps(){
     return new Promise((resolve,reject) => {
-      this.storage.executeSql('create table IF NOT EXISTS mantenimiento_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_original INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER)', [])
+
+      this.dbService.isDatabaseReady().subscribe((dbIsReady)=>{
+        if(dbIsReady){
+          this.dbService.storage.executeSql(this.createTableUrl, [])
           .then(() => {
-            this.storage.executeSql('SELECT * FROM mantenimiento_hlb',[]).then((data)=>{
-              let hlbMantains = [];
-              if (data.rows.length > 0) {
-                for (var i = 0; i < data.rows.length; i++) { 
-                  hlbMantains.push(data.rows.item(i));
-                }
-              }
-              resolve(hlbMantains);
+            this.dbService.storage.executeSql('SELECT COUNT(*) AS cantidad FROM traspatios_fincas where sincronizado = ?',[0]).then((data)=>{
+              resolve(data.rows.item(0));
             }).catch((e) => {
               reject(e);
             });
           }).catch((e) => {
             reject(e);
           });
-    });
+        }else{
+          reject({message:"La base de datos no se ha creado aún!"});
+        }
+      });
 
+    });
   }
 
-  insertAnHlbMantain(hlbMantainRecord:Mantenimiento_Hlb){
+  insertATraspatioFinca(traspatioFincaRecord:TraspatioFincaNuevo){
 
     return new Promise((resolve,reject) => {
 
-      this.storage.executeSql('create table IF NOT EXISTS mantenimiento_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_original INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER)', [])
+      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
+        if(isDataBaseReady){
+          this.dbService.storage.executeSql(this.createTableUrl, [])
           .then(() => {
-            this.storage.executeSql('INSERT INTO mantenimiento_hlb VALUES (?,?,?,?,?,?,?,?,?,?)',[hlbMantainRecord.id_local,hlbMantainRecord.id_original,hlbMantainRecord.pais,hlbMantainRecord.tipo,hlbMantainRecord.finca_poblado,hlbMantainRecord.lote_propietario,hlbMantainRecord.latitud,hlbMantainRecord.longitud,hlbMantainRecord.estado,hlbMantainRecord.sincronizado]).then(()=>{
-              resolve(hlbMantainRecord);
+            this.dbService.storage.executeSql('INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?)',[traspatioFincaRecord.id_traspatio_finca,traspatioFincaRecord.pais,traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.sincronizado]).then(()=>{
+              resolve(traspatioFincaRecord);
             }).catch((error) => {
               reject(error);
             });
           }).catch((error) => {
             reject(error);
           });
+        }else{
+          reject(new Error("La base de datos no se ha creado aún!"));
+        }
+      });
+      
     });
 
   }
 
-  insert_many_hlb_mantains(hlbMantains:Mantenimiento_Hlb[]){
-
-    const createTableStatement = 'create table IF NOT EXISTS mantenimiento_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_original INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER)';
-    const insertStatement = 'INSERT INTO mantenimiento_hlb VALUES (?,?,?,?,?,?,?,?,?,?)';
-    let generalStatement = [];
-    generalStatement.push(createTableStatement);
-    for(let i=0;i<hlbMantains.length;i++){
-      let hlbMantain = hlbMantains[i];
-      let valuesArray = [hlbMantain.id_local,hlbMantain.id_original,hlbMantain.pais,hlbMantain.tipo,hlbMantain.finca_poblado,hlbMantain.lote_propietario,hlbMantain.latitud,hlbMantain.longitud,hlbMantain.estado,hlbMantain.sincronizado];
-      let insertionListStatement = [];
-      insertionListStatement.push(insertStatement);
-      insertionListStatement.push(valuesArray);
-      generalStatement.push(insertionListStatement);
-    }
+  insertManyTraspatiosFincas(hlbMantains:TraspatioFincaNuevo[]){
 
     return new Promise((resolve,reject) => {
-      this.storage.sqlBatch(generalStatement).then(()=>{
-        resolve(true);
-      }).catch((error)=>{
-        reject(error);
+      
+
+      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
+        if(isDataBaseReady){
+
+          const insertStatement = 'INSERT INTO traspatios_fincas VALUES (?,?,?,?,?,?,?,?,?)';
+          let generalStatement = [];
+          generalStatement.push(this.createTableUrl);
+          for(let i=0;i<hlbMantains.length;i++){
+            let hlbMantain = hlbMantains[i];
+            let valuesArray = [hlbMantain.id_traspatio_finca,hlbMantain.pais,hlbMantain.tipo,hlbMantain.finca_poblado,hlbMantain.lote_propietario,hlbMantain.latitud,hlbMantain.longitud,hlbMantain.estado,hlbMantain.sincronizado];
+            let insertionListStatement = [];
+            insertionListStatement.push(insertStatement);
+            insertionListStatement.push(valuesArray);
+            generalStatement.push(insertionListStatement);
+          }
+
+          this.dbService.storage.sqlBatch(generalStatement).then(()=>{
+            resolve(true);
+          }).catch((error)=>{
+            reject(error);
+          });
+
+        }else{
+          reject(new Error("La base de datos no se ha creado aún!"));
+        }
+
       });
+
     });
-    
+
   }
 
   getFincaPobladosByType(tipo:string){//tipo puede ser = 'traspatio', 'productor' ó 'ticofrut'
     return new Promise((resolve,reject) => {
-      this.storage.executeSql('create table IF NOT EXISTS mantenimiento_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_original INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER)', [])
+      this.dbService.storage.executeSql(this.createTableUrl, [])
           .then(() => {
-            this.storage.executeSql('SELECT DISTINCT finca_poblado FROM mantenimiento_hlb where tipo = ?',[tipo]).then((data)=>{
+            this.dbService.storage.executeSql('SELECT DISTINCT finca_poblado FROM traspatios_fincas where tipo = ?',[tipo]).then((data)=>{
               let traspatios = [];
               if (data.rows.length > 0) {
                 for (var i = 0; i < data.rows.length; i++) { 
@@ -181,11 +228,11 @@ export class LocalDbService {
     });
   }
 
-  getPropietariosLotesByFincaPobladoName(fincaPoblado:string){//fincaPoblado = alguna finca o poblado seleccionado por el usuario.
+  getPropietariosLotesByFincaPobladoName(fincaPoblado:string){//fincaPoblado = nombre de una finca o poblado.
     return new Promise((resolve,reject) => {
-      this.storage.executeSql('create table IF NOT EXISTS mantenimiento_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_original INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER)', [])
+      this.dbService.storage.executeSql(this.createTableUrl, [])
           .then(() => {
-            this.storage.executeSql('SELECT lote_propietario FROM mantenimiento_hlb where finca_poblado = ?',[fincaPoblado]).then((data)=>{
+            this.dbService.storage.executeSql('SELECT lote_propietario FROM traspatios_fincas where finca_poblado = ?',[fincaPoblado]).then((data)=>{
               let lotesPropietarios = [];
               if (data.rows.length > 0) {
                 for (var i = 0; i < data.rows.length; i++) { 

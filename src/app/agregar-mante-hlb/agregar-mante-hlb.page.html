@@ -13,11 +13,6 @@
 
     <ion-list>
 
-      <ion-item>
-        <ion-label position="stacked">Pais</ion-label>
-        <ion-input formControlName="pais" type="text" clearOnEdit="false"></ion-input>
-      </ion-item>
-
       <ion-radio-group formControlName="tipo" (ionChange)="changeType($event)">
         <ion-list-header>
           <ion-label>
@@ -50,12 +45,12 @@
 
       <ion-item>
         <ion-label position="stacked">Latitud</ion-label>
-        <ion-input formControlName="latitud" type="number" focus></ion-input>
+        <ion-input formControlName="latitud" type="number" readOnly></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Longitud</ion-label>
-        <ion-input formControlName="longitud" type="number" focus></ion-input>
+        <ion-input formControlName="longitud" type="number" readOnly></ion-input>
       </ion-item>
 
       <ion-button (click)="openMap()">

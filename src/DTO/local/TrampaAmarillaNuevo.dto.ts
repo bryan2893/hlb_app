@@ -1,8 +1,8 @@
-export default interface Mantenimiento_Hlb_Guardado{
-    id_local:Number;
-    id_original:Number;
-    pais: String;
+export interface TrampaAmarillaNuevo{
+    id_trampa:Number;
+    num_trampa: Number;
     tipo:String;
+    pais:String;
     finca_poblado:String;
     lote_propietario:String;
     latitud: Number;
