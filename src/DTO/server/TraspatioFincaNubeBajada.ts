@@ -1,0 +1,10 @@
+export interface TraspatioFincaNubeBajada{
+    ID_TRASPATIO_FINCA:Number;
+    PAIS: String;
+    TIPO:String;
+    FINCA_POBLADO:String;
+    LOTE_PROPIETARIO:String;
+    LATITUD: Number;
+    LONGITUD: Number;
+    ESTADO:Number;
+}

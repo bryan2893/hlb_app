@@ -20,14 +20,4 @@ export class LoaderService {
     });
   }
 
-  hideLoader():Promise<any>{
-    return new Promise((resolve,reject)=>{
-      this.loadingController.dismiss().then((res) => {
-        resolve(res);
-      }).catch((error) => {
-        reject(error.message);
-      });
-    });
-  }
-
 }

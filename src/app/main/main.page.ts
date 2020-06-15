@@ -14,15 +14,21 @@ export class MainPage implements OnInit {
   ngOnInit() {}
 
   async sincronizarPrueba(){
+    let loading:any;
     try{
-      await this.loaderService.showLoader();
+
+      loading = await this.loaderService.showLoader();
+      loading.present();
+
       await this.servicioDeSincronizacion.sincronizarTodo();
-      await this.loaderService.hideLoader();
-      alert('sincronización completada!');
+      
+      loading.dismiss();
     }catch(error){
-      await this.loaderService.hideLoader();
-      alert(error.message);
+      //await this.loaderService.hideLoader();
+      loading.dismiss();
+      alert(error);
     }
+    
   }
 
 }

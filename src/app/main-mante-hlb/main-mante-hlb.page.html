@@ -22,6 +22,11 @@
         <h3>Tipo: {{mantain.tipo}}</h3>
         <p>{{mantain.finca_poblado}}, {{mantain.lote_propietario}}</p>
       </ion-label>
+
+      <ion-icon *ngIf="mantain.sincronizado === 0" name="sync-outline" size="large" slot="end" ></ion-icon>
+
+      <ion-icon *ngIf="mantain.sincronizado === 1" name="checkmark" size="large" slot="end" ></ion-icon>
+
     </ion-item>
    </ion-list>
 

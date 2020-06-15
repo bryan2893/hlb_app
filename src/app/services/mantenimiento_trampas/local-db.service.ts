@@ -3,6 +3,7 @@ import {BehaviorSubject} from 'rxjs';
 import {SQLite,SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {Platform} from '@ionic/angular';
 import {TrampaAmarillaNuevo} from '../../../DTO/local/TrampaAmarillaNuevo.dto';
+import {TrampaAmarillaNubeBajada} from '../../../DTO/server/TrampaAmarillaNubeBajada';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class LocalDbService {
         this.storage = db;
         this.isDbReady.next(true);
       }).catch((error)=>{
-
+        
       });
 
     }).catch((error) => {
@@ -72,7 +73,7 @@ export class LocalDbService {
           this.storage.executeSql(this.createTableQuery, [])
           .then(() => {
             let offset = (pageNumber - 1) * rowsPerPage;
-            this.storage.executeSql('SELECT id_trampa,tipo,pais,num_trampa,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado FROM trampas_amarillas where sincronizado = ? limit ?,?',[0,offset,rowsPerPage]).then((registrosTrampas)=>{
+            this.storage.executeSql('SELECT id_trampa,tipo,pais,num_trampa,finca_poblado,lote_propietario,latitud,longitud,estado FROM trampas_amarillas where sincronizado = ? limit ?,?',[0,offset,rowsPerPage]).then((registrosTrampas)=>{
 
               let trapsPage = [];
               if (registrosTrampas.rows.length > 0) {
@@ -168,6 +169,10 @@ export class LocalDbService {
       this.countNoSincronizedTraps().then((data:any)=>{
         let trapsQuantity = data.cantidad;
 
+        if(trapsQuantity === 0){
+          resolve(0);
+        }
+
         let divisionResiduo = trapsQuantity % rowsPerPage;
         let divsionEntera = Math.trunc(trapsQuantity / rowsPerPage);
 
@@ -208,16 +213,16 @@ export class LocalDbService {
     
   }
 
-  insertManyTraps(traps:TrampaAmarillaNuevo[]){
+  insertManyTraps(traps:TrampaAmarillaNubeBajada[]){
 
     return new Promise((resolve,reject) => {
 
-      const insertStatement = 'INSERT INTO trampas_amarillas VALUES (?,?,?,?,?,?,?,?,?)';
+      const insertStatement = 'INSERT INTO trampas_amarillas(id_trampa,tipo,pais,num_trampa,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?)';
       let generalStatement = [];
       generalStatement.push(this.createTableQuery);
       for(let i=0;i<traps.length;i++){
         let trap = traps[i];
-        let valuesArray = [trap.id_trampa,trap.num_trampa,trap.tipo,trap.pais,trap.finca_poblado,trap.lote_propietario,trap.latitud,trap.longitud,trap.estado,trap.sincronizado];
+        let valuesArray = [trap.ID_TRAMPA,trap.TIPO,trap.PAIS,trap.NUM_TRAMPA,trap.FINCA_POBLADO,trap.LOTE_PROPIETARIO,trap.LATITUD,trap.LONGITUD,trap.ESTADO,1];
         let insertionListStatement = [];
         insertionListStatement.push(insertStatement);
         insertionListStatement.push(valuesArray);
@@ -229,8 +234,31 @@ export class LocalDbService {
       }).catch((error)=>{
         reject(error);
       });
+
     });
     
+  }
+
+
+  deleteAllInfo(){
+      return new Promise((resolve,reject) => {
+        this.isDatabaseReady().subscribe((dbIsReady)=>{
+          if(dbIsReady){
+            this.storage.executeSql(this.createTableQuery, [])
+            .then(() => {
+              this.storage.executeSql('DELETE FROM trampas_amarillas',[]).then(()=>{
+                resolve();
+              }).catch((error) => {
+                reject(error);
+              });
+            }).catch((error) => {
+              reject(error);
+            });
+          }else{
+            reject({message:"La base de datos no se ha creado aún!"});
+          }
+        });
+      });
   }
 
 }
