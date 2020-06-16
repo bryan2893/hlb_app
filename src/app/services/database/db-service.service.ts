@@ -21,7 +21,7 @@ export class DbServiceService {
     }).catch((error) => {
       alert(error.message);
     });
-
+    
   }
   
   isDatabaseReady(){

@@ -38,38 +38,36 @@ export class MainTrampasAmarillasPage implements OnInit {
     });
   }
 
-  obtenerNumeroPaginas(){
-    this.localDbService.getPagesQuantity(this.rowsPerPage).then((quantity) => {
-      alert(quantity);
-    });
-  }
-
   obtenerPaginaTrampas(){
     this.localDbService.getTrapsPage(1,0).then((data)=>{
       alert(JSON.stringify(data));
     });
   }
 
-  async contarRegistros(){
+  whenUserPressAKey(event:any){
+    let value = event.target.value;
+    
+    console.log(event.target.value);
+  }
 
-    try{
-      let registro = await this.localDbService.countTraps();
-      alert(registro.cantidad);
-      return registro.cantidad;
-    }catch(error){
-      throw new Error(error.message);
-    }
-
+  alCancelar(){
+    alert("todo bien");
   }
 
   change(){
+    
     this.searchBarActive = !this.searchBarActive;
-    setTimeout(() => {
-      this.searchBar.setFocus();
-    },100);
+
+    if(!this.searchBarActive){
+      return;
+    }else{
+      setTimeout(() => {
+        this.searchBar.setFocus();
+      },100);
+    }
   }
 
-  loadTraps(event){
+  loadTraps(event:any){
     this.localDbService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
       this.addMoreTrapItems(trapsList);
       this.pageCounter += 1;
@@ -78,7 +76,7 @@ export class MainTrampasAmarillasPage implements OnInit {
 
   }
 
-  addMoreTrapItems(trapsPage) {
+  addMoreTrapItems(trapsPage:any) {
 
     for (let i = 0; i < trapsPage.length; i++) {  
       this.traps.push(trapsPage[i]);   

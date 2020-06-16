@@ -59,10 +59,18 @@ export class MainManteHlbPage implements OnInit {
   }
 
   change(){
+
+    
     this.searchBarActive = !this.searchBarActive;
-    setTimeout(() => {
-      this.searchBar.setFocus();
-    },100);
+
+    if(!this.searchBarActive){
+      return;
+    }else{
+      setTimeout(() => {
+        this.searchBar.setFocus();
+      },100);
+    }
+
   }
 
   loadMantains(event){

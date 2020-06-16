@@ -18,8 +18,6 @@ export class HomePage {
   constructor(private authService: AuthService,private router: Router) {}
 
   loginUser(){
-
-    console.log("Puedo debuguear!!");
     this.router.navigate(['/main']);
     /*
     this.authService.validateUser(this.formFields.username,this.formFields.password).then((user:User) => {

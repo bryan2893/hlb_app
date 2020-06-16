@@ -261,4 +261,8 @@ export class LocalDbService {
       });
   }
 
+  findAtrap(trapNumber:number){
+    
+  }
+
 }

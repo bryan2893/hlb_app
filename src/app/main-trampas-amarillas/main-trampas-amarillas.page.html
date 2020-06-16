@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 <!-- Searchbar with a cancel button and custom cancel button text -->
-<ion-searchbar (ionCancel)="change()" #searchbar *ngIf="searchBarActive" inputmode="numeric" showCancelButton="always" cancelButtonText="Custom Cancel"></ion-searchbar>
+<ion-searchbar (ionClear)="alCancelar()" (ionCancel)="change()" (ionChange)="whenUserPressAKey($event)" #searchbar *ngIf="searchBarActive" inputmode="numeric" showCancelButton="always" cancelButtonText="Custom Cancel"></ion-searchbar>
 
 <ion-content>
 
@@ -36,15 +36,6 @@
        loadingText="Cargando trampas....">  
      </ion-infinite-scroll-content>  
    </ion-infinite-scroll>
-
-  <!--<ion-list>
-    <ion-item *ngFor="let trap of traps"></ion-item>
-  </ion-list>
- 
-  <ion-infinite-scroll (ionInfinite)="loadTraps($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando trampas...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>-->
 
 </ion-content>
 
