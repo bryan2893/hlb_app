@@ -65,7 +65,7 @@ export class AgregarTrampaPage implements OnInit {
     }
 
     
-    this.mantenimientosHlbLocalDbService.getFincaPobladosByType(this.tipo).then((fincasPobladosList:string[])=>{
+    this.mantenimientosHlbLocalDbService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{

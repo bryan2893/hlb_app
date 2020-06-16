@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { SQLiteObject } from '@ionic-native/sqlite';
+
 import {DbServiceService} from '../database/db-service.service';
 import {TraspatioFincaNuevo} from '../../../DTO/local/TraspatioFincaNuevo';
 import {TraspatioFincaNubeBajada} from '../../../DTO/server/TraspatioFincaNubeBajada';
@@ -7,76 +9,82 @@ import {TraspatioFincaNubeBajada} from '../../../DTO/server/TraspatioFincaNubeBa
   providedIn: 'root'
 })
 export class TraspatioFincaLocalService {
-  private createTableQuery = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';
+
+  db:SQLiteObject = null;
 
   constructor(private dbService: DbServiceService) {}
 
+  setDatabase(db:SQLiteObject){
+    if(this.db === null){
+      this.db = db;
+    }
+  }
+
+  createTable(){
+    let sql = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';
+    return this.db.executeSql(sql,[]);
+  }
+
   getTraspatiosFincasPage(pageNumber:number,rowsPerPage:number){
 
+    let sql = 'SELECT * FROM traspatios_fincas limit ?,?';
     return new Promise((resolve,reject)=>{
-      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
-        if(isDataBaseReady){
-          this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            let offset = (pageNumber - 1) * rowsPerPage;
-            this.dbService.storage.executeSql('SELECT * FROM traspatios_fincas limit ?,?',[offset,rowsPerPage]).then((data)=>{
 
-              let hlbMantainPage = [];
-              if (data.rows.length > 0) {
-                for (var i = 0; i < data.rows.length; i++) { 
-                  hlbMantainPage.push(data.rows.item(i));
-                }
+          let offset = (pageNumber - 1) * rowsPerPage;
+          this.db.executeSql(sql,[offset,rowsPerPage]).then((data)=>{
+
+            let hlbMantainPage = [];
+            if (data.rows.length > 0) {
+              for (var i = 0; i < data.rows.length; i++) { 
+                hlbMantainPage.push(data.rows.item(i));
               }
+            }
 
-              resolve(hlbMantainPage);
+            resolve(hlbMantainPage);
 
-            }).catch((e) => {
-              reject(e);
-            });
           }).catch((e) => {
             reject(e);
           });
-        }else{
 
-        }
-      });
-          
     });
     
   }
 
   getNoSincronizedTraspatiosFincasPage(pageNumber:number,rowsPerPage:number){
     
+    let sql = 'SELECT id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado FROM traspatios_fincas where sincronizado = ? limit ?,?';
     return new Promise((resolve,reject)=>{
-      this.dbService.isDatabaseReady().subscribe((dbIsReady)=>{
-        if(dbIsReady){
 
-          this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            let offset = (pageNumber - 1) * rowsPerPage;
-            this.dbService.storage.executeSql('SELECT id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado FROM traspatios_fincas where sincronizado = ? limit ?,?',[0,offset,rowsPerPage]).then((registrosTraspatiosFincas)=>{
+          let offset = (pageNumber - 1) * rowsPerPage;
+          this.db.executeSql(sql,[0,offset,rowsPerPage]).then((registrosTraspatiosFincas)=>{
 
-              let trapsPage = [];
-              if (registrosTraspatiosFincas.rows.length > 0) {
-                for (var i = 0; i < registrosTraspatiosFincas.rows.length; i++) { 
-                  trapsPage.push(registrosTraspatiosFincas.rows.item(i));
-                }
+            let trapsPage = [];
+            if (registrosTraspatiosFincas.rows.length > 0) {
+              for (var i = 0; i < registrosTraspatiosFincas.rows.length; i++) { 
+                trapsPage.push(registrosTraspatiosFincas.rows.item(i));
               }
-
-              resolve(trapsPage);
-            }).catch((e) => {
-              reject(e);
-            });
+            }
+            resolve(trapsPage);
           }).catch((e) => {
             reject(e);
           });
-        }
-        else{
-          reject({message:"La base de datos no se ha creado aún!"});
-        }
-      });
       
     });
+  }
+
+  countTraspatiosFincas():any{
+
+    let sql = 'SELECT COUNT(*) AS cantidad FROM traspatios_fincas';
+    return new Promise((resolve,reject) => {
+
+      this.db.executeSql(sql,[]).then((data)=>{
+        resolve(data.rows.item(0));
+      }).catch((error) => {
+        reject(error);
+      });
+
+    });
+
   }
 
   getPagesQuantity(rowsPerPage:number){
@@ -98,6 +106,19 @@ export class TraspatioFincaLocalService {
         reject(error);
       });
     })
+  }
+
+  countNoSincronizedTraspatiosFincas(){
+    let sql = 'SELECT COUNT(*) AS cantidad FROM traspatios_fincas where sincronizado = ?';
+    return new Promise((resolve,reject) => {
+
+      this.db.executeSql(sql,[0]).then((data)=>{
+        resolve(data.rows.item(0));
+      }).catch((e) => {
+        reject(e);
+      });
+
+    });
   }
 
   getPagesQuantityForNoSincronizedTraspatiosFincas(rowsPerPage:number){
@@ -124,74 +145,16 @@ export class TraspatioFincaLocalService {
     });
   }
 
-  countTraspatiosFincas():any{
-
-    return new Promise((resolve,reject) => {
-
-      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
-        if(isDataBaseReady){
-          this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            this.dbService.storage.executeSql('SELECT COUNT(*) AS cantidad FROM traspatios_fincas',[]).then((data)=>{
-              resolve(data.rows.item(0));
-            }).catch((e) => {
-              reject(e);
-            });
-          }).catch((e) => {
-            reject(e);
-          });
-        }else{
-          reject(new Error("La base de datos no se ha creado aún!"));
-        }
-      });
-
-    });
-
-  }
-
-  countNoSincronizedTraspatiosFincas(){
-    return new Promise((resolve,reject) => {
-
-      this.dbService.isDatabaseReady().subscribe((dbIsReady)=>{
-        if(dbIsReady){
-          this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            this.dbService.storage.executeSql('SELECT COUNT(*) AS cantidad FROM traspatios_fincas where sincronizado = ?',[0]).then((data)=>{
-              resolve(data.rows.item(0));
-            }).catch((e) => {
-              reject(e);
-            });
-          }).catch((e) => {
-            reject(e);
-          });
-        }else{
-          reject({message:"La base de datos no se ha creado aún!"});
-        }
-      });
-
-    });
-  }
-
   insertATraspatioFinca(traspatioFincaRecord:TraspatioFincaNuevo){
 
+    let sql = 'INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
 
-      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
-        if(isDataBaseReady){
-          this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            this.dbService.storage.executeSql('INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?)',[traspatioFincaRecord.id_traspatio_finca,traspatioFincaRecord.pais,traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.sincronizado]).then(()=>{
+      this.db.executeSql(sql,[traspatioFincaRecord.id_traspatio_finca,traspatioFincaRecord.pais,traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.sincronizado]).then(()=>{
               resolve(traspatioFincaRecord);
             }).catch((error) => {
               reject(error);
             });
-          }).catch((error) => {
-            reject(error);
-          });
-        }else{
-          reject(new Error("La base de datos no se ha creado aún!"));
-        }
-      });
       
     });
 
@@ -199,101 +162,87 @@ export class TraspatioFincaLocalService {
 
   insertManyTraspatiosFincas(hlbMantains:TraspatioFincaNubeBajada[]){
 
+    let createTableQuery = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';
+    let sql = 'INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
-      
-
-      this.dbService.isDatabaseReady().subscribe((isDataBaseReady)=>{
-        if(isDataBaseReady){
-
-          const insertStatement = 'INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?)';
           let generalStatement = [];
-          generalStatement.push(this.createTableQuery);
+          generalStatement.push(createTableQuery);
           for(let i=0;i<hlbMantains.length;i++){
             let hlbMantain = hlbMantains[i];
             let valuesArray = [hlbMantain.ID_TRASPATIO_FINCA,hlbMantain.PAIS,hlbMantain.TIPO,hlbMantain.FINCA_POBLADO,hlbMantain.LOTE_PROPIETARIO,hlbMantain.LATITUD,hlbMantain.LONGITUD,hlbMantain.ESTADO,1];
             let insertionListStatement = [];
-            insertionListStatement.push(insertStatement);
+            insertionListStatement.push(sql);
             insertionListStatement.push(valuesArray);
             generalStatement.push(insertionListStatement);
           }
 
-          this.dbService.storage.sqlBatch(generalStatement).then(()=>{
-            resolve(true);
+          this.db.sqlBatch(generalStatement).then((data)=>{
+            resolve(data);
           }).catch((error)=>{
             reject(error);
           });
-
-        }else{
-          reject(new Error("La base de datos no se ha creado aún!"));
-        }
-
-      });
-
     });
 
   }
 
-  getFincaPobladosByType(tipo:string){//tipo puede ser = 'traspatio', 'productor' ó 'ticofrut'
+  getTraspatiosFincasByType(tipo:string){//tipo puede ser = 'traspatio', 'productor' ó 'ticofrut'
+    let sql = 'SELECT DISTINCT finca_poblado FROM traspatios_fincas where tipo = ?';
     return new Promise((resolve,reject) => {
-      this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            this.dbService.storage.executeSql('SELECT DISTINCT finca_poblado FROM traspatios_fincas where tipo = ?',[tipo]).then((data)=>{
-              let traspatios = [];
-              if (data.rows.length > 0) {
-                for (var i = 0; i < data.rows.length; i++) { 
-                  traspatios.push(data.rows.item(i).finca_poblado);
-                }
-              }
-              resolve(traspatios);
-            }).catch((e) => {
-              reject(e);
-            });
-          }).catch((e) => {
-            reject(e);
-          });
+      this.db.executeSql(sql,[tipo]).then((data)=>{
+        let fincasPoblados = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) { 
+            fincasPoblados.push(data.rows.item(i).finca_poblado);
+          }
+        }
+        resolve(fincasPoblados);
+      }).catch((e) => {
+        reject(e);
+      });
     });
   }
 
   getPropietariosLotesByFincaPobladoName(fincaPoblado:string){//fincaPoblado = nombre de una finca o poblado.
+    let sql = 'SELECT lote_propietario FROM traspatios_fincas where finca_poblado = ?';
     return new Promise((resolve,reject) => {
-      this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            this.dbService.storage.executeSql('SELECT lote_propietario FROM traspatios_fincas where finca_poblado = ?',[fincaPoblado]).then((data)=>{
-              let lotesPropietarios = [];
-              if (data.rows.length > 0) {
-                for (var i = 0; i < data.rows.length; i++) { 
-                  lotesPropietarios.push(data.rows.item(i).lote_propietario);
-                }
-              }
-              resolve(lotesPropietarios);
-            }).catch((e) => {
-              reject(e);
-            });
-          }).catch((e) => {
-            reject(e);
-          });
+      this.db.executeSql(sql,[fincaPoblado]).then((data)=>{
+        let lotesPropietarios = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) { 
+            lotesPropietarios.push(data.rows.item(i).lote_propietario);
+          }
+        }
+        resolve(lotesPropietarios);
+      }).catch((e) => {
+        reject(e);
+      });
     });
   }
 
   deleteAllInfo(){
+    let sql = 'DELETE FROM traspatios_fincas';
     return new Promise((resolve,reject) => {
-      this.dbService.isDatabaseReady().subscribe((dbIsReady)=>{
-        if(dbIsReady){
-          this.dbService.storage.executeSql(this.createTableQuery, [])
-          .then(() => {
-            this.dbService.storage.executeSql('DELETE FROM traspatios_fincas',[]).then(()=>{
-              resolve(true);
-            }).catch((error) => {
-              reject(error);
-            });
-          }).catch((error) => {
-            reject(error);
-          });
-        }else{
-          reject({message:"La base de datos no se ha creado aún!"});
-        }
+      this.db.executeSql(sql,[]).then(()=>{
+        resolve(true);
+      }).catch((error) => {
+        reject(error);
       });
     });
-}
+  }
+
+  findTraspatiosFincas(finca_poblado_o_lote_propietario_o_tipo:string){
+    let sql = 'SELECT * FROM traspatios_fincas where finca_poblado = ? OR lote_propietario = ? OR tipo = ?';
+    return new Promise((resolve,reject) => {
+      this.db.executeSql(sql,[finca_poblado_o_lote_propietario_o_tipo,finca_poblado_o_lote_propietario_o_tipo,finca_poblado_o_lote_propietario_o_tipo]).then((data)=>{
+        let traspatiosFincasEncontrados = [];
+        for(let i= 0;i<data.rows.length;i++){
+          traspatiosFincasEncontrados.push(data.rows.item(i));
+        }
+        resolve(traspatiosFincasEncontrados);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
 
 }

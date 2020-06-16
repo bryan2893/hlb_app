@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
+
 import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class MainTrampasAmarillasPage implements OnInit {
   pagesQuantity = 0;
   traps = [];
 
-  constructor(private localDbService: TrampaAmarillaLocalService) {}
+  constructor(private trampaAmarillaLocalService: TrampaAmarillaLocalService) {}
 
   ngOnInit() {
   }
@@ -24,63 +25,52 @@ export class MainTrampasAmarillasPage implements OnInit {
   ionViewWillEnter(){
     this.traps = [];
     this.pageCounter = 1;
-    this.localDbService.isDatabaseReady().subscribe((response)=>{
-      if(response){
-        this.localDbService.getPagesQuantity(this.rowsPerPage).then((quantity:number)=>{
-          this.pagesQuantity = quantity;
-        }).then(()=>{
-          this.localDbService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
-            this.addMoreTrapItems(trapsList);
-            this.pageCounter += 1;
-          });
-        });
-      }
-    });
-  }
-
-  obtenerPaginaTrampas(){
-    this.localDbService.getTrapsPage(1,0).then((data)=>{
-      alert(JSON.stringify(data));
+    this.trampaAmarillaLocalService.getPagesQuantity(this.rowsPerPage).then((pagesQuantity:number)=>{
+      this.pagesQuantity = pagesQuantity;
+    }).then(()=>{
+      this.trampaAmarillaLocalService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
+        this.addMoreTrapItems(trapsList);
+        this.pageCounter += 1;
+      });
     });
   }
 
   whenUserPressAKey(event:any){
     let value = event.target.value;
-    
-    console.log(event.target.value);
+    this.trampaAmarillaLocalService.findAtrap(value).then((listaDeTrampasEncontradas:any)=>{
+      this.traps = listaDeTrampasEncontradas;
+    }).catch((error)=>{
+      console.log(error);
+    });
   }
 
-  alCancelar(){
-    alert("todo bien");
-  }
-
-  change(){
-    
+  change(event:any){
     this.searchBarActive = !this.searchBarActive;
-
-    if(!this.searchBarActive){
-      return;
-    }else{
+    if(this.searchBarActive){
       setTimeout(() => {
         this.searchBar.setFocus();
       },100);
+    }else{
+      this.pageCounter = 1;
+      this.trampaAmarillaLocalService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList:any)=>{
+        this.traps = trapsList;
+        this.pageCounter += 1;
+      });
     }
   }
 
   loadTraps(event:any){
-    this.localDbService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
+    this.trampaAmarillaLocalService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
       this.addMoreTrapItems(trapsList);
       this.pageCounter += 1;
       event.target.complete();
     });
-
   }
 
   addMoreTrapItems(trapsPage:any) {
-
     for (let i = 0; i < trapsPage.length; i++) {  
       this.traps.push(trapsPage[i]);   
-    }  
-  } 
+    }
+  }
 
 }

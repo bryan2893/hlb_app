@@ -3,6 +3,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {SQLite,SQLiteObject} from '@ionic-native/sqlite/ngx';
+import {TraspatioFincaLocalService} from './services/traspatios_fincas/TraspatioFincaLocal.service';
+import {TrampaAmarillaLocalService} from './services/trampas_amarillas/TrampaAmarillaLocal.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,9 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private sqlite:SQLite
+    private sqlite:SQLite,
+    private traspatioFincaLocalService:TraspatioFincaLocalService,
+    private trampaAmarillasLocalService:TrampaAmarillaLocalService
   ) {
     this.initializeApp();
   }
@@ -22,7 +26,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      //this.splashScreen.hide();
       this.createDatabase();
     });
   }
@@ -31,6 +35,18 @@ export class AppComponent {
   createDatabase(){
     this.sqlite.create({name:'hlb_db.db',location:'default'}).then((db:SQLiteObject)=>{
       console.log("Base de datos creada!" + JSON.stringify(db));
+      this.traspatioFincaLocalService.setDatabase(db);
+      this.trampaAmarillasLocalService.setDatabase(db);
+      
+    }).then(()=>{
+      //Create first table
+      return this.traspatioFincaLocalService.createTable();
+      
+    }).then(()=>{
+      return this.trampaAmarillasLocalService.createTable();
+
+    }).then(()=>{
+      this.splashScreen.hide();
     }).catch((error)=>{
       console.log(error);
     });

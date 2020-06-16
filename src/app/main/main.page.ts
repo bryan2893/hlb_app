@@ -17,7 +17,7 @@ export class MainPage implements OnInit {
     let loading:any;
     try{
 
-      loading = await this.loaderService.showLoader();
+      loading = await this.loaderService.showLoader("Sincronizando...");
       loading.present();
 
       await this.servicioDeSincronizacion.sincronizarTodo();

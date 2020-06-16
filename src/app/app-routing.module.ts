@@ -62,6 +62,14 @@ const routes: Routes = [
   {
     path: 'lotes-propietarios',
     loadChildren: () => import('./modals/lotes-propietarios/lotes-propietarios.module').then( m => m.LotesPropietariosPageModule)
+  },
+  {
+    path: 'main-inspeccion-hlb',
+    loadChildren: () => import('./main-inspeccion-hlb/main-inspeccion-hlb.module').then( m => m.MainInspeccionHlbPageModule)
+  },
+  {
+    path: 'main-inspeccion-trampa',
+    loadChildren: () => import('./main-inspeccion-trampa/main-inspeccion-trampa.module').then( m => m.MainInspeccionTrampaPageModule)
   }
 
 ];
