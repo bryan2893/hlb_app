@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
-import {LocalDbService} from '../services/mantenimiento_trampas/local-db.service';
+import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
 
 @Component({
   selector: 'app-main-trampas-amarillas',
@@ -16,7 +16,7 @@ export class MainTrampasAmarillasPage implements OnInit {
   pagesQuantity = 0;
   traps = [];
 
-  constructor(private localDbService: LocalDbService) {}
+  constructor(private localDbService: TrampaAmarillaLocalService) {}
 
   ngOnInit() {
   }

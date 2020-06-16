@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
-import {LocalDbService} from '../services/mantenimientos_hlb/local-db.service';
+import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 
 @Component({
   selector: 'app-main-mante-hlb',
@@ -16,7 +16,7 @@ export class MainManteHlbPage implements OnInit {
   pagesQuantity = 0;
   mantains = [];
 
-  constructor(private localDbService:LocalDbService) { }
+  constructor(private localDbService:TraspatioFincaLocalService) { }
 
   ionViewWillEnter(){
     this.mantains = [];

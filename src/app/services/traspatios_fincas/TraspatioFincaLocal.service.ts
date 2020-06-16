@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {DbServiceService} from '../../services/database/db-service.service';
+import {DbServiceService} from '../database/db-service.service';
 import {TraspatioFincaNuevo} from '../../../DTO/local/TraspatioFincaNuevo';
 import {TraspatioFincaNubeBajada} from '../../../DTO/server/TraspatioFincaNubeBajada';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LocalDbService {
+export class TraspatioFincaLocalService {
   private createTableQuery = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';
 
   constructor(private dbService: DbServiceService) {}

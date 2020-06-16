@@ -8,7 +8,7 @@ import {TrampaAmarillaNubeBajada} from '../../../DTO/server/TrampaAmarillaNubeBa
 @Injectable({
   providedIn: 'root'
 })
-export class LocalDbService {
+export class TrampaAmarillaLocalService {
   private storage: SQLiteObject;
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private createTableQuery = 'create table IF NOT EXISTS trampas_amarillas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_trampa INTEGER NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';

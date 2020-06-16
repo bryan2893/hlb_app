@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
-import {LocalDbService as TrampasAmarillasLocalService} from '../services/mantenimiento_trampas/local-db.service';
-import {ExternalDbService as TrampasAmarillasExternalService} from '../services/mantenimiento_trampas/external-db.service';
-import {LocalDbService as TraspatiosFincasLocalService} from '../services/mantenimientos_hlb/local-db.service';
-import {ExternalDbService as TraspatiosFincasExternalService} from '../services/mantenimientos_hlb/external-db.service';
+import {TrampaAmarillaLocalService as TrampasAmarillasLocalService} from './trampas_amarillas/TrampaAmarillaLocal.service';
+import {ExternalDbService as TrampasAmarillasExternalService} from './trampas_amarillas/TrampaAmarillaNube.service';
+import {TraspatioFincaLocalService as TraspatiosFincasLocalService} from './traspatios_fincas/TraspatioFincaLocal.service';
+import {TraspatioFincaNubeService as TraspatiosFincasExternalService} from './traspatios_fincas/TraspatioFincaNube.service';
 
 @Injectable({
   providedIn: 'root'
