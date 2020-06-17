@@ -18,15 +18,15 @@ export class MainPage implements OnInit {
     try{
 
       loading = await this.loaderService.showLoader("Sincronizando...");
-      loading.present();
+      await loading.present();
 
       await this.servicioDeSincronizacion.sincronizarTodo();
       
-      loading.dismiss();
+      await loading.dismiss();
     }catch(error){
       //await this.loaderService.hideLoader();
-      loading.dismiss();
-      alert(error);
+      await loading.dismiss();
+      alert(JSON.stringify(error));
     }
     
   }

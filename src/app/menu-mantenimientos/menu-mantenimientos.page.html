@@ -1,10 +1,17 @@
 <ion-header>
+
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-icon name="construct-outline" size="large"></ion-icon>
+    </ion-buttons>
+    <ion-title>Menú de mantenimientos</ion-title>
+
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Menú de mantenimientos</ion-title>
+
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
@@ -14,15 +21,9 @@
     <ion-list lines="none">
 
       <ion-item button detail [routerLink]="['/main-trampas-amarillas']">
-        <ion-avatar slot="start">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
-        </ion-avatar>
         <ion-label>Trampas amarillas</ion-label>
       </ion-item><br>
       <ion-item button detail [routerLink]="['/main-mante-hlb']">
-        <ion-avatar slot="start">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
-        </ion-avatar>
         <ion-label>Traspatios/fincas</ion-label>
       </ion-item><br>
       

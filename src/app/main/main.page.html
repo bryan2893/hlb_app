@@ -1,11 +1,8 @@
 <ion-header>
   <ion-toolbar>
     <ion-item lines="none" slot="end" button [routerLink]="['/']">
-      <ion-icon slot="end"  name="log-out" size="large"></ion-icon>
+      <ion-icon slot="end" name="log-out-outline" size="large"></ion-icon>
     </ion-item>
-    <!--<ion-buttons slot="end">
-      <ion-back-button defaultHref="/"></ion-back-button>
-    </ion-buttons>-->
     <ion-title>Menú principal</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -16,19 +13,20 @@
 
       <ion-item button detail [routerLink]="['/menu-inspecciones']">
         <ion-avatar slot="start">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
+          <ion-icon name="search-outline" size="large"></ion-icon>
         </ion-avatar>
         <ion-label>Inspecciones</ion-label>
       </ion-item><br>
       <ion-item button detail [routerLink]="['/menu-mantenimientos']">
         <ion-avatar slot="start">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
+          <ion-icon name="construct-outline" size="large"></ion-icon>
         </ion-avatar>
         <ion-label>Mantenimientos</ion-label>
       </ion-item><br>
+
       <ion-item button detail [routerLink]="['/settings']">
         <ion-avatar slot="start">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
+          <ion-icon name="settings-outline" size="large"></ion-icon>
         </ion-avatar>
         <ion-label>Configuración general</ion-label>
       </ion-item>
@@ -37,7 +35,8 @@
 
     <div class="configButton">
       <ion-button fill="outline" color="primary" size="larger" (click)="sincronizarPrueba()">
-        <ion-icon slot="start" name="swap-vertical-outline"></ion-icon>
+        <!--<ion-icon slot="start" name="swap-vertical-outline"></ion-icon>-->
+        <ion-icon size="large" slot="start" name="sync-circle"></ion-icon>
         SINCRONIZAR
       </ion-button>
     </div>
