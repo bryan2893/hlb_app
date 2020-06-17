@@ -70,6 +70,10 @@ const routes: Routes = [
   {
     path: 'main-inspeccion-trampa',
     loadChildren: () => import('./main-inspeccion-trampa/main-inspeccion-trampa.module').then( m => m.MainInspeccionTrampaPageModule)
+  },
+  {
+    path: 'agregar-inspeccion-hlb',
+    loadChildren: () => import('./agregar-inspeccion-hlb/agregar-inspeccion-hlb.module').then( m => m.AgregarInspeccionHlbPageModule)
   }
 
 ];

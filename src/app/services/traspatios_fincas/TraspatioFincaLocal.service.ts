@@ -92,6 +92,10 @@ export class TraspatioFincaLocalService {
       this.countTraspatiosFincas().then((data:any)=>{
         let hlbMantainQuantity = data.cantidad;
 
+        if(hlbMantainQuantity === 0){
+          resolve(0);
+        }
+
         let divisionResiduo = hlbMantainQuantity % rowsPerPage;
         let divsionEntera = Math.trunc(hlbMantainQuantity / rowsPerPage);
 

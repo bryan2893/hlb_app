@@ -1,9 +1,54 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>main-inspeccion-hlb</ion-title>
+  <ion-toolbar *ngIf="!searchBarActive">
+    <ion-title>Traspatios/Fincas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="change()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+      <ion-back-button defaultHref="/menu-inspecciones"></ion-back-button>
+    </ion-buttons>
+    <!--<ion-icon name="search"></ion-icon>-->
   </ion-toolbar>
 </ion-header>
+<!-- Searchbar with a cancel button and custom cancel button text -->
+<ion-searchbar (ionCancel)="change($event)" (ionChange)="whenUserPressAKey($event)" #searchbar *ngIf="searchBarActive" inputmode="numeric" showCancelButton="always" cancelButtonText="Custom Cancel"></ion-searchbar>
 
 <ion-content>
 
+   <ion-list>
+    <ion-item *ngFor="let inspeccionTraspatioFinca of inspeccionTraspatiosFincasList">
+      <ion-label>
+        <h2>Fecha-Hora #{{inspeccionTraspatioFinca.fecha_hora}}</h2>
+        <h3>Tipo: {{inspeccionTraspatioFinca.tipo}}</h3>
+        <p>{{inspeccionTraspatioFinca.finca_poblado}}, {{inspeccionTraspatioFinca.lote_propietario}}</p>
+      </ion-label>
+
+      <ion-icon *ngIf="inspeccionTraspatioFinca.sincronizado === 0" name="sync-outline" size="large" slot="end" ></ion-icon>
+
+      <ion-icon *ngIf="inspeccionTraspatioFinca.sincronizado === 1" name="checkmark" size="large" slot="end" ></ion-icon>
+
+    </ion-item>
+
+    <div class="notFoundMessage" *ngIf="inspeccionTraspatiosFincasList.length === 0">
+      <ion-text color="dark">
+        <h4 >¡Sin resultados!</h4>
+      </ion-text>
+    </div>
+
+   </ion-list>
+
+   <ion-infinite-scroll threshold="110px" (ionInfinite)="loadInspections($event)" [disabled]="pageCounter > pagesQuantity">
+     <ion-infinite-scroll-content  
+       loadingSpinner="circles"
+       loadingText="Cargando inspecciones...">
+     </ion-infinite-scroll-content>
+   </ion-infinite-scroll>
+
 </ion-content>
+
+ <!-- fab placed to the bottom start -->
+ <ion-fab *ngIf="!searchBarActive" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button [routerLink]="['/agregar-inspeccion-hlb']">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

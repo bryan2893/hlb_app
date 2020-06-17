@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
-import {TrampaAmarillaNubeSubida} from '../../../DTO/server/TrampaAmarillaNubeSubida';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
+import {InspeccionHlbNubeSubida} from '../../../DTO/server/InspeccionHlbNubeSubida';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TrampaAmarillaNubeService {
-  private urlToDownload = 'http://hlb.ticofrut.com/api/trampas_amarillas/obtener_pagina/';
-  private urlToUpload = 'http://hlb.ticofrut.com/api/trampas_amarillas/sincronizar';
-  private urlToCountRecords = 'http://hlb.ticofrut.com/api/trampas_amarillas/contarRegistros/';
+export class InspeccionHlbNubeService {
+
+  private urlToDownload = 'http://hlb.ticofrut.com/api/inspeccion_hlb/obtener_pagina/';
+  private urlToUpload = 'http://hlb.ticofrut.com/api/inspeccion_hlb/sincronizar';
+  private urlToCountRecords = 'http://hlb.ticofrut.com/api/inspeccion_hlb/contarRegistros/';
 
   constructor(private http: HTTP) {
     this.http.setHeader('*', String("Accept"), String("application/json"));
     this.http.setDataSerializer('json');
   }
   
-  getTrapsPage(pageNumber:number,amountPerPage:number,pais:string){
+  getInspHlbPage(pageNumber:number,amountPerPage:number,oldDays:string,pais:string){
     return new Promise((resolve,reject)=>{
-      let completedUrl = this.urlToDownload + pageNumber + '/' + amountPerPage+'/'+pais;
+      let completedUrl = this.urlToDownload + pageNumber + '/' + amountPerPage+'/'+oldDays+'/'+pais;
       this.http.get(completedUrl,{},{}).then((response:HTTPResponse)=>{
         resolve(response);
       }).catch((e)=>{
@@ -26,11 +27,11 @@ export class TrampaAmarillaNubeService {
     });
   }
 
-  syncListOfTraps(listaDeTrampas:TrampaAmarillaNubeSubida[]){
+  syncListOfInspHlb(listaDeInspeccionesHlb:InspeccionHlbNubeSubida[]){
     return new Promise((resolve,reject)=>{
       
       let paqueteDeSincronizacion = {
-        registros:listaDeTrampas,
+        registros:listaDeInspeccionesHlb,
         informacionDeSincronizacion:[
           {
             direccion_mac:'aaab1',
@@ -51,10 +52,10 @@ export class TrampaAmarillaNubeService {
     });
   }
 
-  countRecords(pais:string){
+  countLastDaysRecords(pais:string,lastDays:number){
       return new Promise((resolve,reject)=>{
       
-        this.http.get(this.urlToCountRecords+'/'+pais,{},{}).then((response:HTTPResponse)=>{
+        this.http.get(this.urlToCountRecords+'/'+pais+'/'+lastDays,{},{}).then((response:HTTPResponse)=>{
           let respuestaTransformada = JSON.parse(response.data);
           resolve(respuestaTransformada[0].CANTIDAD);
         }).catch((e)=>{
@@ -64,9 +65,9 @@ export class TrampaAmarillaNubeService {
       });
   }
 
-  getPagesQuantity(rowsPerPage:number,pais:string){
+  getPagesQuantity(rowsPerPage:number,pais:string,lastDays:number){
     return new Promise((resolve,reject)=>{
-      this.countRecords(pais).then((response:number)=>{
+      this.countLastDaysRecords(pais,lastDays).then((response:number)=>{
         let quantity = response;
 
         if(quantity === 0){
@@ -89,5 +90,4 @@ export class TrampaAmarillaNubeService {
       
     });
   }
-
 }

@@ -83,6 +83,10 @@ export class TrampaAmarillaLocalService {
       this.countTraps().then((data)=>{
         let trapsQuantity = data.cantidad;
 
+        if(trapsQuantity === 0){
+          resolve(0);
+        }
+
         let divisionResiduo = trapsQuantity % rowsPerPage;
         let divsionEntera = Math.trunc(trapsQuantity / rowsPerPage);
 
