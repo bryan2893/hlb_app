@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Settings from '../../DTO/settings.dto';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
+import {ToastService} from '../services/toast-service/toast.service';
 
 @Component({
   selector: 'app-settings',
@@ -12,7 +13,9 @@ export class SettingsPage implements OnInit {
 
   seetingsForm: FormGroup;
 
-  constructor(private almacenamientoNativoService: AlmacenamientoNativoService, private formBuilder: FormBuilder) {
+  constructor(private almacenamientoNativoService: AlmacenamientoNativoService,
+    private formBuilder: FormBuilder,
+    private toastService:ToastService) {
 
     this.seetingsForm = this.formBuilder.group({
       radio_de_alcance:[''],
@@ -48,12 +51,11 @@ export class SettingsPage implements OnInit {
 
   saveSettings(parametrosDeConfiguracion:Settings){
 
-    console.log(this.validarParametros(parametrosDeConfiguracion));
-    console.log(parametrosDeConfiguracion);
-
     if(this.validarParametros(parametrosDeConfiguracion)){
       this.almacenamientoNativoService.almacenarParametrosDeConfiguracion(parametrosDeConfiguracion).then((respuesta)=>{
-        alert("Cofiguraciones almacenadas!!");
+        this.toastService.showToast("Cofiguraciones guardadas!").then((toast)=>{
+          toast.present();
+        });
       }).catch((error)=>{
         alert("Problema al intentar guardar las configuraciones!");
       });
