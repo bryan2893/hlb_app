@@ -5,6 +5,7 @@ import {ModalController} from '@ionic/angular';
 import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
+import {AlertService} from '../services/alert/alert.service';
 
 @Component({
   selector: 'app-agregar-mante-hlb',
@@ -26,7 +27,10 @@ export class AgregarManteHlbPage implements OnInit {
     private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router:Router,
     private previousUrlHolderService: PreviousUrlHolderService,
-    private almacenamientoNativoService:AlmacenamientoNativoService) {
+    private almacenamientoNativoService:AlmacenamientoNativoService,
+    private alertService:AlertService
+    ) {
+
     this.seetingsForm = this.formBuilder.group({
       tipo:['traspatio',Validators.required],
       finca_poblado:['',Validators.required],
@@ -64,37 +68,37 @@ export class AgregarManteHlbPage implements OnInit {
   }
 
   async submit(){
-    if(this.seetingsForm.dirty){//si todos los campos estan completados...
+    try{
 
-      let hlbMantainRegisterToSave:any = {};
+      if(this.seetingsForm.dirty){//si todos los campos estan completados...
 
-      hlbMantainRegisterToSave['id_traspatio_finca'] = -1;
-
-      //Se obtiene el pais del almacenamiento interno del telefono.
-      let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-
-      let paisRecuperado:string;
-      if(parametrosDeConfiguracion !== null){
-        paisRecuperado = parametrosDeConfiguracion.pais;
+        let hlbMantainRegisterToSave:any = {};
+  
+        hlbMantainRegisterToSave['id_traspatio_finca'] = -1;
+  
+        //Se obtiene el pais del almacenamiento interno del telefono.
+        let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+  
+        let paisRecuperado:string = parametrosDeConfiguracion.pais;
+  
+        hlbMantainRegisterToSave['pais'] = paisRecuperado;
+        hlbMantainRegisterToSave['tipo'] = this.seetingsForm.controls['tipo'].value;
+        hlbMantainRegisterToSave['finca_poblado'] = this.seetingsForm.controls['finca_poblado'].value;
+        hlbMantainRegisterToSave['lote_propietario'] = this.seetingsForm.controls['lote_propietario'].value;
+        hlbMantainRegisterToSave['latitud'] = this.seetingsForm.controls['latitud'].value;
+        hlbMantainRegisterToSave['longitud'] = this.seetingsForm.controls['longitud'].value;
+        hlbMantainRegisterToSave['estado'] = 1;
+        hlbMantainRegisterToSave['sincronizado'] = 0;
+  
+        await this.mantenimientosHlbLocalDbService.insertATraspatioFinca(hlbMantainRegisterToSave);
+  
+      }else{
+        throw new Error("Verifique que todos los datos están completos!");
       }
 
-      hlbMantainRegisterToSave['pais'] = paisRecuperado;
-      hlbMantainRegisterToSave['tipo'] = this.seetingsForm.controls['tipo'].value;
-      hlbMantainRegisterToSave['finca_poblado'] = this.seetingsForm.controls['finca_poblado'].value;
-      hlbMantainRegisterToSave['lote_propietario'] = this.seetingsForm.controls['lote_propietario'].value;
-      hlbMantainRegisterToSave['latitud'] = this.seetingsForm.controls['latitud'].value;
-      hlbMantainRegisterToSave['longitud'] = this.seetingsForm.controls['longitud'].value;
-      hlbMantainRegisterToSave['estado'] = 1;
-      hlbMantainRegisterToSave['sincronizado'] = 0;
-
-      this.mantenimientosHlbLocalDbService.insertATraspatioFinca(hlbMantainRegisterToSave).then((hlbMantain)=>{
-        alert("Mantenimiento hlb insertado correctamente!" + JSON.stringify(hlbMantain));
-      }).catch((error)=>{
-        alert(error.message);
-      });
-
-    }else{
-      alert("Verifique que los datos están completos!");
+    }catch(error){
+      let alert = await this.alertService.presentAlert(error);
+      alert.present();
     }
   }
 

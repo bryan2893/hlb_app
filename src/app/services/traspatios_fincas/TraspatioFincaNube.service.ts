@@ -46,7 +46,7 @@ export class TraspatioFincaNubeService {
       this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
         resolve(response);
       }).catch((error)=>{
-        reject(error);
+        reject(JSON.stringify(error));
       });
 
     });

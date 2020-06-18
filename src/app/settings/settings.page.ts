@@ -3,6 +3,7 @@ import Settings from '../../DTO/settings.dto';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {ToastService} from '../services/toast-service/toast.service';
+import {AlertService} from '../services/alert/alert.service';
 
 @Component({
   selector: 'app-settings',
@@ -15,7 +16,8 @@ export class SettingsPage implements OnInit {
 
   constructor(private almacenamientoNativoService: AlmacenamientoNativoService,
     private formBuilder: FormBuilder,
-    private toastService:ToastService) {
+    private toastService:ToastService,
+    private alertService:AlertService) {
 
     this.seetingsForm = this.formBuilder.group({
       radio_de_alcance:[''],
@@ -34,43 +36,28 @@ export class SettingsPage implements OnInit {
   ionViewWillEnter(){
     this.getSettings();
   }
-
-  validarParametros(parametrosDeConfiguracion:Settings){
-    if(parametrosDeConfiguracion.radio_de_alcance === null
-     || parametrosDeConfiguracion.volumen_de_registros === null 
-     || parametrosDeConfiguracion.link_de_sincronizacion === null 
-     || parametrosDeConfiguracion.pais === null 
-     || parametrosDeConfiguracion.dias_permitidos === null 
-     || parametrosDeConfiguracion.version === null){
-       return false;
-     }else{
-       return true;
-     }
-  }
   
 
   saveSettings(parametrosDeConfiguracion:Settings){
-
-    if(this.validarParametros(parametrosDeConfiguracion)){
-      this.almacenamientoNativoService.almacenarParametrosDeConfiguracion(parametrosDeConfiguracion).then((respuesta)=>{
+    
+    
+      this.almacenamientoNativoService.almacenarParametrosDeConfiguracion(parametrosDeConfiguracion).then(()=>{
         this.toastService.showToast("Cofiguraciones guardadas!").then((toast)=>{
           toast.present();
         });
       }).catch((error)=>{
-        alert("Problema al intentar guardar las configuraciones!");
+        this.alertService.presentAlert(error.message).then((alert)=>{
+          alert.present();
+        });
       });
-    }else{
-      alert("Todos los campos son obligatorios!");
-    }
+    
   }
 
   getSettings(){
     this.almacenamientoNativoService.obtenerParametrosDeConfiguracion().then((parametrosDeConfiguracion)=>{
-      if(parametrosDeConfiguracion){
-        this.seetingsForm.setValue(parametrosDeConfiguracion);
-      }
+      this.seetingsForm.setValue(parametrosDeConfiguracion);
     }).catch((error)=>{
-      alert(error.message);
+      //No se hace nada ya que no hay parametros registrados!!
     });
   }
 

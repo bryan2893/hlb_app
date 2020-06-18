@@ -11,8 +11,6 @@ import { AgregarTrampaPage } from './agregar-trampa.page';
 
 import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
 
-import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -21,8 +19,7 @@ import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblado
     AgregarTrampaPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MapViewerPageModule,
-    FincasPobladosPageModule
+    MapViewerPageModule
   ],
   declarations: [AgregarTrampaPage]
 })
