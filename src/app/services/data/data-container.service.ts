@@ -9,7 +9,7 @@ export class DataContainerService {
 
   constructor() { }
 
-  setData(data){
+  setData(data:any){
     this.data = [];
     this.data.push(data);
   }

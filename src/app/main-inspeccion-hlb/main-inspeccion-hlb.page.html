@@ -11,14 +11,14 @@
   </ion-toolbar>
 </ion-header>
 <!-- Searchbar with a cancel button and custom cancel button text -->
-<ion-searchbar (ionCancel)="change($event)" (ionChange)="whenUserPressAKey($event)" #searchbar *ngIf="searchBarActive" inputmode="numeric" showCancelButton="always" cancelButtonText="Custom Cancel"></ion-searchbar>
+<ion-searchbar (ionCancel)="change($event)" (ionChange)="whenUserPressAKey($event)" #searchbar *ngIf="searchBarActive" inputmode="text" showCancelButton="always" cancelButtonText="Custom Cancel"></ion-searchbar>
 
 <ion-content>
 
    <ion-list>
     <ion-item *ngFor="let inspeccionTraspatioFinca of inspeccionTraspatiosFincasList">
       <ion-label>
-        <h2>Fecha-Hora #{{inspeccionTraspatioFinca.fecha_hora}}</h2>
+        <h2>Fecha-Hora: {{inspeccionTraspatioFinca.fecha_hora}}</h2>
         <h3>Tipo: {{inspeccionTraspatioFinca.tipo}}</h3>
         <p>{{inspeccionTraspatioFinca.finca_poblado}}, {{inspeccionTraspatioFinca.lote_propietario}}</p>
       </ion-label>

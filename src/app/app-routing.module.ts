@@ -73,6 +73,9 @@ const routes: Routes = [
   },
   {
     path: 'agregar-inspeccion-hlb',
+    resolve:{
+      data: DataResolverService
+    },
     loadChildren: () => import('./agregar-inspeccion-hlb/agregar-inspeccion-hlb.module').then( m => m.AgregarInspeccionHlbPageModule)
   }
 
