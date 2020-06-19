@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import Settings from '../../../DTO/settings.dto';
+import {User} from '../../../DTO/User.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ import Settings from '../../../DTO/settings.dto';
 export class AlmacenamientoNativoService {
 
   private llaveConfiguracionesGenerales = "configuraciones";
+  private llaveFechaSincronizacion = "ultimaFecha";
+  private llaveUsuarioDefault = "usuario";
 
   constructor(private nativeStorage: NativeStorage) {}
 
@@ -48,6 +51,54 @@ export class AlmacenamientoNativoService {
         
     });
     
+  }
+
+  obtenerUltimaFechaDeSincronizacion(){
+
+    return new Promise((resolve,reject)=>{
+      this.nativeStorage.getItem(this.llaveFechaSincronizacion).then((fechaSincronizacion:string)=>{
+        resolve(fechaSincronizacion);
+      }).catch(()=>{
+        reject(new Error("No hay última fecha de sincronización registrada!"));
+      });
+    });
+    
+  }
+
+  almacenarFechaDeSincronizacion(fechaSincronizacion:string){
+
+    return new Promise((resolve,reject)=>{
+      this.nativeStorage.setItem(this.llaveFechaSincronizacion,fechaSincronizacion).then(()=> {
+        resolve(fechaSincronizacion);
+      }).catch(()=>{
+        reject(new Error("Error al intentar guardar fecha de sincronizacion!"));
+      });
+    });
+
+  }
+
+  obtenerUsuarioPorDefault(){
+
+    return new Promise((resolve,reject)=>{
+      this.nativeStorage.getItem(this.llaveUsuarioDefault).then((usuario:User)=>{
+        resolve(usuario);
+      }).catch(()=>{
+        reject(new Error("No hay usuario registrado!"));
+      });
+    });
+    
+  }
+
+  almacenarUsuarioPorDefault(usuario:User){
+
+    return new Promise((resolve,reject)=>{
+      this.nativeStorage.setItem(this.llaveUsuarioDefault,usuario).then(()=> {
+        resolve(usuario);
+      }).catch(()=>{
+        reject(new Error("Error al intentar guardar infomacion de usuario!"));
+      });
+    });
+
   }
 
 }

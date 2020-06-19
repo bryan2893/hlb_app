@@ -6,6 +6,7 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
+  overflow-y: auto;
 }
 
 #container strong {
@@ -24,4 +25,15 @@
 
 #container a {
   text-decoration: none;
+}
+ion-button{
+  margin-top: 20px;
+}
+
+ion-list-header{
+  margin-top: 15px;
+}
+
+h2{
+  font-weight: bold;
 }

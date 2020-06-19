@@ -46,7 +46,7 @@ export class InspeccionHlbLocalService {
 
   getNoSincronizedInspHlbPage(pageNumber:number,rowsPerPage:number){
     
-    let sql = 'SELECT id_inspec_hlb,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas FROM trampas_amarillas where sincronizado = ? limit ?,?';
+    let sql = 'SELECT id_inspec_hlb,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas FROM inspecciones_hlb where sincronizado = ? limit ?,?';
     return new Promise((resolve,reject)=>{
         let offset = (pageNumber - 1) * rowsPerPage;
         this.db.executeSql(sql,[0,offset,rowsPerPage]).then((registrosInspHlb)=>{
@@ -146,16 +146,16 @@ export class InspeccionHlbLocalService {
 
       
       if(hlbInspection.tipo === "traspatio"){
-        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,hlbInspection.labor,hlbInspection.categoria,hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,'na',0,'na',0,'na',hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
+        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.nombre_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,hlbInspection.labor,hlbInspection.categoria,hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,'na',0,'na',0,'na',hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
           resolve(hlbInspection);
         }).catch((error) => {
-          reject(error);
+          reject(new Error("Error intentando ingresar un registro de de inspeccion hlb en sqlite: "+error.message));
         });
       }else{//Suponer que es tipo "ticofrut" o "productor"
-        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,'na','na',hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,hlbInspection.patron,hlbInspection.calle,hlbInspection.direccion_calle,hlbInspection.numero_arbol,hlbInspection.dir_arbol,hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
+        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.nombre_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,'na','na',hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,hlbInspection.patron,hlbInspection.calle,hlbInspection.direccion_calle,hlbInspection.numero_arbol,hlbInspection.dir_arbol,hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
           resolve(hlbInspection);
         }).catch((error) => {
-          reject(error);
+          reject(new Error("Error intentando ingresar un registro de de inspeccion hlb en sqlite: "+error.message));
         });
       }
 

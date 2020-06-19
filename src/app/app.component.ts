@@ -6,6 +6,8 @@ import {SQLite,SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {TraspatioFincaLocalService} from './services/traspatios_fincas/TraspatioFincaLocal.service';
 import {TrampaAmarillaLocalService} from './services/trampas_amarillas/TrampaAmarillaLocal.service';
 import {InspeccionHlbLocalService} from './services/inspecciones_hlb/InspeccionHlbLocal.service';
+import {DateService} from './services/date/date.service';
+import {AlmacenamientoNativoService} from './services/almacenamiento-interno/almacenamiento-nativo.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,9 @@ export class AppComponent {
     private sqlite:SQLite,
     private traspatioFincaLocalService:TraspatioFincaLocalService,
     private trampaAmarillasLocalService:TrampaAmarillaLocalService,
-    private inspeccionHlbLocaService:InspeccionHlbLocalService
+    private inspeccionHlbLocaService:InspeccionHlbLocalService,
+    private dateService:DateService,
+    private almacenamientoNativoService:AlmacenamientoNativoService
   ) {
     this.initializeApp();
   }
@@ -29,6 +33,8 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       //this.splashScreen.hide();
+      this.setDefaultUser();
+      this.setFirstDate();
       this.createDatabase();
     });
   }
@@ -53,4 +59,23 @@ export class AppComponent {
       console.log("Error:"+error.message);
     });
   }
+
+  //En este método se registra la fecha en que la aplicación arranco por primera vez.
+  //
+  setFirstDate(){
+    this.almacenamientoNativoService.almacenarFechaDeSincronizacion(this.dateService.getCurrentDateOnly()).then((result)=>{
+      console.log("se almacenó la fecha: "+result);
+    }).catch((error)=>{
+      console.log(error);
+    });
+  }
+
+  setDefaultUser(){
+    this.almacenamientoNativoService.almacenarUsuarioPorDefault({fullName:"Default User HLB APP",username:"dfUser",password:'default',permissions:['super usuario'],token:''}).then((usuario)=>{
+      console.log("Usuario por defecto almacenado!");
+    }).catch((error)=>{
+      console.log("Error al intentar almacenar usuario por defecto "+ error);
+    });
+  }
+
 }

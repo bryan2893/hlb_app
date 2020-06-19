@@ -41,7 +41,8 @@ export class MainPage implements OnInit {
       toast.present();
     }catch(error){
       await loading.dismiss();
-      let alert = await this.alertService.presentAlert(error);
+      let alert = await this.alertService.presentAlert(JSON.stringify(error));
+      console.log(JSON.stringify(error));
       alert.present();
     }
     

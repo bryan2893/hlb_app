@@ -28,8 +28,8 @@ export class MainInspeccionHlbPage implements OnInit {
     this.inspeccionHlbLocalService.getPagesQuantity(this.rowsPerPage).then((pagesQuantity:number)=>{
       this.pagesQuantity = pagesQuantity;
     }).then(()=>{
-      this.inspeccionHlbLocalService.getInspHlbPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
-        this.addMoreHlbInspectionsItems(trapsList);
+      this.inspeccionHlbLocalService.getInspHlbPage(this.pageCounter,this.rowsPerPage).then((hlbInspectionsList)=>{
+        this.addMoreHlbInspectionsItems(hlbInspectionsList);
         this.pageCounter += 1;
       });
     });

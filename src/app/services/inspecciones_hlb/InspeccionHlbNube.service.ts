@@ -27,7 +27,6 @@ export class InspeccionHlbNubeService {
         console.log("Datos descargados = "+response.data);
         resolve(response);
       }).catch((e)=>{
-        console.log("Encontró un error intentando obtener la página de registros: "+JSON.stringify(e));
         reject(e);
       });
     });

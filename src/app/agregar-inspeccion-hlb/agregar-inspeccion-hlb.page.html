@@ -9,26 +9,6 @@
 
 <ion-content>
 
-  <!--
-        tipo:string,
-        finca_poblado:string,
-        lote_propietario:string,
-        ciclo:number,
-        labor:string,
-        categoria:string,
-        variedad:string,
-        sintomatologia:number,
-        estado:number,
-        diagnostico:number,
-        latitud:number,
-        longitud:number,
-        patron:string,
-        calle:number,
-        direccion_calle:string,
-        numero_arbol:number,
-        dir_arbol:string,
-        notas:string
-      -->
   <form [formGroup]="inspHlbForm" (ngSubmit)="submit()">
 
     <ion-list>
@@ -188,6 +168,8 @@
     </ion-list>
   
     <ion-button expand="block" type="submit">Guardar</ion-button>
+
+    <!--<ion-button expand="block" (click)="getDate()">Obtener Fecha</ion-button>-->
 
 
   </form>
