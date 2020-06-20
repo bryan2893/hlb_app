@@ -24,9 +24,9 @@ export class HomePage {
     return (this.username !== '' && this.password !== '' && this.tipoLogueo !== '');
   }
 
-  //username:"dfUser",password:'default'
   loginUser(){
 
+    /*
     if(this.todoLoNecesarioEstaCompleto()){
       if(this.tipoLogueo === 'super'){
         this.userService.getDefaultUserInfo().then((user:User)=>{
@@ -58,7 +58,8 @@ export class HomePage {
         alert.present();
       });
     }
-
+    */
+   this.router.navigate(['/main']);
   }
   
 

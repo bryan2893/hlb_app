@@ -8,6 +8,7 @@ import {TrampaAmarillaLocalService} from './services/trampas_amarillas/TrampaAma
 import {InspeccionHlbLocalService} from './services/inspecciones_hlb/InspeccionHlbLocal.service';
 import {DateService} from './services/date/date.service';
 import {AlmacenamientoNativoService} from './services/almacenamiento-interno/almacenamiento-nativo.service';
+import {UserService} from './services/user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,8 @@ export class AppComponent {
     private trampaAmarillasLocalService:TrampaAmarillaLocalService,
     private inspeccionHlbLocaService:InspeccionHlbLocalService,
     private dateService:DateService,
-    private almacenamientoNativoService:AlmacenamientoNativoService
+    private almacenamientoNativoService:AlmacenamientoNativoService,
+    private userService:UserService
   ) {
     this.initializeApp();
   }
@@ -34,6 +36,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       //this.splashScreen.hide();
       this.setDefaultUser();
+      this.logueoPaPruebas();
       this.setFirstDate();
       this.createDatabase();
     });
@@ -76,6 +79,18 @@ export class AppComponent {
     }).catch((error)=>{
       console.log("Error al intentar almacenar usuario por defecto "+ error);
     });
+  }
+
+  //Esta funcion es para loguear a un usuario y no tener que estar haciendolo cada vez que se entra a la aplcacion mienstras se desarrolla.
+  logueoPaPruebas(){
+    let user = {
+      fullName:"super usuario",
+      username:"bhernandeza",
+      password:"casajaja",
+      permissions:['super administrador'],
+      token:""
+    }
+    this.userService.setLogedUser(user);
   }
 
 }
