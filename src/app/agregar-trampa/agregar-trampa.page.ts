@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Validators,FormBuilder,FormGroup} from '@angular/forms';
+import {Validators,FormBuilder,FormGroup, FormControl} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
 import {TrampaAmarillaLocalService as MantenimientosTrampasLocalDbService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
 import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
@@ -90,22 +90,10 @@ export class AgregarTrampaPage implements OnInit {
 
   }
 
-  validateInfo(trampaAmarillaRecord:any){
-    return (trampaAmarillaRecord.id_trampa !== '' && 
-      trampaAmarillaRecord.num_trampa !== '' &&
-      trampaAmarillaRecord.tipo !== '' &&
-      trampaAmarillaRecord.pais !== '' &&
-      trampaAmarillaRecord.finca_poblado !== '' &&
-      trampaAmarillaRecord.lote_propietario !== '' &&
-      trampaAmarillaRecord.latitud !== '' &&
-      trampaAmarillaRecord.longitud !== '' &&
-      trampaAmarillaRecord.estado !== '');
-  }
-
   async submit(){
 
     try{
-      if(this.validateInfo(this.addTrapForm.value)){//si todos los campos estan completados...
+      if(this.addTrapForm.dirty && this.addTrapForm.valid){//si todos los campos estan completados...
 
         let pais:string;
         let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
@@ -130,7 +118,7 @@ export class AgregarTrampaPage implements OnInit {
         toast.present();
         
       }else{
-        let alert = await this.alertService.presentAlert("Verifique que los datos están completos!");
+        let alert = await this.alertService.presentAlert("Verifique que los datos sean correctos!");
         alert.present();
       }
     }catch(error){

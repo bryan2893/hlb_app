@@ -123,30 +123,17 @@ export class AgregarInspeccionHlbPage implements OnInit {
   validarFormSegunTipo(hlbForm:any):any{
     let tipo:string = hlbForm.tipo;
 
-    let validacionGeneral = (hlbForm.tipo !== '' &&
-                            hlbForm.pais !== '' &&
-                            hlbForm.finca_poblado !== '' &&
-                            hlbForm.lote_propietario !== ''&&
-                            hlbForm.ciclo !== null && 
-                            hlbForm.variedad !== '' && 
-                            hlbForm.sintomatologia !== '' &&
-                            hlbForm.estado !== '' &&
-                            hlbForm.diagnostico !== '' &&
-                            hlbForm.latitud !== '' &&
-                            hlbForm.longitud !== '');
-
     if(tipo === 'traspatio'){
       return (hlbForm.labor !== '' &&
-      hlbForm.categoria !== '' && validacionGeneral
+      hlbForm.categoria !== ''
       );
     }else{
       return(
         hlbForm.patron !== ''&&
         hlbForm.calle !== null &&
         hlbForm.direccion_calle !== '' &&
-        hlbForm.numero_arbol !== null&&
-        hlbForm.dir_arbol !== '' &&
-        validacionGeneral
+        hlbForm.numero_arbol !== null &&
+        hlbForm.dir_arbol !== ''
       );
     }
 
@@ -156,7 +143,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
     try{
 
-      if(this.validarFormSegunTipo(this.inspHlbForm.value)){//si todos los campos estan completados...
+      if(this.inspHlbForm.dirty && this.inspHlbForm.valid){
 
         let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
         let pais:string = configuracionesGenerales.pais;
@@ -212,14 +199,19 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
         hlbInspectionToSave['sincronizado'] = 0;
 
-        //Validar los campos que deben ser rellenados cuando son tipo traspatio o cuando son productor Ó ticofrut.
-        await  this.inspeccionHlbLocalService.insertAnHlbInspection(hlbInspectionToSave);
-        
-        let toast = await this.toastService.showToast("Inspeccion insertada correctamente!");
-        await toast.present();
+        if(this.validarFormSegunTipo(hlbInspectionToSave)){
+          
+          await  this.inspeccionHlbLocalService.insertAnHlbInspection(hlbInspectionToSave);
+          let toast = await this.toastService.showToast("Inspeccion insertada correctamente!");
+          await toast.present();
+          
+        }else{
+          let alert = await this.alertService.presentAlert("Verifique que los datos están completos");
+          await alert.present();
+        }
         
       }else{
-        let alert = await this.alertService.presentAlert("Verifique que los datos están completos");
+        let alert = await this.alertService.presentAlert("Verifique que los datos están completos!");
         await alert.present();
       }
 
@@ -239,7 +231,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
       this.propietarios_lotes = propietariosLotesList;
       this.isSelectPropietarioLoteActive = true;
     }).catch((error)=>{
-
+      
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Validators,FormBuilder,FormGroup} from '@angular/forms';
+import {Validators,FormBuilder,FormGroup, FormControl} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
 import {ModalController} from '@ionic/angular';
 import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
@@ -37,8 +37,8 @@ export class AgregarManteHlbPage implements OnInit {
       tipo:['traspatio',Validators.required],
       finca_poblado:['',Validators.required],
       lote_propietario:['',Validators.required],
-      latitud:['',],
-      longitud:['',]
+      latitud:[''],
+      longitud:['']
     });
   }
 
@@ -69,23 +69,10 @@ export class AgregarManteHlbPage implements OnInit {
     }
   }
 
-  validateInfo(inspHlbRecord:any){
-
-    return (inspHlbRecord.id_traspatio_finca !== '' &&
-    inspHlbRecord.tipo !== '' &&
-    inspHlbRecord.pais !== '' &&
-    inspHlbRecord.finca_poblado !== '' &&
-    inspHlbRecord.lote_propietario !== '' &&
-    inspHlbRecord.latitud !== '' &&
-    inspHlbRecord.longitud !== '' &&
-    inspHlbRecord.estado !== '' && inspHlbRecord.sincronizado !== '');
-
-  }
-
   async submit(){
     try{
 
-      if(this.validateInfo(this.traspatioFincaForm.value)){//si todos los campos estan completados...
+      if(this.traspatioFincaForm.dirty && this.traspatioFincaForm.valid){
 
         let hlbMantainRegisterToSave:any = {};
   
