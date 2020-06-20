@@ -30,10 +30,18 @@ export class MainInspeccionHlbPage implements OnInit {
     }).then(()=>{
       this.inspeccionHlbLocalService.getInspHlbPage(this.pageCounter,this.rowsPerPage).then((hlbInspectionsList)=>{
         this.addMoreHlbInspectionsItems(hlbInspectionsList);
+        console.log(hlbInspectionsList);
         this.pageCounter += 1;
       });
     });
   }
+
+  ionViewWillLeave(){
+    this.inspeccionTraspatiosFincasList = [];
+    this.pagesQuantity = 0;
+  }
+
+  
 
   whenUserPressAKey(event:any){
     let value = event.target.value;

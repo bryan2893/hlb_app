@@ -35,7 +35,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private inspeccionHlbLocalService:InspeccionHlbLocalService,
-    private mantenimientosHlbLocalDbService:TraspatioFincaLocalService,
+    private traspatioFincaLocalService:TraspatioFincaLocalService,
     private router: Router,
     private previousUrlHolderService:PreviousUrlHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
@@ -90,11 +90,11 @@ export class AgregarInspeccionHlbPage implements OnInit {
     }
 
     
-    this.mantenimientosHlbLocalDbService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
+    this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{
-
+      
     });
 
   }
@@ -107,7 +107,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
     }
 
     
-    this.mantenimientosHlbLocalDbService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
+    this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{
@@ -121,18 +121,32 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   validarFormSegunTipo(hlbForm:any):any{
-    console.log("Entro a validar el tipo!");
     let tipo:string = hlbForm.tipo;
 
+    let validacionGeneral = (hlbForm.tipo !== '' &&
+                            hlbForm.pais !== '' &&
+                            hlbForm.finca_poblado !== '' &&
+                            hlbForm.lote_propietario !== ''&&
+                            hlbForm.ciclo !== null && 
+                            hlbForm.variedad !== '' && 
+                            hlbForm.sintomatologia !== '' &&
+                            hlbForm.estado !== '' &&
+                            hlbForm.diagnostico !== '' &&
+                            hlbForm.latitud !== '' &&
+                            hlbForm.longitud !== '');
+
     if(tipo === 'traspatio'){
-      return (hlbForm.labor !== '' && hlbForm.categoria !== '');
+      return (hlbForm.labor !== '' &&
+      hlbForm.categoria !== '' && validacionGeneral
+      );
     }else{
       return(
         hlbForm.patron !== ''&&
-        hlbForm.calle !== '' &&
+        hlbForm.calle !== null &&
         hlbForm.direccion_calle !== '' &&
-        hlbForm.numero_arbol !== ''&&
-        hlbForm.dir_arbol !== ''
+        hlbForm.numero_arbol !== null&&
+        hlbForm.dir_arbol !== '' &&
+        validacionGeneral
       );
     }
 
@@ -141,14 +155,12 @@ export class AgregarInspeccionHlbPage implements OnInit {
   async submit(){
 
     try{
-      if(this.inspHlbForm.dirty){//si todos los campos estan completados...
+
+      if(this.validarFormSegunTipo(this.inspHlbForm.value)){//si todos los campos estan completados...
 
         let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
         let pais:string = configuracionesGenerales.pais;
         let usuario:User = this.userService.getLogedUser();
-
-        
-
         let hlbInspectionToSave:any = {};
   
         hlbInspectionToSave['id_inspec_hlb'] = -1;
@@ -201,20 +213,16 @@ export class AgregarInspeccionHlbPage implements OnInit {
         hlbInspectionToSave['sincronizado'] = 0;
 
         //Validar los campos que deben ser rellenados cuando son tipo traspatio o cuando son productor Ó ticofrut.
-        if(this.validarFormSegunTipo(hlbInspectionToSave)){
-          console.log("Entro a hacer la insercion de una inspeccion hlb");
-          await  this.inspeccionHlbLocalService.insertAnHlbInspection(hlbInspectionToSave);
-          console.log("Si no se imprime esto quiere decir que el error esta en la insercion de la inspeccion");
-          let toast = await this.toastService.showToast("Inspeccion insertada correctamente!");
-          await toast.present();
-        }else{
-          let alert = await this.alertService.presentAlert("Verifique que los datos están completos");
-          await alert.present();
-        }
+        await  this.inspeccionHlbLocalService.insertAnHlbInspection(hlbInspectionToSave);
+        
+        let toast = await this.toastService.showToast("Inspeccion insertada correctamente!");
+        await toast.present();
+        
       }else{
         let alert = await this.alertService.presentAlert("Verifique que los datos están completos");
         await alert.present();
       }
+
     }catch(error){
       let alert = await this.alertService.presentAlert(error);
       await alert.present();
@@ -227,7 +235,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
       return;
     }
     this.inspHlbForm.controls['lote_propietario'].patchValue('');
-    this.mantenimientosHlbLocalDbService.getPropietariosLotesByFincaPobladoName(fincaPobladoSelected).then((propietariosLotesList:string[])=>{
+    this.traspatioFincaLocalService.getPropietariosLotesByFincaPobladoName(fincaPobladoSelected).then((propietariosLotesList:string[])=>{
       this.propietarios_lotes = propietariosLotesList;
       this.isSelectPropietarioLoteActive = true;
     }).catch((error)=>{

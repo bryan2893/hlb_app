@@ -8,6 +8,7 @@ import {TraspatioFincaLocalService} from './traspatios_fincas/TraspatioFincaLoca
 import {TraspatioFincaNubeService} from './traspatios_fincas/TraspatioFincaNube.service';
 import {InspeccionHlbLocalService} from './inspecciones_hlb/InspeccionHlbLocal.service';
 import {InspeccionHlbNubeService} from './inspecciones_hlb/InspeccionHlbNube.service';
+import {DateService} from './date/date.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class SincronizacionService {
     private traspatiosFincasLocalService:TraspatioFincaLocalService,
     private traspatiosFincasNubeService:TraspatioFincaNubeService,
     private inspeccionHlbLocalService:InspeccionHlbLocalService,
-    private inspeccionHlbNubeService:InspeccionHlbNubeService) { }
+    private inspeccionHlbNubeService:InspeccionHlbNubeService,
+    private dateService:DateService) { }
 
   async sincronizarTodo(){
     try{
@@ -35,6 +37,8 @@ export class SincronizacionService {
         console.log("Si entro a UNO");
         let listaDetrampas:any;
         listaDetrampas = await this.TrampaAmarillaLocalService.getNoSincronizedTrapsPage(i,this.rowsPerPage);
+        console.log("Llego antes del método para mandar a sincronizar!!");
+        console.log("Esta es la lista de trampas antes de la sincronizacion = "+listaDetrampas);
         await this.TrampaAmarillaNubeService.syncListOfTraps(listaDetrampas);
       }
 
@@ -99,7 +103,10 @@ export class SincronizacionService {
         listaDeInspeccionesHlb = JSON.parse(respuesta.data);
         await this.inspeccionHlbLocalService.insertManyHlbInspections(listaDeInspeccionesHlb);
       }
-        
+      
+      //Al terminar la sincronizacion se registra la fecha actual de sincronización.
+      let currentDate = this.dateService.getCurrentDateOnly();
+      await this.almacenamientoNativoService.almacenarFechaDeSincronizacion(currentDate);
       
     }catch(error){
       throw error;

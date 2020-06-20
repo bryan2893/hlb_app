@@ -71,7 +71,7 @@ export class AppComponent {
   }
 
   setDefaultUser(){
-    this.almacenamientoNativoService.almacenarUsuarioPorDefault({fullName:"Default User HLB APP",username:"dfUser",password:'default',permissions:['super usuario'],token:''}).then((usuario)=>{
+    this.almacenamientoNativoService.almacenarUsuarioPorDefault({fullName:"Default User HLB APP",username:"aa",password:'aa',permissions:['super usuario'],token:''}).then((usuario)=>{
       console.log("Usuario por defecto almacenado!");
     }).catch((error)=>{
       console.log("Error al intentar almacenar usuario por defecto "+ error);
