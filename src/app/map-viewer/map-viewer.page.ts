@@ -13,6 +13,7 @@ import {
 } from '@ionic-native/google-maps/ngx';
 import {DataContainerService} from '../services/data/data-container.service';
 import {Router,ActivatedRoute} from '@angular/router';
+import {LoaderService} from '../services/loader.service';
 
 @Component({
   selector: 'app-map-viewer',
@@ -27,7 +28,10 @@ export class MapViewerPage implements OnInit {
 
   previousUrlToComeBack:string;//url donde se debe regresar con las coordenadas obtenidas.
 
-  constructor(private dataContainerService: DataContainerService,private router:Router,private route: ActivatedRoute) {//
+  constructor(private dataContainerService: DataContainerService,
+    private router:Router,
+    private route: ActivatedRoute,
+    private loaderService:LoaderService) {//
 
   }
 
@@ -43,7 +47,7 @@ export class MapViewerPage implements OnInit {
     this.loadMap();
   }
 
-  loadMap(){
+  async loadMap(){
 
     this.map = GoogleMaps.create('map', {
       // camera: {
@@ -55,13 +59,17 @@ export class MapViewerPage implements OnInit {
       //   tilt: 30
       // }
     });
-    this.goToMyLocation();
+
+      let loading = await this.loaderService.showLoader("Cargando mapa...");
+      loading.present();
+      await this.goToMyLocation();
+      loading.dismiss();
       
   }
 
   goToMyLocation(){
       //this.map.clear();
-      this.map.getMyLocation().then((location:MyLocation)=>{
+      return this.map.getMyLocation().then((location:MyLocation)=>{
 
       //Mover la cámara animadamente
       this.map.animateCamera({
@@ -74,8 +82,8 @@ export class MapViewerPage implements OnInit {
       //Agregar un marcador
       let marker: Marker = this.map.addMarkerSync({
         icon:'blue',
-        title: '@ionic-native/google-maps plugin!',
-        snippet: 'This plugin is awesome!',
+        //title: '@ionic-native/google-maps plugin!',
+        snippet: 'Tu posicion actual',
         position: location.latLng,
         draggable: true,
         animation: GoogleMapsAnimation.BOUNCE
@@ -86,14 +94,15 @@ export class MapViewerPage implements OnInit {
       //show the infoWindow
       marker.showInfoWindow();
 
-      //If clicked it, display the alert
+      /*
       marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
         //this.showToast('clicked!');
         //alert("jaja");
       });
-
+      */
+      Promise.resolve(true);
     }).catch((error)=>{
-
+      Promise.reject(false);
     });
 
   }

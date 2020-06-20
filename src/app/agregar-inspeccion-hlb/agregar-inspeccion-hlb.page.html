@@ -1,0 +1,177 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>+ Nueva inspeccion hlb</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/main-trampas-amarillas"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="inspHlbForm" (ngSubmit)="submit()">
+
+    <ion-list>
+
+      <ion-radio-group formControlName="tipo" (ionChange)="changeType($event)">
+        <ion-list-header>
+          <ion-label>
+            Tipo
+          </ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Traspatio</ion-label>
+          <ion-radio value="traspatio"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Productor</ion-label>
+          <ion-radio value="productor"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Ticofrut</ion-label>
+          <ion-radio value="ticofrut"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+
+      <ion-item *ngIf="isSelectPobladoFincaActive">
+        <ion-label>{{poblado_finca_key}}</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)">
+          <ion-select-option *ngFor="let poblado_finca of poblados_fincas" value={{poblado_finca}}>{{poblado_finca}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="isSelectPropietarioLoteActive">
+        <ion-label>{{lote_propietario_key}}</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="lote_propietario">
+          <ion-select-option *ngFor="let propietario_lote of propietarios_lotes" value={{propietario_lote}}>{{propietario_lote}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      
+      <ion-item>
+        <ion-label position="stacked">Ciclo</ion-label>
+        <ion-input formControlName="ciclo" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+        <ion-label position="stacked">Calle</ion-label>
+        <ion-input formControlName="calle" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+        <ion-label>Direccion de calle</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="direccion_calle">
+          <ion-select-option value="n-s">N-S</ion-select-option>
+          <ion-select-option value="s-n">S-N</ion-select-option>
+          <ion-select-option value="o-e">O-E</ion-select-option>
+          <ion-select-option value="e-o">E-O</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+        <ion-label position="stacked">Número de arbol</ion-label>
+        <ion-input formControlName="numero_arbol" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+        <ion-label>Direccion de arbol</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="dir_arbol">
+          <ion-select-option value="n-s">N-S</ion-select-option>
+          <ion-select-option value="s-n">S-N</ion-select-option>
+          <ion-select-option value="o-e">O-E</ion-select-option>
+          <ion-select-option value="e-o">E-O</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+        <ion-label>Patrón</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="patron">
+          <ion-select-option value="FYD">FYD</ion-select-option>
+          <ion-select-option value="SWIN">SWIN</ion-select-option>
+          <ion-select-option value="CAR">CAR</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="tipo === 'traspatio'">
+        <ion-label>Labor</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="labor">
+          <ion-select-option value="aplicacion">Aplicacion</ion-select-option>
+          <ion-select-option value="censo">Censo</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="tipo === 'traspatio'">
+        <ion-label>Categoria</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="categoria">
+          <ion-select-option value="plantacion">Plantacion</ion-select-option>
+          <ion-select-option value="traspatio">Traspatio</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Variedad</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="variedad">
+          <ion-select-option value="naranja">Naranja</ion-select-option>
+          <ion-select-option value="limon">Limón</ion-select-option>
+          <ion-select-option value="mandarina">Mandarina</ion-select-option>
+          <ion-select-option value="toronja">Toronja</ion-select-option>
+          <ion-select-option value="maracuya">Maracuyá</ion-select-option>
+          <ion-select-option value="limoncillo">Limoncillo</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Sintomatología</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="sintomatologia">
+          <ion-select-option value='1'>Si</ion-select-option>
+          <ion-select-option value='0'>No</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Estado</ion-label>
+        <ion-select type="number" value="" okText="Aceptar" cancelText="Cancelar" formControlName="estado">
+          <ion-select-option value='0'>Pendiente</ion-select-option>
+          <ion-select-option value='1'>Erradicado</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label>Diagnóstico</ion-label>
+        <ion-select type="number" value="" okText="Aceptar" cancelText="Cancelar" formControlName="diagnostico">
+          <ion-select-option value='1'>Si</ion-select-option>
+          <ion-select-option value='0'>No</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Latitud</ion-label>
+        <ion-input formControlName="latitud" type="number" readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Longitud</ion-label>
+        <ion-input formControlName="longitud" type="number" readonly></ion-input>
+      </ion-item>
+
+      <ion-button (click)="openMap()">
+        <ion-icon slot="icon-only" name="location-outline"></ion-icon>
+      </ion-button>
+
+      <ion-item>
+        <ion-label position="stacked">Notas</ion-label>
+        <ion-textarea value="" formControlName="notas"></ion-textarea>
+      </ion-item>
+      
+  
+    </ion-list>
+  
+    <ion-button expand="block" type="submit">Guardar</ion-button>
+
+    <!--<ion-button expand="block" (click)="getDate()">Obtener Fecha</ion-button>-->
+
+
+  </form>
+
+</ion-content>

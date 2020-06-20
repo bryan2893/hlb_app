@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
-import {LocalDbService as MantenimientosTrampasLocalDbService} from '../services/mantenimiento_trampas/local-db.service';
-import {LocalDbService as MantenimientosHlbLocalDbService} from '../services/mantenimientos_hlb/local-db.service';
+import {TrampaAmarillaLocalService as MantenimientosTrampasLocalDbService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
+import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
+import {AlertService} from '../services/alert/alert.service';
+import {ToastService} from '../services/toast-service/toast.service';
 
 @Component({
   selector: 'app-agregar-trampa',
@@ -25,7 +27,7 @@ export class AgregarTrampaPage implements OnInit {
 
   coords:any;
 
-  seetingsForm: FormGroup;
+  addTrapForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -33,9 +35,11 @@ export class AgregarTrampaPage implements OnInit {
     private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router: Router,
     private previousUrlHolderService:PreviousUrlHolderService,
-    private almacenamientoNativoService:AlmacenamientoNativoService) {
+    private almacenamientoNativoService:AlmacenamientoNativoService,
+    private alertService:AlertService,
+    private toastService:ToastService) {
 
-    this.seetingsForm = this.formBuilder.group({
+    this.addTrapForm = this.formBuilder.group({
       num_trampa:['',Validators.required],
       tipo:['',Validators.required],
       finca_poblado:['',Validators.required],
@@ -49,8 +53,8 @@ export class AgregarTrampaPage implements OnInit {
   changeType(event:any){
     this.tipo = event.target.value;
     this.isSelectPropietarioLoteActive = false;
-    this.seetingsForm.controls['finca_poblado'].patchValue('');
-    this.seetingsForm.controls['lote_propietario'].patchValue('');
+    this.addTrapForm.controls['finca_poblado'].patchValue('');
+    this.addTrapForm.controls['lote_propietario'].patchValue('');
     this.poblados_fincas = [];
     this.propietarios_lotes = [];
     
@@ -65,7 +69,7 @@ export class AgregarTrampaPage implements OnInit {
     }
 
     
-    this.mantenimientosHlbLocalDbService.getFincaPobladosByType(this.tipo).then((fincasPobladosList:string[])=>{
+    this.mantenimientosHlbLocalDbService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{
@@ -77,51 +81,61 @@ export class AgregarTrampaPage implements OnInit {
   ionViewWillEnter(){
     if (this.route.snapshot.data['data']) {
       this.coords = this.route.snapshot.data['data'];
-      this.seetingsForm.controls['latitud'].patchValue(this.coords.latitud);
-      this.seetingsForm.controls['longitud'].patchValue(this.coords.longitud);
+      this.addTrapForm.controls['latitud'].patchValue(this.coords.latitud);
+      this.addTrapForm.controls['longitud'].patchValue(this.coords.longitud);
     }
-    this.almacenamientoNativoService.obtenerParametrosDeConfiguracion().then((parametrosDeConfiguracion)=>{
-      if(parametrosDeConfiguracion === null){
-
-      }
-    });
   }
 
   ngOnInit() {
 
   }
 
+  validateInfo(trampaAmarillaRecord:any){
+    return (trampaAmarillaRecord.id_trampa !== '' && 
+      trampaAmarillaRecord.num_trampa !== '' &&
+      trampaAmarillaRecord.tipo !== '' &&
+      trampaAmarillaRecord.pais !== '' &&
+      trampaAmarillaRecord.finca_poblado !== '' &&
+      trampaAmarillaRecord.lote_propietario !== '' &&
+      trampaAmarillaRecord.latitud !== '' &&
+      trampaAmarillaRecord.longitud !== '' &&
+      trampaAmarillaRecord.estado !== '');
+  }
+
   async submit(){
 
     try{
-      if(this.seetingsForm.dirty){//si todos los campos estan completados...
+      if(this.validateInfo(this.addTrapForm.value)){//si todos los campos estan completados...
 
         let pais:string;
         let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-        if(configuracionesGenerales !== null){
-          pais = configuracionesGenerales.pais;
-        }
+        pais = configuracionesGenerales.pais;
+        
   
         let trapMantainRegisterToSave:any = {};
   
         trapMantainRegisterToSave['id_trampa'] = -1;
-        trapMantainRegisterToSave['num_trampa'] = this.seetingsForm.controls['num_trampa'].value;
-        trapMantainRegisterToSave['tipo'] = this.seetingsForm.controls['tipo'].value;
+        trapMantainRegisterToSave['num_trampa'] = this.addTrapForm.controls['num_trampa'].value;
+        trapMantainRegisterToSave['tipo'] = this.addTrapForm.controls['tipo'].value;
         trapMantainRegisterToSave['pais'] = pais;
-        trapMantainRegisterToSave['finca_poblado'] = this.seetingsForm.controls['finca_poblado'].value;
-        trapMantainRegisterToSave['lote_propietario'] = this.seetingsForm.controls['lote_propietario'].value;
-        trapMantainRegisterToSave['latitud'] = this.seetingsForm.controls['latitud'].value;
-        trapMantainRegisterToSave['longitud'] = this.seetingsForm.controls['longitud'].value;
+        trapMantainRegisterToSave['finca_poblado'] = this.addTrapForm.controls['finca_poblado'].value;
+        trapMantainRegisterToSave['lote_propietario'] = this.addTrapForm.controls['lote_propietario'].value;
+        trapMantainRegisterToSave['latitud'] = this.addTrapForm.controls['latitud'].value;
+        trapMantainRegisterToSave['longitud'] = this.addTrapForm.controls['longitud'].value;
         trapMantainRegisterToSave['estado'] = 1;
         trapMantainRegisterToSave['sincronizado'] = 0;
-  
-        await  this.mantenimientosTrampasLocalDbService.insertAtrap(trapMantainRegisterToSave);
-        alert("Trampa insertada correctamente!");
+
+        await this.mantenimientosTrampasLocalDbService.insertAtrap(trapMantainRegisterToSave);
+        let toast = await this.toastService.showToast("Trampa insertada correctamente!");
+        toast.present();
+        
       }else{
-        alert("Verifique que los datos están completos!");
+        let alert = await this.alertService.presentAlert("Verifique que los datos están completos!");
+        alert.present();
       }
     }catch(error){
-      alert(error.message);
+      let alert = await this.alertService.presentAlert(error);
+      alert.present();
     }
   }
 
@@ -130,12 +144,14 @@ export class AgregarTrampaPage implements OnInit {
     if(!fincaPobladoSelected){
       return;
     }
-    this.seetingsForm.controls['lote_propietario'].patchValue('');
+    this.addTrapForm.controls['lote_propietario'].patchValue('');
     this.mantenimientosHlbLocalDbService.getPropietariosLotesByFincaPobladoName(fincaPobladoSelected).then((propietariosLotesList:string[])=>{
       this.propietarios_lotes = propietariosLotesList;
       this.isSelectPropietarioLoteActive = true;
     }).catch((error)=>{
-      
+      this.alertService.presentAlert(error).then((alert)=>{
+        alert.present();
+      });
     });
   }
 

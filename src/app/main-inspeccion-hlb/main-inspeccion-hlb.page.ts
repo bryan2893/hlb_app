@@ -1,0 +1,84 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {IonSearchbar} from '@ionic/angular';
+
+import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
+
+@Component({
+  selector: 'app-main-inspeccion-hlb',
+  templateUrl: './main-inspeccion-hlb.page.html',
+  styleUrls: ['./main-inspeccion-hlb.page.scss'],
+})
+export class MainInspeccionHlbPage implements OnInit {
+
+  @ViewChild('searchbar',{static:false}) searchBar: IonSearchbar;
+  searchBarActive = false;
+  private rowsPerPage = 13;
+  private pageCounter = 1;
+  pagesQuantity = 0;
+  inspeccionTraspatiosFincasList = [];
+
+  constructor(private inspeccionHlbLocalService: InspeccionHlbLocalService) {}
+
+  ngOnInit() {
+  }
+
+  ionViewWillEnter(){
+    this.inspeccionTraspatiosFincasList = [];
+    this.pageCounter = 1;
+    this.inspeccionHlbLocalService.getPagesQuantity(this.rowsPerPage).then((pagesQuantity:number)=>{
+      this.pagesQuantity = pagesQuantity;
+    }).then(()=>{
+      this.inspeccionHlbLocalService.getInspHlbPage(this.pageCounter,this.rowsPerPage).then((hlbInspectionsList)=>{
+        this.addMoreHlbInspectionsItems(hlbInspectionsList);
+        console.log(hlbInspectionsList);
+        this.pageCounter += 1;
+      });
+    });
+  }
+
+  ionViewWillLeave(){
+    this.inspeccionTraspatiosFincasList = [];
+    this.pagesQuantity = 0;
+  }
+
+  
+
+  whenUserPressAKey(event:any){
+    let value = event.target.value;
+    this.inspeccionHlbLocalService.findHlbInspections(value).then((listaDeInspeccionesEncontradas:any)=>{
+      this.inspeccionTraspatiosFincasList = listaDeInspeccionesEncontradas;
+    }).catch((error)=>{
+      console.log(error);
+    });
+  }
+
+  change(event:any){
+    this.searchBarActive = !this.searchBarActive;
+    if(this.searchBarActive){
+      setTimeout(() => {
+        this.searchBar.setFocus();
+      },100);
+    }else{
+      this.pageCounter = 1;
+      this.inspeccionHlbLocalService.getInspHlbPage(this.pageCounter,this.rowsPerPage).then((hlbInspectionsList:any)=>{
+        this.inspeccionTraspatiosFincasList = hlbInspectionsList;
+        this.pageCounter += 1;
+      });
+    }
+  }
+
+  loadInspections(event:any){
+    this.inspeccionHlbLocalService.getInspHlbPage(this.pageCounter,this.rowsPerPage).then((hlbInspectionsList)=>{
+      this.addMoreHlbInspectionsItems(hlbInspectionsList);
+      this.pageCounter += 1;
+      event.target.complete();
+    });
+  }
+
+  addMoreHlbInspectionsItems(hlbInspectionPage:any) {
+    for (let i = 0; i < hlbInspectionPage.length; i++) {  
+      this.inspeccionTraspatiosFincasList.push(hlbInspectionPage[i]); 
+    }
+  }
+
+}

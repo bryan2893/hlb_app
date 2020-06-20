@@ -8,10 +8,10 @@ export class LoaderService {
 
   constructor(public loadingController: LoadingController) { }
 
-  showLoader():Promise<any>{
+  showLoader(textoAmostrar:string):Promise<any>{
     return new Promise((resolve,reject)=>{
       this.loadingController.create({
-        message: 'Sincronizando...'
+        message: textoAmostrar
       }).then((res) => {
         resolve(res);
       }).catch((error)=>{

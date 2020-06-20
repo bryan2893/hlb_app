@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AgregarTrampaPageRoutingModule } from './agregar-trampa-routing.module';
+import { AgregarInspeccionHlbPageRoutingModule } from './agregar-inspeccion-hlb-routing.module';
 
-import { AgregarTrampaPage } from './agregar-trampa.page';
+import { AgregarInspeccionHlbPage } from './agregar-inspeccion-hlb.page';
 
 import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
 
@@ -16,11 +15,11 @@ import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    AgregarTrampaPageRoutingModule,
+    AgregarInspeccionHlbPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     MapViewerPageModule
   ],
-  declarations: [AgregarTrampaPage]
+  declarations: [AgregarInspeccionHlbPage]
 })
-export class AgregarTrampaPageModule {}
+export class AgregarInspeccionHlbPageModule {}

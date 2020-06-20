@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
-import {LocalDbService} from '../services/mantenimientos_hlb/local-db.service';
+import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 
 @Component({
   selector: 'app-main-mante-hlb',
@@ -16,15 +16,15 @@ export class MainManteHlbPage implements OnInit {
   pagesQuantity = 0;
   mantains = [];
 
-  constructor(private localDbService:LocalDbService) { }
+  constructor(private traspatioFincaLocalService:TraspatioFincaLocalService) { }
 
   ionViewWillEnter(){
     this.mantains = [];
     this.pageCounter = 1;
-    this.localDbService.getPagesQuantity(this.rowsPerPage).then((quantity:number)=>{
+    this.traspatioFincaLocalService.getPagesQuantity(this.rowsPerPage).then((quantity:number)=>{
       this.pagesQuantity = quantity;
     }).then(()=>{
-      this.localDbService.getTraspatiosFincasPage(this.pageCounter,this.rowsPerPage).then((mantainsList)=>{
+      this.traspatioFincaLocalService.getTraspatiosFincasPage(this.pageCounter,this.rowsPerPage).then((mantainsList)=>{
         this.addMoreHlbMantains(mantainsList);
         this.pageCounter += 1;
       });
@@ -34,47 +34,35 @@ export class MainManteHlbPage implements OnInit {
   ngOnInit() {
   }
 
-  obtenerNumeroPaginas(){
-    this.localDbService.getPagesQuantity(this.rowsPerPage).then((quantity) => {
-      alert(quantity);
-    });
-  }
-
-  obtenerPaginaTrampas(){
-    this.localDbService.getTraspatiosFincasPage(1,0).then((data)=>{
-      alert(JSON.stringify(data));
-    });
-  }
-
-  async contarRegistros(){
-
-    try{
-      let registro = await this.localDbService.countTraspatiosFincas();
-      alert(registro.cantidad);
-      return registro.cantidad;
-    }catch(error){
-      throw new Error(error.message);
-    }
-
-  }
 
   change(){
-
     
     this.searchBarActive = !this.searchBarActive;
-
-    if(!this.searchBarActive){
-      return;
-    }else{
+    if(this.searchBarActive){
       setTimeout(() => {
         this.searchBar.setFocus();
       },100);
+    }else{
+      this.pageCounter = 1;
+      this.traspatioFincaLocalService.getTraspatiosFincasPage(this.pageCounter,this.rowsPerPage).then((mantains:any)=>{
+        this.mantains = mantains;
+        this.pageCounter += 1;
+      });
     }
 
   }
 
-  loadMantains(event){
-    this.localDbService.getTraspatiosFincasPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
+  whenUserPressAKey(event:any){
+    let value = event.target.value;
+    this.traspatioFincaLocalService.findTraspatiosFincas(value).then((listaDetraspatiosEncontrados:any)=>{
+      this.mantains = listaDetraspatiosEncontrados;
+    }).catch((error)=>{
+      console.log(error);
+    });
+  }
+
+  loadMantains(event:any){
+    this.traspatioFincaLocalService.getTraspatiosFincasPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
       this.addMoreHlbMantains(trapsList);
       this.pageCounter += 1;
       event.target.complete();
@@ -82,11 +70,11 @@ export class MainManteHlbPage implements OnInit {
 
   }
 
-  addMoreHlbMantains(mantainsPage) {
+  addMoreHlbMantains(mantainsPage:any) {
 
     for (let i = 0; i < mantainsPage.length; i++) {  
       this.mantains.push(mantainsPage[i]);   
-    }  
+    }
   }
 
 }

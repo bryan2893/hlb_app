@@ -9,13 +9,13 @@
 
 <ion-content>
 
-  <form [formGroup]="seetingsForm" (ngSubmit)="submit()">
+  <form [formGroup]="addTrapForm" (ngSubmit)="submit()">
 
     <ion-list>
 
       <ion-item>
         <ion-label position="stacked">Número de trampa</ion-label>
-        <ion-input formControlName="num_trampa" type="number" clearOnEdit="true"></ion-input>
+        <ion-input formControlName="num_trampa" type="number"></ion-input>
       </ion-item>
 
       <ion-radio-group formControlName="tipo" (ionChange)="changeType($event)">

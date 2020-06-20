@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
 import {ModalController} from '@ionic/angular';
-import {LocalDbService as MantenimientosHlbLocalDbService} from '../services/mantenimientos_hlb/local-db.service';
+import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
+import {AlertService} from '../services/alert/alert.service';
+import {ToastService} from '../services/toast-service/toast.service';
 
 @Component({
   selector: 'app-agregar-mante-hlb',
@@ -18,7 +20,7 @@ export class AgregarManteHlbPage implements OnInit {
 
   coords:any;
 
-  seetingsForm: FormGroup;
+  traspatioFincaForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -26,8 +28,12 @@ export class AgregarManteHlbPage implements OnInit {
     private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router:Router,
     private previousUrlHolderService: PreviousUrlHolderService,
-    private almacenamientoNativoService:AlmacenamientoNativoService) {
-    this.seetingsForm = this.formBuilder.group({
+    private almacenamientoNativoService:AlmacenamientoNativoService,
+    private alertService:AlertService,
+    private toastService:ToastService
+    ) {
+
+    this.traspatioFincaForm = this.formBuilder.group({
       tipo:['traspatio',Validators.required],
       finca_poblado:['',Validators.required],
       lote_propietario:['',Validators.required],
@@ -39,8 +45,8 @@ export class AgregarManteHlbPage implements OnInit {
   changeType(event:any){
     this.tipo = event.target.value;
     
-    this.seetingsForm.controls['finca_poblado'].patchValue('');
-    this.seetingsForm.controls['lote_propietario'].patchValue('');
+    this.traspatioFincaForm.controls['finca_poblado'].patchValue('');
+    this.traspatioFincaForm.controls['lote_propietario'].patchValue('');
    
     
     if(this.tipo === "traspatio"){
@@ -58,43 +64,59 @@ export class AgregarManteHlbPage implements OnInit {
   ionViewWillEnter(){
     if (this.route.snapshot.data['data']) {
       this.coords = this.route.snapshot.data['data'];
-      this.seetingsForm.controls['latitud'].patchValue(this.coords.latitud);
-      this.seetingsForm.controls['longitud'].patchValue(this.coords.longitud);
+      this.traspatioFincaForm.controls['latitud'].patchValue(this.coords.latitud);
+      this.traspatioFincaForm.controls['longitud'].patchValue(this.coords.longitud);
     }
   }
 
+  validateInfo(inspHlbRecord:any){
+
+    return (inspHlbRecord.id_traspatio_finca !== '' &&
+    inspHlbRecord.tipo !== '' &&
+    inspHlbRecord.pais !== '' &&
+    inspHlbRecord.finca_poblado !== '' &&
+    inspHlbRecord.lote_propietario !== '' &&
+    inspHlbRecord.latitud !== '' &&
+    inspHlbRecord.longitud !== '' &&
+    inspHlbRecord.estado !== '' && inspHlbRecord.sincronizado !== '');
+
+  }
+
   async submit(){
-    if(this.seetingsForm.dirty){//si todos los campos estan completados...
+    try{
 
-      let hlbMantainRegisterToSave:any = {};
+      if(this.validateInfo(this.traspatioFincaForm.value)){//si todos los campos estan completados...
 
-      hlbMantainRegisterToSave['id_traspatio_finca'] = -1;
-
-      //Se obtiene el pais del almacenamiento interno del telefono.
-      let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-
-      let paisRecuperado:string;
-      if(parametrosDeConfiguracion !== null){
-        paisRecuperado = parametrosDeConfiguracion.pais;
+        let hlbMantainRegisterToSave:any = {};
+  
+        hlbMantainRegisterToSave['id_traspatio_finca'] = -1;
+  
+        //Se obtiene el pais del almacenamiento interno del telefono.
+        let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+  
+        let paisRecuperado:string = parametrosDeConfiguracion.pais;
+  
+        hlbMantainRegisterToSave['pais'] = paisRecuperado;
+        hlbMantainRegisterToSave['tipo'] = this.traspatioFincaForm.controls['tipo'].value;
+        hlbMantainRegisterToSave['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value;
+        hlbMantainRegisterToSave['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value;
+        hlbMantainRegisterToSave['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
+        hlbMantainRegisterToSave['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
+        hlbMantainRegisterToSave['estado'] = 1;
+        hlbMantainRegisterToSave['sincronizado'] = 0;
+  
+        await this.mantenimientosHlbLocalDbService.insertATraspatioFinca(hlbMantainRegisterToSave);
+        let toast = await this.toastService.showToast("Traspatio/finca insertado correctamente!");
+        toast.present();
+  
+      }else{
+        let alert = await this.alertService.presentAlert("Verifique que todos los datos están completos!");
+        alert.present();
       }
 
-      hlbMantainRegisterToSave['pais'] = paisRecuperado;
-      hlbMantainRegisterToSave['tipo'] = this.seetingsForm.controls['tipo'].value;
-      hlbMantainRegisterToSave['finca_poblado'] = this.seetingsForm.controls['finca_poblado'].value;
-      hlbMantainRegisterToSave['lote_propietario'] = this.seetingsForm.controls['lote_propietario'].value;
-      hlbMantainRegisterToSave['latitud'] = this.seetingsForm.controls['latitud'].value;
-      hlbMantainRegisterToSave['longitud'] = this.seetingsForm.controls['longitud'].value;
-      hlbMantainRegisterToSave['estado'] = 1;
-      hlbMantainRegisterToSave['sincronizado'] = 0;
-
-      this.mantenimientosHlbLocalDbService.insertATraspatioFinca(hlbMantainRegisterToSave).then((hlbMantain)=>{
-        alert("Mantenimiento hlb insertado correctamente!" + JSON.stringify(hlbMantain));
-      }).catch((error)=>{
-        alert(error.message);
-      });
-
-    }else{
-      alert("Verifique que los datos están completos!");
+    }catch(error){
+      let alert = await this.alertService.presentAlert(error);
+      alert.present();
     }
   }
 
@@ -107,8 +129,8 @@ export class AgregarManteHlbPage implements OnInit {
   }
 
   borrarCoordenadas(){
-    this.seetingsForm.controls['latitud'].patchValue('');
-    this.seetingsForm.controls['longitud'].patchValue('');
+    this.traspatioFincaForm.controls['latitud'].patchValue('');
+    this.traspatioFincaForm.controls['longitud'].patchValue('');
   }
-
+  
 }

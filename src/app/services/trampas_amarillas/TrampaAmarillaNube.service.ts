@@ -5,7 +5,7 @@ import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
 @Injectable({
   providedIn: 'root'
 })
-export class ExternalDbService {
+export class TrampaAmarillaNubeService {
   private urlToDownload = 'http://hlb.ticofrut.com/api/trampas_amarillas/obtener_pagina/';
   private urlToUpload = 'http://hlb.ticofrut.com/api/trampas_amarillas/sincronizar';
   private urlToCountRecords = 'http://hlb.ticofrut.com/api/trampas_amarillas/contarRegistros/';

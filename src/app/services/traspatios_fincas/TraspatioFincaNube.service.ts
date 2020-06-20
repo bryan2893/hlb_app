@@ -5,7 +5,7 @@ import {TraspatioFincaNubeSubida} from '../../../DTO/server/TraspatioFincaNubeSu
 @Injectable({
   providedIn: 'root'
 })
-export class ExternalDbService {
+export class TraspatioFincaNubeService {
 
   private urlToDownload = 'http://hlb.ticofrut.com/api/traspatios_fincas/obtener_pagina/';
   private urlToUpload = 'http://hlb.ticofrut.com/api/traspatios_fincas/sincronizar';
@@ -46,7 +46,7 @@ export class ExternalDbService {
       this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
         resolve(response);
       }).catch((error)=>{
-        reject(error);
+        reject(JSON.stringify(error));
       });
 
     });
