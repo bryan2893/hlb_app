@@ -10,6 +10,9 @@ import {DateService} from './services/date/date.service';
 import {AlmacenamientoNativoService} from './services/almacenamiento-interno/almacenamiento-nativo.service';
 import {UserService} from './services/user/user.service';
 
+//PROBANDO
+import {Device} from '@ionic-native/device/ngx';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
