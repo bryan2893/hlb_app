@@ -10,7 +10,7 @@ export class PreviousUrlResolver implements Resolve<any>{
   constructor(private previousUrlHolderService:PreviousUrlHolderService) { }
 
   resolve(){
-    return this.previousUrlHolderService.getPreviousUrl();
+    return this.previousUrlHolderService.getDataFromPreviousUrl();
   }
 
 }

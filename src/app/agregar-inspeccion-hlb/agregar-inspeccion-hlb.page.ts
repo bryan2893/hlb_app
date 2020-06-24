@@ -10,6 +10,7 @@ import {DateService} from '../services/date/date.service';
 import {UserService} from '../services/user/user.service';
 import { User } from 'src/DTO/User.dto';
 import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
+import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 
 @Component({
   selector: 'app-agregar-inspeccion-hlb',
@@ -236,7 +237,13 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   openMap(){
-    this.previousUrlHolderService.setPreviousUrl(this.router.url);
+    let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+
+    dataToSendMapViewer["urlAnterior"] = this.router.url;
+    dataToSendMapViewer["tipo"] = "vista_agregar";
+    dataToSendMapViewer["coordenadas"] = null;
+
+    this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
   }
 

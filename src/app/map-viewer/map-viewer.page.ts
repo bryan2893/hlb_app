@@ -10,6 +10,8 @@ import {DataContainerService} from '../services/data/data-container.service';
 import {Router,ActivatedRoute} from '@angular/router';
 import {LoaderService} from '../services/loader.service';
 
+import {PreviousUrlStructure} from '../../DTO/previuousUrlStructure.dto';
+
 @Component({
   selector: 'app-map-viewer',
   templateUrl: './map-viewer.page.html',
@@ -21,6 +23,8 @@ export class MapViewerPage implements OnInit {
   map:GoogleMap;
   marker:Marker;
 
+  dataFromPreviousPage:PreviousUrlStructure;
+
   previousUrlToComeBack:string;//url donde se debe regresar con las coordenadas obtenidas.
 
   constructor(private dataContainerService: DataContainerService,
@@ -31,33 +35,33 @@ export class MapViewerPage implements OnInit {
 
   ionViewWillEnter(){
     if (this.route.snapshot.data['data']) {
-      this.previousUrlToComeBack = this.route.snapshot.data['data'];
+      this.dataFromPreviousPage = this.route.snapshot.data['data'];
     }
   }
 
   ngOnInit() {
     //this.latitud = this.navParams.data.latitud;
     //this.longitud = this.navParams.data.longitud;
-    this.loadMap();
+    try{
+      this.loadMap();
+    }catch(error){
+      alert(error);
+    }
+    
   }
 
   async loadMap(){
 
-    this.map = GoogleMaps.create('map', {
-      // camera: {
-      //   target: {
-      //     lat: 43.0741704,
-      //     lng: -89.3809802
-      //   },
-      //   zoom: 18,
-      //   tilt: 30
-      // }
-    });
+    this.map = GoogleMaps.create('map', {});
 
-      let loading = await this.loaderService.showLoader("Cargando mapa...");
-      loading.present();
+    let loading = await this.loaderService.showLoader("Cargando mapa...");
+    await loading.present();
+    if(this.dataFromPreviousPage.tipo === "vista_agregar"){
       await this.goToMyLocation();
-      loading.dismiss();
+    }else{
+      this.goToADefineLocation();
+    }
+    await loading.dismiss();
       
   }
 
@@ -101,9 +105,32 @@ export class MapViewerPage implements OnInit {
 
   }
 
+  //normalmente se utiliza cuando la vista anterior a esta es de editar donde las coordenadas ya se encuentran guardadas.
+  goToADefineLocation(){
+
+    this.map.animateCamera({
+      target:this.dataFromPreviousPage.coordenadas,
+      zoom:17,
+      tilt:30,
+      duration:1000
+    });
+
+    let marker: Marker = this.map.addMarkerSync({
+      icon:'blue',
+      //title: '@ionic-native/google-maps plugin!',
+      snippet: 'Tu posicion actual',
+      position: this.dataFromPreviousPage.coordenadas,
+      draggable: true,
+      animation: GoogleMapsAnimation.BOUNCE
+    });
+
+    this.marker = marker;
+
+  }
+
   getCurrentPositionAndGetOut(){
     this.dataContainerService.setData({latitud:this.marker.getPosition().lat,longitud:this.marker.getPosition().lng});
-    this.router.navigateByUrl(this.previousUrlToComeBack);
+    this.router.navigateByUrl(this.dataFromPreviousPage.urlAnterior);
   }
 
 }

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar *ngIf="!searchBarActive">
-    <ion-title>Traspatios/Fincas</ion-title>
+    <ion-title>Insp. Traspatios/Fincas</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="change()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
@@ -38,7 +38,7 @@
    </ion-list>
 
    <ion-infinite-scroll threshold="110px" (ionInfinite)="loadInspections($event)" [disabled]="pageCounter > pagesQuantity">
-     <ion-infinite-scroll-content  
+     <ion-infinite-scroll-content
        loadingSpinner="circles"
        loadingText="Cargando inspecciones...">
      </ion-infinite-scroll-content>
