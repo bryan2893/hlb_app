@@ -2,13 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {
   GoogleMaps,
   GoogleMap,
-  GoogleMapsEvent,
   GoogleMapsAnimation,
-  GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
   Marker,
-  Environment,
   MyLocation
 } from '@ionic-native/google-maps/ngx';
 import {DataContainerService} from '../services/data/data-container.service';
@@ -18,7 +13,7 @@ import {LoaderService} from '../services/loader.service';
 @Component({
   selector: 'app-map-viewer',
   templateUrl: './map-viewer.page.html',
-  styleUrls: ['./map-viewer.page.scss'],
+  styleUrls: ['./map-viewer.page.scss']
 })
 export class MapViewerPage implements OnInit {
   latitud:number;
@@ -31,8 +26,7 @@ export class MapViewerPage implements OnInit {
   constructor(private dataContainerService: DataContainerService,
     private router:Router,
     private route: ActivatedRoute,
-    private loaderService:LoaderService) {//
-
+    private loaderService:LoaderService) {
   }
 
   ionViewWillEnter(){
@@ -92,7 +86,7 @@ export class MapViewerPage implements OnInit {
       this.marker = marker;
 
       //show the infoWindow
-      marker.showInfoWindow();
+      //marker.showInfoWindow();
 
       /*
       marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
