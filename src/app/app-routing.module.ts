@@ -91,6 +91,13 @@ const routes: Routes = [
       data: DataResolverService
     },
     loadChildren: () => import('./ver-editar-trampa-amarilla/ver-editar-trampa-amarilla.module').then( m => m.VerEditarTrampaAmarillaPageModule)
+  },
+  {
+    path: 'ver-editar-traspatio-finca',
+    resolve:{
+      data: DataResolverService
+    },
+    loadChildren: () => import('./ver-editar-traspatio-finca/ver-editar-traspatio-finca.module').then( m => m.VerEditarTraspatioFincaPageModule)
   }
 
 ];

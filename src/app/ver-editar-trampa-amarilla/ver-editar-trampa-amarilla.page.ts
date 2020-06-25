@@ -115,12 +115,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
         this.addTrapForm.controls['tipo'].patchValue(inData.tipo);
         this.addTrapForm.controls['pais'].patchValue(inData.pais);
         this.addTrapForm.controls['finca_poblado'].patchValue(inData.finca_poblado);
-
-        console.log("Valor de lote propietario "+ JSON.stringify(inData.lote_propietario));
-        console.log("Lista de lotes_propietarios = "+JSON.stringify(this.propietarios_lotes));
-
         this.addTrapForm.controls['lote_propietario'].patchValue(inData.lote_propietario);
-
         this.addTrapForm.controls['latitud'].patchValue(inData.latitud);
         this.addTrapForm.controls['longitud'].patchValue(inData.longitud);
         this.addTrapForm.controls['estado'].patchValue(inData.estado);

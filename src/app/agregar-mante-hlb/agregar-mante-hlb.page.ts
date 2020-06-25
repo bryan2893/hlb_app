@@ -121,10 +121,5 @@ export class AgregarManteHlbPage implements OnInit {
     this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
   }
-
-  borrarCoordenadas(){
-    this.traspatioFincaForm.controls['latitud'].patchValue('');
-    this.traspatioFincaForm.controls['longitud'].patchValue('');
-  }
   
 }

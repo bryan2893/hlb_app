@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
 import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
+import {DataContainerService} from '../services/data/data-container.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-mante-hlb',
@@ -16,7 +18,9 @@ export class MainManteHlbPage implements OnInit {
   pagesQuantity = 0;
   mantains = [];
 
-  constructor(private traspatioFincaLocalService:TraspatioFincaLocalService) { }
+  constructor(private traspatioFincaLocalService:TraspatioFincaLocalService,
+    private dataContainerService:DataContainerService,
+    private router: Router) { }
 
   ionViewWillEnter(){
     this.mantains = [];
@@ -75,6 +79,11 @@ export class MainManteHlbPage implements OnInit {
     for (let i = 0; i < mantainsPage.length; i++) {  
       this.mantains.push(mantainsPage[i]);   
     }
+  }
+
+  onItemClick(traspatioFincaItem:any){
+    this.dataContainerService.setData(traspatioFincaItem);
+    this.router.navigateByUrl('/ver-editar-traspatio-finca');
   }
 
 }

@@ -16,7 +16,7 @@
 <ion-content>
 
    <ion-list>
-    <ion-item *ngFor="let mantain of mantains">
+    <ion-item *ngFor="let mantain of mantains" button (click) = "onItemClick(mantain)">
       <ion-label>
         <h2>País: {{mantain.pais}}</h2>
         <h3>Tipo: {{mantain.tipo}}</h3>

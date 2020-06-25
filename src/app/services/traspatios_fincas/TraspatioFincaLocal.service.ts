@@ -164,6 +164,20 @@ export class TraspatioFincaLocalService {
 
   }
 
+  updateATraspatioFinca(id_local:string,traspatioFincaRecord:TraspatioFincaNuevo){
+
+    let sql = 'UPDATE traspatios_fincas set tipo = ?, finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?,sincronizado = ? WHERE id_local = ?';
+    return new Promise((resolve,reject) => {
+
+      this.db.executeSql(sql,[traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.sincronizado,id_local]).then(()=>{
+              resolve(traspatioFincaRecord);
+            }).catch((error) => {
+              reject(error);
+            });
+    });
+
+  }
+
   insertManyTraspatiosFincas(hlbMantains:TraspatioFincaNubeBajada[]){
 
     let createTableQuery = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';

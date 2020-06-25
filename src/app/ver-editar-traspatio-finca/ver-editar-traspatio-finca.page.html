@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Ver/editar trampa amarilla</ion-title>
+    <ion-title>Ver/editar traspatio-finca</ion-title>
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/main-inspeccion-trampa"></ion-back-button>
     </ion-buttons>
@@ -9,14 +9,9 @@
 
 <ion-content>
 
-  <form [formGroup]="addTrapForm" (ngSubmit)="submit()">
+  <form [formGroup]="traspatioFincaForm" (ngSubmit)="submit()">
 
     <ion-list>
-
-      <ion-item>
-        <ion-label position="stacked">Número de trampa</ion-label>
-        <ion-input formControlName="num_trampa" type="number" readonly></ion-input>
-      </ion-item>
 
       <ion-radio-group formControlName="tipo" (ionChange)="changeType($event)">
         <ion-list-header>
@@ -38,19 +33,34 @@
         </ion-item>
       </ion-radio-group>
 
-      <ion-item *ngIf="isSelectPobladoFincaActive">
+      <ion-item>
+        <ion-label position="stacked">País</ion-label>
+        <ion-input formControlName="pais" type="text" readonly disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
+        <ion-input formControlName="finca_poblado" type="text"></ion-input>
+      </ion-item>
+
+      <!--<ion-item *ngIf="isSelectPobladoFincaActive">
         <ion-label>{{poblado_finca_key}}</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)">
           <ion-select-option *ngFor="let poblado_finca of poblados_fincas" value={{poblado_finca}}>{{poblado_finca}}</ion-select-option>
         </ion-select>
+      </ion-item>-->
+      
+      <ion-item>
+        <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
+        <ion-input formControlName="lote_propietario" type="text"></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="isSelectPropietarioLoteActive">
+      <!--<ion-item *ngIf="isSelectPropietarioLoteActive">
         <ion-label>{{lote_propietario_key}}</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="lote_propietario">
           <ion-select-option *ngFor="let propietario_lote of propietarios_lotes" value={{propietario_lote}}>{{propietario_lote}}</ion-select-option>
         </ion-select>
-      </ion-item>
+      </ion-item>-->
 
       <ion-item>
         <ion-label position="stacked">Latitud</ion-label>
@@ -62,14 +72,13 @@
         <ion-input formControlName="longitud" type="number" readonly></ion-input>
       </ion-item>
 
-      
       <ion-button (click)="openMap()">
         <ion-icon slot="icon-only" name="location-outline"></ion-icon>
       </ion-button>
       
     </ion-list>
   
-    <ion-button expand="block" type="submit">Guardar</ion-button>
+    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
 
   </form>
 
