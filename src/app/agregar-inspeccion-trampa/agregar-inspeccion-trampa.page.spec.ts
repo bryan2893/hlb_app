@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MainInspeccionTrampaPage } from './main-inspeccion-trampa.page';
+import { AgregarInspeccionTrampaPage } from './agregar-inspeccion-trampa.page';
 
-describe('MainInspeccionTrampaPage', () => {
-  let component: MainInspeccionTrampaPage;
-  let fixture: ComponentFixture<MainInspeccionTrampaPage>;
+describe('AgregarInspeccionTrampaPage', () => {
+  let component: AgregarInspeccionTrampaPage;
+  let fixture: ComponentFixture<AgregarInspeccionTrampaPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainInspeccionTrampaPage ],
+      declarations: [ AgregarInspeccionTrampaPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MainInspeccionTrampaPage);
+    fixture = TestBed.createComponent(AgregarInspeccionTrampaPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

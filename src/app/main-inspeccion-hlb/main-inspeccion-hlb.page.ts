@@ -88,7 +88,6 @@ export class MainInspeccionHlbPage implements OnInit {
   onItemClick(inspHlbItem:any){
     this.dataContainerService.setData(inspHlbItem);
     this.router.navigateByUrl('/ver-editar-inspeccion-hlb');
-
   }
 
 }

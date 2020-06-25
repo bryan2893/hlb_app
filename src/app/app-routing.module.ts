@@ -98,6 +98,14 @@ const routes: Routes = [
       data: DataResolverService
     },
     loadChildren: () => import('./ver-editar-traspatio-finca/ver-editar-traspatio-finca.module').then( m => m.VerEditarTraspatioFincaPageModule)
+  },
+  {
+    path: 'agregar-inspeccion-trampa',
+    loadChildren: () => import('./agregar-inspeccion-trampa/agregar-inspeccion-trampa.module').then( m => m.AgregarInspeccionTrampaPageModule)
+  },
+  {
+    path: 'ver-editar-inspeccion-trampa',
+    loadChildren: () => import('./ver-editar-inspeccion-trampa/ver-editar-inspeccion-trampa.module').then( m => m.VerEditarInspeccionTrampaPageModule)
   }
 
 ];
