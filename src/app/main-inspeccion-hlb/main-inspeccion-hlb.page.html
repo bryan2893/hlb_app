@@ -16,7 +16,8 @@
 <ion-content>
 
    <ion-list>
-    <ion-item *ngFor="let inspeccionTraspatioFinca of inspeccionTraspatiosFincasList">
+
+    <ion-item *ngFor="let inspeccionTraspatioFinca of inspeccionTraspatiosFincasList" button (click)="onItemClick(inspeccionTraspatioFinca)">
       <ion-label>
         <h2>Fecha-Hora: {{inspeccionTraspatioFinca.fecha_hora}}</h2>
         <h3>Tipo: {{inspeccionTraspatioFinca.tipo}}</h3>
