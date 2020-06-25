@@ -153,6 +153,17 @@ export class TrampaAmarillaLocalService {
     
   }
 
+  updateATrap(id_local:string,trap:TrampaAmarillaNuevo){
+    let sql = 'UPDATE trampas_amarillas set tipo = ?,pais = ?,finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?,sincronizado = ? WHERE id_local = ?';
+    return new Promise((resolve,reject) => {
+      this.db.executeSql(sql,[trap.tipo,trap.pais,trap.finca_poblado,trap.lote_propietario,trap.latitud,trap.longitud,trap.estado,trap.sincronizado,id_local]).then(()=>{
+        resolve(trap);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
+
   insertManyTraps(traps:TrampaAmarillaNubeBajada[]){
 
     let sql = 'INSERT INTO trampas_amarillas(id_trampa,tipo,pais,num_trampa,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?)';

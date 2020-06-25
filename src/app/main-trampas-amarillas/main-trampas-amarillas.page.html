@@ -16,7 +16,7 @@
 <ion-content>
 
    <ion-list>
-    <ion-item *ngFor="let trap of traps">
+    <ion-item *ngFor="let trap of traps" button (click) = "onItemClick(trap)">
       <ion-label>
         <h2>Trampa #{{trap.num_trampa}}</h2>
         <h3>Tipo: {{trap.tipo}}</h3>

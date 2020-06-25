@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
 
 import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
+import {DataContainerService} from '../services/data/data-container.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-trampas-amarillas',
@@ -17,7 +19,9 @@ export class MainTrampasAmarillasPage implements OnInit {
   pagesQuantity = 0;
   traps = [];
 
-  constructor(private trampaAmarillaLocalService: TrampaAmarillaLocalService) {}
+  constructor(private trampaAmarillaLocalService: TrampaAmarillaLocalService,
+    private dataContainerService:DataContainerService,
+    private router: Router) {}
 
   ngOnInit() {
   }
@@ -71,6 +75,11 @@ export class MainTrampasAmarillasPage implements OnInit {
     for (let i = 0; i < trapsPage.length; i++) {  
       this.traps.push(trapsPage[i]);   
     }
+  }
+
+  onItemClick(inspHlbItem:any){
+    this.dataContainerService.setData(inspHlbItem);
+    this.router.navigateByUrl('/ver-editar-trampa-amarilla');
   }
 
 }

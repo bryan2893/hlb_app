@@ -84,6 +84,13 @@ const routes: Routes = [
       data: DataResolverService
     },
     loadChildren: () => import('./ver-editar-inspeccion-hlb/ver-editar-inspeccion-hlb.module').then( m => m.VerEditarInspeccionHlbPageModule)
+  },
+  {
+    path: 'ver-editar-trampa-amarilla',
+    resolve:{
+      data: DataResolverService
+    },
+    loadChildren: () => import('./ver-editar-trampa-amarilla/ver-editar-trampa-amarilla.module').then( m => m.VerEditarTrampaAmarillaPageModule)
   }
 
 ];
