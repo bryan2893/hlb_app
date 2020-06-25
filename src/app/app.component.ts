@@ -6,6 +6,7 @@ import {SQLite,SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {TraspatioFincaLocalService} from './services/traspatios_fincas/TraspatioFincaLocal.service';
 import {TrampaAmarillaLocalService} from './services/trampas_amarillas/TrampaAmarillaLocal.service';
 import {InspeccionHlbLocalService} from './services/inspecciones_hlb/InspeccionHlbLocal.service';
+import {InspeccionTrampaLocalService} from './services/inspeccion_trampas/InspeccionTrampaLocal.service';
 import {DateService} from './services/date/date.service';
 import {AlmacenamientoNativoService} from './services/almacenamiento-interno/almacenamiento-nativo.service';
 import {UserService} from './services/user/user.service';
@@ -24,6 +25,7 @@ export class AppComponent {
     private traspatioFincaLocalService:TraspatioFincaLocalService,
     private trampaAmarillasLocalService:TrampaAmarillaLocalService,
     private inspeccionHlbLocaService:InspeccionHlbLocalService,
+    private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
     private dateService:DateService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private userService:UserService
@@ -49,6 +51,7 @@ export class AppComponent {
       this.traspatioFincaLocalService.setDatabase(db);
       this.trampaAmarillasLocalService.setDatabase(db);
       this.inspeccionHlbLocaService.setDatabase(db);
+      this.inspeccionTrampaLocalService.setDatabase(db);
     }).then(()=>{
       //Create first table
       return this.traspatioFincaLocalService.createTable();
@@ -56,6 +59,8 @@ export class AppComponent {
       return this.trampaAmarillasLocalService.createTable();
     }).then(()=>{
       return this.inspeccionHlbLocaService.createTable();
+    }).then(()=>{
+      return this.inspeccionTrampaLocalService.createTable();
     }).then(()=>{
       this.splashScreen.hide();
     }).catch((error)=>{
