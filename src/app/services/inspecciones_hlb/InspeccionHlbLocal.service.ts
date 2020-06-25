@@ -3,6 +3,7 @@ import { SQLiteObject } from '@ionic-native/sqlite';
 
 import {InspeccionHlbNuevo} from '../../../DTO/local/InspeccionHlbNuevo';
 import {InspeccionHlbNubeBajada} from '../../../DTO/server/InspeccionHlbNubeBajada';
+import {InspeccionHlbGuardado} from '../../../DTO/local/InspeccionHlbGuardado';
 
 @Injectable({
   providedIn: 'root'
@@ -158,6 +159,19 @@ export class InspeccionHlbLocalService {
           reject(new Error("Error intentando ingresar un registro de de inspeccion hlb en sqlite: "+error.message));
         });
       }
+
+    });
+  }
+
+  updateAnHlbInspection(id_local:string,hlbInspection:InspeccionHlbNuevo){
+    let sql = 'UPDATE inspecciones_hlb SET tipo = ?, pais = ?, finca_poblado = ?, lote_propietario = ?, ciclo = ?, labor = ?, categoria = ?, variedad = ?, sintomatologia = ?, estado = ?, diagnostico = ?, latitud = ?, longitud = ?, patron = ?, calle = ?, direccion_calle = ?, numero_arbol = ?, dir_arbol = ?, notas = ?, sincronizado = ? WHERE id_local = ?';
+    return new Promise((resolve,reject) => {
+      
+      this.db.executeSql(sql,[hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,hlbInspection.labor,hlbInspection.categoria,hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,hlbInspection.patron,hlbInspection.calle,hlbInspection.direccion_calle,hlbInspection.numero_arbol,hlbInspection.dir_arbol,hlbInspection.notas,hlbInspection.sincronizado,id_local]).then(()=>{
+        resolve(hlbInspection);
+      }).catch((error) => {
+        reject(new Error("Error intentando actualiar un registro de inspeccion hlb en sqlite: "+error.message));
+      });
 
     });
   }

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {IonSearchbar} from '@ionic/angular';
 
 import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
+import {DataContainerService} from '../services/data/data-container.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-inspeccion-hlb',
@@ -17,7 +19,9 @@ export class MainInspeccionHlbPage implements OnInit {
   pagesQuantity = 0;
   inspeccionTraspatiosFincasList = [];
 
-  constructor(private inspeccionHlbLocalService: InspeccionHlbLocalService) {}
+  constructor(private inspeccionHlbLocalService: InspeccionHlbLocalService,
+    private dataContainerService:DataContainerService,
+    private router:Router) {}
 
   ngOnInit() {
   }
@@ -79,6 +83,12 @@ export class MainInspeccionHlbPage implements OnInit {
     for (let i = 0; i < hlbInspectionPage.length; i++) {  
       this.inspeccionTraspatiosFincasList.push(hlbInspectionPage[i]); 
     }
+  }
+
+  onItemClick(inspHlbItem:any){
+    this.dataContainerService.setData(inspHlbItem);
+    this.router.navigateByUrl('/ver-editar-inspeccion-hlb');
+
   }
 
 }

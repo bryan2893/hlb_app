@@ -7,6 +7,7 @@ import {PreviousUrlHolderService} from '../services/data/previous-url-holder.ser
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
+import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 
 @Component({
   selector: 'app-agregar-mante-hlb',
@@ -111,7 +112,13 @@ export class AgregarManteHlbPage implements OnInit {
   }
 
   openMap(){
-    this.previousUrlHolderService.setPreviousUrl(this.router.url);
+    let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+
+    dataToSendMapViewer["urlAnterior"] = this.router.url;
+    dataToSendMapViewer["tipo"] = "vista_agregar";
+    dataToSendMapViewer["coordenadas"] = null;
+
+    this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
   }
 

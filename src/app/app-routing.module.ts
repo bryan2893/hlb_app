@@ -79,8 +79,11 @@ const routes: Routes = [
     loadChildren: () => import('./agregar-inspeccion-hlb/agregar-inspeccion-hlb.module').then( m => m.AgregarInspeccionHlbPageModule)
   },
   {
-    path: 'ver-editar-insp-hlb',
-    loadChildren: () => import('./ver-editar-insp-hlb/ver-editar-insp-hlb.module').then( m => m.VerEditarInspHlbPageModule)
+    path: 'ver-editar-inspeccion-hlb',
+    resolve:{
+      data: DataResolverService
+    },
+    loadChildren: () => import('./ver-editar-inspeccion-hlb/ver-editar-inspeccion-hlb.module').then( m => m.VerEditarInspeccionHlbPageModule)
   }
 
 ];

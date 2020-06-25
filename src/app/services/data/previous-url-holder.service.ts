@@ -5,15 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class PreviousUrlHolderService {
 
-  private url:string;
+  private data:any;
 
   constructor() { }
 
-  setPreviousUrl(url:string){
-    this.url = url;
+  setDataForPreviousUrl(data:any){
+    this.data = data;
   }
 
-  getPreviousUrl(){
-    return this.url;
+  getDataFromPreviousUrl(){
+    return this.data;
   }
 }

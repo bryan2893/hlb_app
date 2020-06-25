@@ -17,7 +17,6 @@ import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
     FormsModule,
     IonicModule,
     AgregarTrampaPageRoutingModule,
-    FormsModule,
     ReactiveFormsModule,
     MapViewerPageModule
   ],
