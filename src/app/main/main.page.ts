@@ -42,7 +42,7 @@ export class MainPage implements OnInit {
     }catch(error){
       await loading.dismiss();
       let alert = await this.alertService.presentAlert(JSON.stringify(error));
-      console.log(JSON.stringify(error));
+      console.log(error);
       alert.present();
     }
     
