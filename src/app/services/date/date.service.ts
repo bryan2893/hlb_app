@@ -108,4 +108,55 @@ export class DateService {
 
   }
 
+  //Trasforma una fecha fea en una bonita :-) !!
+  getBeautyDate(date:string){
+    let f = new Date(date);
+
+    let año = f.getFullYear();
+    let mes = f.getMonth()+1;
+    let dia = f.getDate();
+    let horas = f.getHours();
+    let minutos = f.getMinutes();
+    let segundos = f.getSeconds();
+
+    let mesAguardar = "";
+    let añoAguardar = "";
+    let diaAguardar = "";
+    let horasAguardar = "";
+    let minutosAguardar = "";
+    let segundosAguardar = "";
+    if(mes<10){
+      mesAguardar = '0'+mes;
+    }else{
+      mesAguardar += mes;
+    }
+    añoAguardar += año;
+    if(dia<10){
+      diaAguardar = '0'+dia;
+    }else{
+      diaAguardar += dia;
+    }
+    if(horas<10){
+      horasAguardar = '0'+horas;
+    }else{
+      horasAguardar += horas;
+    }
+    if(minutos<10){
+      minutosAguardar = '0'+minutos;
+    }else{
+      minutosAguardar += minutos;
+    }
+    if(segundos<10){
+      segundosAguardar = '0'+segundos;
+    }else{
+      segundosAguardar += segundos;
+    }
+
+    let fecha = diaAguardar+'/'+mesAguardar+'/'+añoAguardar;
+    var hora = horasAguardar + ":" + minutosAguardar + ":" + segundosAguardar;
+    var dateTime = fecha+' '+hora;
+    return dateTime;
+
+  }
+
 }
