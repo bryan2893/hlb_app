@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
-
-import {DbServiceService} from '../database/db-service.service';
 import {TraspatioFincaNuevo} from '../../../DTO/local/TraspatioFincaNuevo';
 import {TraspatioFincaNubeBajada} from '../../../DTO/server/TraspatioFincaNubeBajada';
 
@@ -12,7 +10,7 @@ export class TraspatioFincaLocalService {
 
   db:SQLiteObject = null;
 
-  constructor(private dbService: DbServiceService) {}
+  constructor() {}
 
   setDatabase(db:SQLiteObject){
     if(this.db === null){
@@ -159,9 +157,8 @@ export class TraspatioFincaLocalService {
             }).catch((error) => {
               reject(error);
             });
-      
     });
-
+    
   }
 
   updateATraspatioFinca(id_local:string,traspatioFincaRecord:TraspatioFincaNuevo){
