@@ -43,6 +43,10 @@
         <ion-input formControlName="finca_poblado" type="text"></ion-input>
       </ion-item>
 
+      <ion-button (click)="openModal()">
+        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+      </ion-button><br>
+
       <!--<ion-item *ngIf="isSelectPobladoFincaActive">
         <ion-label>{{poblado_finca_key}}</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)">

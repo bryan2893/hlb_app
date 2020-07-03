@@ -7,6 +7,8 @@ import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
 import { TraspatioFincaLocalService } from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
+import {ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-ver-editar-traspatio-finca',
@@ -33,6 +35,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
     private toastService:ToastService,
+    public modalController:ModalController,
     private traspatioFincaLocalService:TraspatioFincaLocalService) { 
       this.traspatioFincaForm = this.formBuilder.group({
         tipo:['',Validators.required],
@@ -187,6 +190,26 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   
       this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
       this.router.navigateByUrl('/map-viewer');
+    }
+
+    async openModal() {
+      const modal = await this.modalController.create({
+        component: FincasPobladosPage,
+        componentProps: {
+          "tipo": this.tipo,
+          "cabecera":this.poblado_finca_key + 's'
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null) {
+  
+          this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+          
+        }
+      });
+  
+      return await modal.present();
     }
 
 }

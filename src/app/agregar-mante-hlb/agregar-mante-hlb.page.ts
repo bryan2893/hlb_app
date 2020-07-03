@@ -135,8 +135,8 @@ export class AgregarManteHlbPage implements OnInit {
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
 
-        //this.dataReturned = dataReturned.data;
-        alert('Modal Sent Data :'+ dataReturned);
+        this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+        
       }
     });
 
