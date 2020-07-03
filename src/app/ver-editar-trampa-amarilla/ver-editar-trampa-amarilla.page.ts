@@ -80,6 +80,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   }
 
   async ionViewWillEnter(){
+    console.log("eNTRÓ A WILL ENTER");
     let inData = this.route.snapshot.data['data'];
     if (inData) {
       if(Object.keys(inData).length === 2){//Quiere decir que viene de la vista mapa
@@ -100,6 +101,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   }
 
   ionViewDidEnter(){
+    console.log("eNTRÓ A DID ENTER");
     let inData = this.route.snapshot.data['data'];
     if (inData) {
       if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa

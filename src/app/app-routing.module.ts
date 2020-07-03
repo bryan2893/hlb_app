@@ -105,6 +105,9 @@ const routes: Routes = [
   },
   {
     path: 'ver-editar-inspeccion-trampa',
+    resolve:{
+      data: DataResolverService
+    },
     loadChildren: () => import('./ver-editar-inspeccion-trampa/ver-editar-inspeccion-trampa.module').then( m => m.VerEditarInspeccionTrampaPageModule)
   }
 

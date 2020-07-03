@@ -96,7 +96,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
            this.lote_propietario_key = "Lote";
         }
  
-        this.inspHlbForm.controls['fecha_hora'].patchValue(inData.fecha_hora);
+        this.inspHlbForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
         
         this.inspHlbForm.controls['codigo_responsable'].patchValue(inData.codigo_responsable);
         this.inspHlbForm.controls['nombre_responsable'].patchValue(inData.nombre_responsable);

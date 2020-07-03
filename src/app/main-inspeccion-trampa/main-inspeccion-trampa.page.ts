@@ -87,12 +87,12 @@ export class MainInspeccionTrampaPage implements OnInit {
     }
   }
 
-  onItemClick(inspHlbItem:any){
-    this.dataContainerService.setData(inspHlbItem);
+  onItemClick(inspTrampaItem:any){
+    this.dataContainerService.setData(inspTrampaItem);
     this.router.navigateByUrl('/ver-editar-inspeccion-trampa');
   }
 
-  convertirFecha(date){
+  convertirFecha(date:any){
     return this.dateService.getBeautyDate(date);
   }
 

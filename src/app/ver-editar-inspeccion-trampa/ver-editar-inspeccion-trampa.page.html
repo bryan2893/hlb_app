@@ -1,9 +1,106 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>ver-editar-inspeccion-trampa</ion-title>
+    <ion-title>Ver/editar inspeccion trampa</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/main-inspeccion-trampa"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <form [formGroup]="inspTrampaForm" (ngSubmit)="submit()">
+
+    <ion-list>
+
+      <ion-item>
+        <ion-label position="stacked">Tipo</ion-label>
+        <ion-input formControlName="tipo" type="text" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">País</ion-label>
+        <ion-input formControlName="pais" type="text" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Fecha/Hora</ion-label>
+        <ion-input formControlName="fecha_hora" type="text" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Código de responsable</ion-label>
+        <ion-input formControlName="codigo_responsable" type="text" disabled></ion-input>
+      </ion-item>
+     
+      <ion-item>
+        <ion-label position="stacked">Nombre de responsable</ion-label>
+        <ion-input formControlName="nombre_responsable" type="text" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Numero de trampa</ion-label>
+        <ion-input formControlName="num_trampa" type="number" disabled ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Latitud de trampa</ion-label>
+        <ion-input formControlName="latitud_trampa" type="number" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Longitud de trampa</ion-label>
+        <ion-input formControlName="longitud_trampa" type="number" disabled></ion-input>
+      </ion-item>
+
+      <ion-button (click)="openMap()">
+        <!--<ion-icon slot="icon-only" name="location-outline"></ion-icon>-->
+        Ver ubicacion
+      </ion-button>
+
+      <ion-item *ngIf="isSelectPobladoFincaActive">
+        <ion-label>{{poblado_finca_key}}</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)">
+          <ion-select-option *ngFor="let poblado_finca of poblados_fincas" value={{poblado_finca}}>{{poblado_finca}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="isSelectPropietarioLoteActive">
+        <ion-label>{{lote_propietario_key}}</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="lote_propietario">
+          <ion-select-option *ngFor="let propietario_lote of propietarios_lotes" value={{propietario_lote}}>{{propietario_lote}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Cantidad de bichitos</ion-label>
+        <ion-input formControlName="cantidad_total" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Diagnostico?</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="diagnostico">
+          <ion-select-option value='1'>Sí</ion-select-option>
+          <ion-select-option value='0'>No</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Cantidad a diagnostico</ion-label>
+        <ion-input formControlName="cantidad_diagnostico" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Notas</ion-label>
+        <ion-textarea value="" formControlName="notas"></ion-textarea>
+      </ion-item>
+      
+  
+    </ion-list>
+  
+    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
+
+
+  </form>
 
 </ion-content>

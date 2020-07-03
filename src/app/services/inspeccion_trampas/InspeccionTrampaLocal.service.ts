@@ -155,11 +155,11 @@ export class InspeccionTrampaLocalService {
     });
   }
 
-  updateAnHlbInspection(id_local:string,trapInspection:InspeccionTrampaNuevo){
+  updateAnTrapInspection(id_local:string,trapInspection:InspeccionTrampaNuevo){
     let sql = 'UPDATE inspecciones_trampas SET tipo = ?,pais = ?,num_trampa = ?,latitud_trampa = ?,longitud_trampa = ?,finca_poblado = ?,lote_propietario = ?,cantidad_total = ?,diagnostico = ?,cantidad_diagnostico = ?,notas = ?,sincronizado = ? WHERE id_local = ?';
     return new Promise((resolve,reject) => {
       
-      this.db.executeSql(sql,[trapInspection.pais,trapInspection.num_trampa,trapInspection.latitud_trampa,trapInspection.longitud_trampa,trapInspection.finca_poblado,trapInspection.lote_propietario,trapInspection.cantidad_total,trapInspection.diagnostico,trapInspection.cantidad_diagnostico,trapInspection.notas,trapInspection.sincronizado,id_local]).then(()=>{
+      this.db.executeSql(sql,[trapInspection.tipo,trapInspection.pais,trapInspection.num_trampa,trapInspection.latitud_trampa,trapInspection.longitud_trampa,trapInspection.finca_poblado,trapInspection.lote_propietario,trapInspection.cantidad_total,trapInspection.diagnostico,trapInspection.cantidad_diagnostico,trapInspection.notas,trapInspection.sincronizado,id_local]).then(()=>{
         resolve(trapInspection);
       }).catch((error) => {
         reject(new Error("Error intentando actualiar un registro de inspeccion trampa amarilla en sqlite: "+error.message));
