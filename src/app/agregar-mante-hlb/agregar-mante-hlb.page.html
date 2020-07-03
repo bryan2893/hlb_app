@@ -38,6 +38,10 @@
         <ion-input formControlName="finca_poblado" type="text" clearOnEdit="false"></ion-input>
       </ion-item>
 
+      <ion-button (click)="openModal()">
+        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+      </ion-button><br>
+
       <ion-item>
         <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
         <ion-input formControlName="lote_propietario" type="text" clearOnEdit="false"></ion-input>
@@ -45,12 +49,12 @@
 
       <ion-item>
         <ion-label position="stacked">Latitud</ion-label>
-        <ion-input formControlName="latitud" type="number" readOnly></ion-input>
+        <ion-input formControlName="latitud" type="number" disabled></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Longitud</ion-label>
-        <ion-input formControlName="longitud" type="number" readOnly></ion-input>
+        <ion-input formControlName="longitud" type="number" disabled></ion-input>
       </ion-item>
 
       <ion-button (click)="openMap()">
