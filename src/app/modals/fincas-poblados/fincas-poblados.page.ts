@@ -36,7 +36,7 @@ export class FincasPobladosPage implements OnInit {
   }
 
   whenUserPressAKey(event:any){
-    let value = event.target.value;
+    let value = event.target.value.toUpperCase();
 
     if(value !== ''){
       let arrayTemporal = this.lista_fincas_poblados.slice();

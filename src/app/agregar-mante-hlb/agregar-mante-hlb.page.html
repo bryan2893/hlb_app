@@ -21,21 +21,21 @@
         </ion-list-header>
         <ion-item>
           <ion-label>Traspatio</ion-label>
-          <ion-radio value="traspatio"></ion-radio>
+          <ion-radio value="TRASPATIO"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Productor</ion-label>
-          <ion-radio value="productor"></ion-radio>
+          <ion-radio value="PRODUCTOR"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Ticofrut</ion-label>
-          <ion-radio value="ticofrut"></ion-radio>
+          <ion-radio value="TICOFRUT"></ion-radio>
         </ion-item>
       </ion-radio-group>
 
       <ion-item>
         <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
-        <ion-input formControlName="finca_poblado" type="text" clearOnEdit="false"></ion-input>
+        <ion-input formControlName="finca_poblado" type="text" autocapitalize='on'></ion-input>
       </ion-item>
 
       <ion-button (click)="openModal()">
@@ -44,7 +44,7 @@
 
       <ion-item>
         <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
-        <ion-input formControlName="lote_propietario" type="text" clearOnEdit="false"></ion-input>
+        <ion-input formControlName="lote_propietario" type="text" autocapitalize='on'></ion-input>
       </ion-item>
 
       <ion-item>

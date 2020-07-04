@@ -57,12 +57,12 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         this.poblados_fincas = [];
         this.propietarios_lotes = [];
         
-        if(this.tipo === "traspatio"){
+        if(this.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
         }
   
-        if(this.tipo === "productor" || this.tipo === "ticofrut"){
+        if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
           this.poblado_finca_key = "Finca";
           this.lote_propietario_key = "Lote";
         }
@@ -137,10 +137,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
           let pais:string = configuracionesGenerales.pais;
           let traspatioFincaToUpdate:any = {};
 
-          traspatioFincaToUpdate['pais'] = pais;
-          traspatioFincaToUpdate['tipo'] = this.traspatioFincaForm.controls['tipo'].value;
-          traspatioFincaToUpdate['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value;
-          traspatioFincaToUpdate['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value;
+          traspatioFincaToUpdate['pais'] = pais.toUpperCase();
+          traspatioFincaToUpdate['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
+          traspatioFincaToUpdate['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
+          traspatioFincaToUpdate['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
           traspatioFincaToUpdate['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
           traspatioFincaToUpdate['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
           traspatioFincaToUpdate['estado'] = 1;

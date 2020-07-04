@@ -8,7 +8,7 @@ import {UserService} from '../../services/user/user.service';
 export class SyncInfoService {
 
   private appName = "App HLB";
-  private appVersion = "1";
+  private appVersion = "1.1";
 
   constructor(private device:Device,private userService:UserService) { }
 
