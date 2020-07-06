@@ -85,47 +85,43 @@ export class SincronizacionService {
       await this.inspeccionTrampaLocalService.deleteAllInfo();
       console.log("Se eliminaron los datos de las trampas,traspatiosFincas, inspecciones HLB e inspecciones de trampas!!");
 
-
+      let pais = parametrosDeConfiguracion.pais.toUpperCase();
       //Se descargan los registros de trampas amarillas y se insertan en la bd local...
-      let trapsPagesQuantity = await this.TrampaAmarillaNubeService.getPagesQuantity(this.rowsPerPage,parametrosDeConfiguracion.pais);
+      let trapsPagesQuantity = await this.TrampaAmarillaNubeService.getPagesQuantity(this.rowsPerPage,pais);
       console.log("CINCO: "+trapsPagesQuantity);
       for(let i = 1;i<=trapsPagesQuantity;i++){
-        console.log("Se insertaron trampas amarillas desde la nube");
         let listaDeTrampasAmarillas:any;
-        let respuesta:any = await this.TrampaAmarillaNubeService.getTrapsPage(i,this.rowsPerPage,parametrosDeConfiguracion.pais);
+        let respuesta:any = await this.TrampaAmarillaNubeService.getTrapsPage(i,this.rowsPerPage,pais);
         listaDeTrampasAmarillas = JSON.parse(respuesta.data);
         await this.TrampaAmarillaLocalService.insertManyTraps(listaDeTrampasAmarillas);
       }
 
       //Se descargan los registros de traspatios/fincas y se insertan en la bd local...
-      let traspatiosFincasPagesQuantity = await this.traspatiosFincasNubeService.getPagesQuantity(this.rowsPerPage,parametrosDeConfiguracion.pais);
+      let traspatiosFincasPagesQuantity = await this.traspatiosFincasNubeService.getPagesQuantity(this.rowsPerPage,pais);
       console.log("SEIS: "+traspatiosFincasPagesQuantity);
       for(let i = 1;i<=traspatiosFincasPagesQuantity;i++){
-        console.log("Se insertaron traspatios fincas desde la nube");
         let listaDeTraspatiosFincas:any;
-        let respuesta:any = await this.traspatiosFincasNubeService.getTraspatiosFincasPage(i,this.rowsPerPage,parametrosDeConfiguracion.pais);
+        let respuesta:any = await this.traspatiosFincasNubeService.getTraspatiosFincasPage(i,this.rowsPerPage,pais);
         listaDeTraspatiosFincas = JSON.parse(respuesta.data);
         await this.traspatiosFincasLocalService.insertManyTraspatiosFincas(listaDeTraspatiosFincas);
       }
 
       //Se descargan los registros de inspecciones HLB y se insertan en la bd local...
-      let inspeccionesHlbPagesQuantity = await this.inspeccionHlbNubeService.getPagesQuantity(this.rowsPerPage,parametrosDeConfiguracion.pais,parametrosDeConfiguracion.volumen_de_registros);
+      let inspeccionesHlbPagesQuantity = await this.inspeccionHlbNubeService.getPagesQuantity(this.rowsPerPage,pais,parametrosDeConfiguracion.volumen_de_registros);
       console.log("SIETE: "+inspeccionesHlbPagesQuantity);
       for(let i = 1;i<=inspeccionesHlbPagesQuantity;i++){
-        console.log("Se insertaron inspecciones HLB desde la nube");
         let listaDeInspeccionesHlb:any;
-        let respuesta:any = await this.inspeccionHlbNubeService.getInspHlbPage(i,this.rowsPerPage,parametrosDeConfiguracion.volumen_de_registros,parametrosDeConfiguracion.pais);
+        let respuesta:any = await this.inspeccionHlbNubeService.getInspHlbPage(i,this.rowsPerPage,parametrosDeConfiguracion.volumen_de_registros,pais);
         listaDeInspeccionesHlb = JSON.parse(respuesta.data);
         await this.inspeccionHlbLocalService.insertManyHlbInspections(listaDeInspeccionesHlb);
       }
 
       //Se descargan los registros de inspecciones de trampas y se insertan en la bd local...
-      let inspeccionesTrampasPagesQuantity = await this.inspeccionTrampaNubeService.getPagesQuantity(this.rowsPerPage,parametrosDeConfiguracion.pais,parametrosDeConfiguracion.volumen_de_registros);
+      let inspeccionesTrampasPagesQuantity = await this.inspeccionTrampaNubeService.getPagesQuantity(this.rowsPerPage,pais,parametrosDeConfiguracion.volumen_de_registros);
       console.log("OCHO: "+inspeccionesTrampasPagesQuantity);
       for(let i = 1;i<=inspeccionesTrampasPagesQuantity;i++){
-        console.log("Se insertaron inspecciones trampas desde la nube");
         let listaDeInspDeTrampas:any;
-        let respuesta:any = await this.inspeccionTrampaNubeService.getInspTrampPage(i,this.rowsPerPage,parametrosDeConfiguracion.volumen_de_registros,parametrosDeConfiguracion.pais);
+        let respuesta:any = await this.inspeccionTrampaNubeService.getInspTrampPage(i,this.rowsPerPage,parametrosDeConfiguracion.volumen_de_registros,pais);
         listaDeInspDeTrampas = JSON.parse(respuesta.data);
         await this.inspeccionTrampaLocalService.insertManyTrapInspections(listaDeInspDeTrampas);
       }

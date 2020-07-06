@@ -7,6 +7,8 @@ import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
 import { TraspatioFincaLocalService } from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
+import {ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-ver-editar-traspatio-finca',
@@ -33,6 +35,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
     private toastService:ToastService,
+    public modalController:ModalController,
     private traspatioFincaLocalService:TraspatioFincaLocalService) { 
       this.traspatioFincaForm = this.formBuilder.group({
         tipo:['',Validators.required],
@@ -54,12 +57,12 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         this.poblados_fincas = [];
         this.propietarios_lotes = [];
         
-        if(this.tipo === "traspatio"){
+        if(this.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
         }
   
-        if(this.tipo === "productor" || this.tipo === "ticofrut"){
+        if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
           this.poblado_finca_key = "Finca";
           this.lote_propietario_key = "Lote";
         }
@@ -98,7 +101,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
       let inData = this.route.snapshot.data['data'];
       if (inData) {
         if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa
-          if (this.tipo === "traspatio"){
+          if (this.tipo === "TRASPATIO"){
             this.poblado_finca_key = "Poblado";
             this.lote_propietario_key = "Propietario";
           }else{
@@ -116,9 +119,8 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         }
   
         this.seObtienenListasPorPrimeraVez = false;//Se indica que de ahora en adelante la carga de listas de traspatios/fincas y lotes/propietarios no se cargan por primera vez.
-
       }
-  
+      
     }
   
     ngOnInit() {
@@ -134,10 +136,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
           let pais:string = configuracionesGenerales.pais;
           let traspatioFincaToUpdate:any = {};
 
-          traspatioFincaToUpdate['pais'] = pais;
-          traspatioFincaToUpdate['tipo'] = this.traspatioFincaForm.controls['tipo'].value;
-          traspatioFincaToUpdate['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value;
-          traspatioFincaToUpdate['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value;
+          traspatioFincaToUpdate['pais'] = pais.toUpperCase();
+          traspatioFincaToUpdate['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
+          traspatioFincaToUpdate['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
+          traspatioFincaToUpdate['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
           traspatioFincaToUpdate['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
           traspatioFincaToUpdate['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
           traspatioFincaToUpdate['estado'] = 1;
@@ -187,6 +189,26 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   
       this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
       this.router.navigateByUrl('/map-viewer');
+    }
+
+    async openModal() {
+      const modal = await this.modalController.create({
+        component: FincasPobladosPage,
+        componentProps: {
+          "tipo": this.tipo,
+          "cabecera":this.poblado_finca_key + 's'
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null) {
+  
+          this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+          
+        }
+      });
+  
+      return await modal.present();
     }
 
 }

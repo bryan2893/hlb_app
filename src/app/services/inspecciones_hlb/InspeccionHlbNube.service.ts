@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
 import {InspeccionHlbNubeSubida} from '../../../DTO/server/InspeccionHlbNubeSubida';
+import {SyncInfoService} from '../../services/syncInfo/sync-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class InspeccionHlbNubeService {
   private urlToUpload = 'http://hlb.ticofrut.com/api/inspeccion_hlb/sincronizar/';
   private urlToCountRecords = 'http://hlb.ticofrut.com/api/inspeccion_hlb/contarRegistros/';
 
-  constructor(private http: HTTP) {
+  constructor(private http: HTTP,private syncInfoService:SyncInfoService) {
     this.http.setHeader('*', String("Accept"), String("application/json"));
     this.http.setDataSerializer('json');
   }
@@ -34,23 +35,22 @@ export class InspeccionHlbNubeService {
 
   syncListOfInspHlb(listaDeInspeccionesHlb:InspeccionHlbNubeSubida[]){
     return new Promise((resolve,reject)=>{
-      
-      let paqueteDeSincronizacion = {
-        registros:listaDeInspeccionesHlb,
-        informacionDeSincronizacion:[
-          {
-            direccion_mac:'aaab1',
-            codigo_usuario:'knajera',
-            nombre_aplicacion:'AppHlb',
-            version_aplicacion:'1.1',
-            fabricante_telefono:'CAT'
-          }
-        ]
-      };
+      this.syncInfoService.getSyncInfo().then((info)=>{
 
-      this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
-        resolve(response);
-      }).catch((error)=>{
+        let paqueteDeSincronizacion = {
+          registros:listaDeInspeccionesHlb,
+          informacionDeSincronizacion:[
+            info
+          ]
+        };
+  
+        this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
+          resolve(response);
+        }).catch((error)=>{
+          reject(JSON.stringify(error));
+        });
+
+      }).catch((error) =>{
         reject(error);
       });
 

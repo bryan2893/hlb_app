@@ -8,13 +8,16 @@ import { VerEditarTraspatioFincaPageRoutingModule } from './ver-editar-traspatio
 
 import { VerEditarTraspatioFincaPage } from './ver-editar-traspatio-finca.page';
 
+import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    VerEditarTraspatioFincaPageRoutingModule
+    VerEditarTraspatioFincaPageRoutingModule,
+    FincasPobladosPageModule
   ],
   declarations: [VerEditarTraspatioFincaPage]
 })

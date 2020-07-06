@@ -59,12 +59,12 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
       this.poblados_fincas = [];
       this.propietarios_lotes = [];
       
-      if(this.tipo === "traspatio"){
+      if(this.tipo === "TRASPATIO"){
         this.poblado_finca_key = "Poblado";
         this.lote_propietario_key = "Propietario";
       }
 
-      if(this.tipo === "productor" || this.tipo === "ticofrut"){
+      if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
         this.poblado_finca_key = "Finca";
         this.lote_propietario_key = "Lote";
       }
@@ -103,7 +103,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
     let inData = this.route.snapshot.data['data'];
     if (inData) {
       if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa
-        if (this.tipo === "traspatio"){
+        if (this.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
         }else{
@@ -141,10 +141,10 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
 
         trampaToSave['id_trampa'] = this.trapRecord.id_trampa;
         trampaToSave['num_trampa'] = this.addTrapForm.controls['num_trampa'].value;
-        trampaToSave['tipo'] = this.addTrapForm.controls['tipo'].value;
-        trampaToSave['pais'] = pais;
-        trampaToSave['finca_poblado'] = this.addTrapForm.controls['finca_poblado'].value;
-        trampaToSave['lote_propietario'] = this.addTrapForm.controls['lote_propietario'].value;
+        trampaToSave['tipo'] = this.addTrapForm.controls['tipo'].value.toUpperCase();
+        trampaToSave['pais'] = pais.toUpperCase();
+        trampaToSave['finca_poblado'] = this.addTrapForm.controls['finca_poblado'].value.toUpperCase();
+        trampaToSave['lote_propietario'] = this.addTrapForm.controls['lote_propietario'].value.toUpperCase();
         trampaToSave['latitud'] = this.addTrapForm.controls['latitud'].value;
         trampaToSave['longitud'] = this.addTrapForm.controls['longitud'].value;
         trampaToSave['estado'] = this.addTrapForm.controls['estado'].value;
