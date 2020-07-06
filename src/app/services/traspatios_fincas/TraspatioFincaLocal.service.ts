@@ -48,6 +48,31 @@ export class TraspatioFincaLocalService {
     
   }
 
+  getAllTraspatiosFincas(){
+
+    let sql = 'SELECT * FROM traspatios_fincas';
+    return new Promise((resolve,reject)=>{
+
+          
+          this.db.executeSql(sql,[]).then((data)=>{
+
+            let hlbMantainPage = [];
+            if (data.rows.length > 0) {
+              for (var i = 0; i < data.rows.length; i++) { 
+                hlbMantainPage.push(data.rows.item(i));
+              }
+            }
+
+            resolve(hlbMantainPage);
+
+          }).catch((e) => {
+            reject(e);
+          });
+
+    });
+    
+  }
+
   getNoSincronizedTraspatiosFincasPage(pageNumber:number,rowsPerPage:number){
     
     let sql = 'SELECT id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado FROM traspatios_fincas where sincronizado = ? limit ?,?';

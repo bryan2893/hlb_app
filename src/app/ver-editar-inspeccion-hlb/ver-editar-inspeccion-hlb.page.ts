@@ -88,13 +88,15 @@ export class VerEditarInspeccionHlbPage implements OnInit {
     let inData = this.route.snapshot.data['data'];
     if (inData) {
       if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa
-        if (this.tipo === "traspatio"){
+        if (this.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
         }else{
            this.poblado_finca_key = "Finca";
            this.lote_propietario_key = "Lote";
         }
+
+        console.log("Datos de inspeccion hlb"+JSON.stringify(inData));
  
         this.inspHlbForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
         
@@ -105,13 +107,10 @@ export class VerEditarInspeccionHlbPage implements OnInit {
         this.inspHlbForm.controls['lote_propietario'].patchValue(inData.lote_propietario);
         this.inspHlbForm.controls['ciclo'].patchValue(inData.ciclo);
  
-         if(inData.tipo === "traspatio"){
+         if(inData.tipo === "TRASPATIO"){
            
            this.inspHlbForm.controls['labor'].patchValue(inData.labor);
            this.inspHlbForm.controls['categoria'].patchValue(inData.categoria);
- 
-           console.log("categria = "+inData.categoria);
-           console.log("labor = "+inData.labor);
  
          }
  
@@ -122,7 +121,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
          this.inspHlbForm.controls['latitud'].patchValue(inData.latitud);
          this.inspHlbForm.controls['longitud'].patchValue(inData.longitud);
          
-         if(!(inData.tipo === "traspatio")){//El tipo es igual a productor o ticofrut.
+         if(!(inData.tipo === "TRASPATIO")){//El tipo es igual a productor o ticofrut.
  
            this.inspHlbForm.controls['patron'].patchValue(inData.patron);
            this.inspHlbForm.controls['calle'].patchValue(inData.calle);
@@ -143,7 +142,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
   validarFormSegunTipo(hlbForm:any):any{
     let tipo:string = hlbForm.tipo;
 
-    if(tipo === 'traspatio'){
+    if(tipo === 'TRASPATIO'){
       return (hlbForm.labor !== '' &&
       hlbForm.categoria !== ''
       );
@@ -174,13 +173,13 @@ export class VerEditarInspeccionHlbPage implements OnInit {
         hlbInspectionToSave['fecha_hora'] = this.dateService.getCurrentDateTime();
         hlbInspectionToSave['codigo_responsable'] = usuario.username;
         hlbInspectionToSave['nombre_responsable'] = usuario.fullName;
-        hlbInspectionToSave['tipo'] = this.inspHlbForm.controls['tipo'].value;
-        hlbInspectionToSave['pais'] = pais;
-        hlbInspectionToSave['finca_poblado'] = this.inspHlbForm.controls['finca_poblado'].value;
-        hlbInspectionToSave['lote_propietario'] = this.inspHlbForm.controls['lote_propietario'].value;
+        hlbInspectionToSave['tipo'] = this.inspHlbForm.controls['tipo'].value.toUpperCase();
+        hlbInspectionToSave['pais'] = pais.toUpperCase();
+        hlbInspectionToSave['finca_poblado'] = this.inspHlbForm.controls['finca_poblado'].value.toUpperCase();
+        hlbInspectionToSave['lote_propietario'] = this.inspHlbForm.controls['lote_propietario'].value.toUpperCase();
         hlbInspectionToSave['ciclo'] = this.inspHlbForm.controls['ciclo'].value;
 
-        if(!(hlbInspectionToSave['tipo'] === 'traspatio')){
+        if(!(hlbInspectionToSave['tipo'] === 'TRASPATIO')){
           hlbInspectionToSave['labor'] = 'na';
           hlbInspectionToSave['categoria'] = 'na';
         }else{
@@ -195,7 +194,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
         hlbInspectionToSave['latitud'] = this.inspHlbForm.controls['latitud'].value;
         hlbInspectionToSave['longitud'] = this.inspHlbForm.controls['longitud'].value;
 
-        if(!(hlbInspectionToSave['tipo'] === 'productor' || hlbInspectionToSave['tipo'] === 'ticofrut')){
+        if(!(hlbInspectionToSave['tipo'] === 'PRODUCTOR' || hlbInspectionToSave['tipo'] === 'TICOFRUT')){
           hlbInspectionToSave['patron'] = 'na';
           hlbInspectionToSave['calle'] = 0;
           hlbInspectionToSave['direccion_calle'] = 'na'

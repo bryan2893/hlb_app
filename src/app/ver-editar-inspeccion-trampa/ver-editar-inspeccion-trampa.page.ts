@@ -232,7 +232,6 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
 
   pobladoFincaSelectChange(event:any){
     if(!this.seObtienenListasPorPrimeraVez){
-      console.log("Se ingreso por primera vez!");
       let fincaPobladoSelected = event.target.value;
       if(!fincaPobladoSelected){
         return;

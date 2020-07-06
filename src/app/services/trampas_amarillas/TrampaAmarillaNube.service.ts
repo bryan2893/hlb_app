@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {TrampaAmarillaNubeSubida} from '../../../DTO/server/TrampaAmarillaNubeSubida';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
+import {SyncInfoService} from '../syncInfo/sync-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class TrampaAmarillaNubeService {
   private urlToUpload = 'http://hlb.ticofrut.com/api/trampas_amarillas/sincronizar';
   private urlToCountRecords = 'http://hlb.ticofrut.com/api/trampas_amarillas/contarRegistros/';
 
-  constructor(private http: HTTP) {
+  constructor(private http: HTTP,private syncInfoService:SyncInfoService) {
     this.http.setHeader('*', String("Accept"), String("application/json"));
     this.http.setDataSerializer('json');
   }
@@ -29,22 +30,22 @@ export class TrampaAmarillaNubeService {
   syncListOfTraps(listaDeTrampas:TrampaAmarillaNubeSubida[]){
     return new Promise((resolve,reject)=>{
       
-      let paqueteDeSincronizacion = {
-        registros:listaDeTrampas,
-        informacionDeSincronizacion:[
-          {
-            direccion_mac:'aaab1',
-            codigo_usuario:'knajera',
-            nombre_aplicacion:'AppHlb',
-            version_aplicacion:'1.1',
-            fabricante_telefono:'CAT'
-          }
-        ]
-      };
+      this.syncInfoService.getSyncInfo().then((info)=>{
 
-      this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
-        resolve(response);
-      }).catch((error)=>{
+        let paqueteDeSincronizacion = {
+          registros:listaDeTrampas,
+          informacionDeSincronizacion:[
+            info
+          ]
+        };
+  
+        this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
+          resolve(response);
+        }).catch((error)=>{
+          reject(JSON.stringify(error));
+        });
+
+      }).catch((error) =>{
         reject(error);
       });
 

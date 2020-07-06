@@ -48,37 +48,37 @@
         <ion-input formControlName="ciclo" type="number"></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+      <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label position="stacked">Calle</ion-label>
         <ion-input formControlName="calle" type="number"></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+      <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label>Direccion de calle</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="direccion_calle">
-          <ion-select-option value="n-s">N-S</ion-select-option>
-          <ion-select-option value="s-n">S-N</ion-select-option>
-          <ion-select-option value="o-e">O-E</ion-select-option>
-          <ion-select-option value="e-o">E-O</ion-select-option>
+          <ion-select-option value="N-S">N-S</ion-select-option>
+          <ion-select-option value="S-N">S-N</ion-select-option>
+          <ion-select-option value="O-E">O-E</ion-select-option>
+          <ion-select-option value="E-O">E-O</ion-select-option>
         </ion-select>
       </ion-item>
 
-      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+      <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label position="stacked">Número de arbol</ion-label>
         <ion-input formControlName="numero_arbol" type="number"></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+      <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label>Direccion de arbol</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="dir_arbol">
-          <ion-select-option value="n-s">N-S</ion-select-option>
-          <ion-select-option value="s-n">S-N</ion-select-option>
-          <ion-select-option value="o-e">O-E</ion-select-option>
-          <ion-select-option value="e-o">E-O</ion-select-option>
+          <ion-select-option value="N-S">N-S</ion-select-option>
+          <ion-select-option value="S-N">S-N</ion-select-option>
+          <ion-select-option value="O-E">O-E</ion-select-option>
+          <ion-select-option value="E-O">E-O</ion-select-option>
         </ion-select>
       </ion-item>
 
-      <ion-item *ngIf="tipo === 'productor' || tipo === 'ticofrut'">
+      <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label>Patrón</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="patron">
           <ion-select-option value="FYD">FYD</ion-select-option>
@@ -87,31 +87,31 @@
         </ion-select>
       </ion-item>
 
-      <ion-item *ngIf="tipo === 'traspatio'">
+      <ion-item *ngIf="tipo === 'TRASPATIO'">
         <ion-label>Labor</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="labor" type="text">
-          <ion-select-option value="aplicacion">Aplicacion</ion-select-option>
-          <ion-select-option value="censo">Censo</ion-select-option>
+          <ion-select-option value="APLICACION">Aplicacion</ion-select-option>
+          <ion-select-option value="CENSO">Censo</ion-select-option>
         </ion-select>
       </ion-item>
 
-      <ion-item *ngIf="tipo === 'traspatio'">
+      <ion-item *ngIf="tipo === 'TRASPATIO'">
         <ion-label>Categoria</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="categoria" type="text">
-          <ion-select-option value="plantacion">Plantacion</ion-select-option>
-          <ion-select-option value="traspatio">Traspatio</ion-select-option>
+          <ion-select-option value="PLANTACION">Plantacion</ion-select-option>
+          <ion-select-option value="TRASPATIO">Traspatio</ion-select-option>
         </ion-select>
       </ion-item>
 
       <ion-item>
         <ion-label>Variedad</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="variedad">
-          <ion-select-option value="naranja">Naranja</ion-select-option>
-          <ion-select-option value="limon">Limón</ion-select-option>
-          <ion-select-option value="mandarina">Mandarina</ion-select-option>
-          <ion-select-option value="toronja">Toronja</ion-select-option>
-          <ion-select-option value="maracuya">Maracuyá</ion-select-option>
-          <ion-select-option value="limoncillo">Limoncillo</ion-select-option>
+          <ion-select-option value="NARANJA">Naranja</ion-select-option>
+          <ion-select-option value="LIMON">Limón</ion-select-option>
+          <ion-select-option value="MANDARINA">Mandarina</ion-select-option>
+          <ion-select-option value="TORONJA">Toronja</ion-select-option>
+          <ion-select-option value="MARACUYA">Maracuyá</ion-select-option>
+          <ion-select-option value="LIMONCILLO">Limoncillo</ion-select-option>
         </ion-select>
       </ion-item>
 

@@ -105,6 +105,13 @@ const routes: Routes = [
       data: DataResolverService
     },
     loadChildren: () => import('./ver-editar-inspeccion-trampa/ver-editar-inspeccion-trampa.module').then( m => m.VerEditarInspeccionTrampaPageModule)
+  },
+  {
+    path: 'busqueda-traspatios-gps',
+    resolve:{
+      data: DataResolverService
+    },
+    loadChildren: () => import('./busqueda-traspatios-gps/busqueda-traspatios-gps.module').then( m => m.BusquedaTraspatiosGpsPageModule)
   }
 
 ];

@@ -101,7 +101,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
       let inData = this.route.snapshot.data['data'];
       if (inData) {
         if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa
-          if (this.tipo === "traspatio"){
+          if (this.tipo === "TRASPATIO"){
             this.poblado_finca_key = "Poblado";
             this.lote_propietario_key = "Propietario";
           }else{
@@ -119,9 +119,8 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         }
   
         this.seObtienenListasPorPrimeraVez = false;//Se indica que de ahora en adelante la carga de listas de traspatios/fincas y lotes/propietarios no se cargan por primera vez.
-
       }
-  
+      
     }
   
     ngOnInit() {

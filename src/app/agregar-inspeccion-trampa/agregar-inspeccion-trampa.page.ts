@@ -20,7 +20,7 @@ import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 })
 export class AgregarInspeccionTrampaPage implements OnInit {
 
-  tipo = "traspatio";
+  tipo = "TRASPATIO";
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
 
@@ -50,7 +50,7 @@ export class AgregarInspeccionTrampaPage implements OnInit {
       this.inspTrampaForm = this.formBuilder.group({
         //id_inspec_hlb,fecha_hora se guardan pero no se muestran en la interfaz
         //codigo_responsable,nombre_responsable se obtiene del usuario que esta logueado.
-        tipo:['traspatio',Validators.required],
+        tipo:['TRASPATIO',Validators.required],
         //pais se obtiene desde almacenamiento local pero no se muestra en interrfaz.
         num_trampa:['',Validators.required],
         latitud_trampa:['',Validators.required],
@@ -74,12 +74,12 @@ export class AgregarInspeccionTrampaPage implements OnInit {
     this.poblados_fincas = [];
     this.propietarios_lotes = [];
     
-    if(this.tipo === "traspatio"){
+    if(this.tipo === "TRASPATIO"){
       this.poblado_finca_key = "Poblado";
       this.lote_propietario_key = "Propietario";
     }
 
-    if(this.tipo === "productor" || this.tipo === "ticofrut"){
+    if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
       this.poblado_finca_key = "Finca";
       this.lote_propietario_key = "Lote";
     }
@@ -147,7 +147,7 @@ export class AgregarInspeccionTrampaPage implements OnInit {
       if(this.inspTrampaForm.dirty && this.inspTrampaForm.valid){
 
         let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-        let pais:string = configuracionesGenerales.pais;
+        let pais:string = configuracionesGenerales.pais.toUpperCase();
         let usuario:User = this.userService.getLogedUser();
         let trapInspectionToSave:any = {};
   
@@ -155,13 +155,13 @@ export class AgregarInspeccionTrampaPage implements OnInit {
         trapInspectionToSave['fecha_hora'] = this.dateService.getCurrentDateTime();
         trapInspectionToSave['codigo_responsable'] = usuario.username;
         trapInspectionToSave['nombre_responsable'] = usuario.fullName;
-        trapInspectionToSave['tipo'] = this.inspTrampaForm.controls['tipo'].value;
+        trapInspectionToSave['tipo'] = this.inspTrampaForm.controls['tipo'].value.toUpperCase();
         trapInspectionToSave['pais'] = pais;
         trapInspectionToSave['num_trampa'] = this.inspTrampaForm.controls['num_trampa'].value;
         trapInspectionToSave['latitud_trampa'] = this.inspTrampaForm.controls['latitud_trampa'].value;
         trapInspectionToSave['longitud_trampa'] = this.inspTrampaForm.controls['longitud_trampa'].value;
-        trapInspectionToSave['finca_poblado'] = this.inspTrampaForm.controls['finca_poblado'].value;
-        trapInspectionToSave['lote_propietario'] = this.inspTrampaForm.controls['lote_propietario'].value;
+        trapInspectionToSave['finca_poblado'] = this.inspTrampaForm.controls['finca_poblado'].value.toUpperCase();
+        trapInspectionToSave['lote_propietario'] = this.inspTrampaForm.controls['lote_propietario'].value.toUpperCase();
         trapInspectionToSave['cantidad_total'] = this.inspTrampaForm.controls['cantidad_total'].value;
         trapInspectionToSave['diagnostico'] = this.inspTrampaForm.controls['diagnostico'].value;
         trapInspectionToSave['cantidad_diagnostico'] = this.inspTrampaForm.controls['cantidad_diagnostico'].value;
