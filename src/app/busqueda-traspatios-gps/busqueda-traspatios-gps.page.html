@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Busqueda GPS</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/main"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item *ngFor="let mantain of mantains">
+      <ion-label>
+        <h2>País: {{mantain.pais}}</h2>
+        <h3>Tipo: {{mantain.tipo}}</h3>
+        <p>{{mantain.finca_poblado}}, {{mantain.lote_propietario}}</p>
+      </ion-label>
+
+      <!--<ion-icon *ngIf="mantain.sincronizado === 1" name="checkmark" size="large" slot="end" ></ion-icon>-->
+
+      <ion-badge color="primary" slot="end">{{mantain.distancia}} mts</ion-badge>
+
+    </ion-item>
+
+    <div class="notFoundMessage" *ngIf="mantains.length === 0">
+      <ion-text color="dark">
+        <h4 >¡Sin contenido!</h4>
+      </ion-text>
+    </div>
+
+   </ion-list>
+
+</ion-content>
+
+<!-- fab placed to the bottom start -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button (click) = "openMap()">
+    <ion-icon name="locate-outline" size="large"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

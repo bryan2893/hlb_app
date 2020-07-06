@@ -4,6 +4,8 @@ import {LoaderService} from '../services/loader.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
 
+import {GpsService} from '../services/gps/gps.service';
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.page.html',
@@ -14,19 +16,12 @@ export class MainPage implements OnInit {
   constructor(private servicioDeSincronizacion:SincronizacionService,
               private loaderService:LoaderService,
               private alertService:AlertService,
-              private toastService:ToastService) { }
+              private toastService:ToastService,
+              private gpsService:GpsService) { }
 
   ngOnInit() {}
 
   async sincronizarPrueba(){
-    /*
-    try{
-      let respuesta = await this.almacenamientoNativo.obtenerParametrosDeConfiguracion();
-      alert(respuesta);
-    }catch(error){
-      alert(error);
-    }
-    */
     
     let loading:any;
     try{
@@ -42,7 +37,6 @@ export class MainPage implements OnInit {
     }catch(error){
       await loading.dismiss();
       let alert = await this.alertService.presentAlert(JSON.stringify(error));
-      console.log(JSON.stringify(error));
       alert.present();
     }
     

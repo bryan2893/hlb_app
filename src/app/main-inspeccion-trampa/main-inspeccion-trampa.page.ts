@@ -4,6 +4,7 @@ import {IonSearchbar} from '@ionic/angular';
 import {InspeccionTrampaLocalService} from '../services/inspeccion_trampas/InspeccionTrampaLocal.service';
 import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
+import {DateService} from '../services/date/date.service';
 
 @Component({
   selector: 'app-main-inspeccion-trampa',
@@ -21,7 +22,8 @@ export class MainInspeccionTrampaPage implements OnInit {
 
   constructor(private inspeccionTrampaLocalService: InspeccionTrampaLocalService,
     private dataContainerService:DataContainerService,
-    private router:Router) {}
+    private router:Router,
+    private dateService:DateService) {}
 
   ngOnInit() {
   }
@@ -85,10 +87,13 @@ export class MainInspeccionTrampaPage implements OnInit {
     }
   }
 
-  onItemClick(inspHlbItem:any){
-    this.dataContainerService.setData(inspHlbItem);
+  onItemClick(inspTrampaItem:any){
+    this.dataContainerService.setData(inspTrampaItem);
     this.router.navigateByUrl('/ver-editar-inspeccion-trampa');
+  }
 
+  convertirFecha(date:any){
+    return this.dateService.getBeautyDate(date);
   }
 
 }

@@ -8,7 +8,7 @@ import { AgregarInspeccionHlbPageRoutingModule } from './agregar-inspeccion-hlb-
 
 import { AgregarInspeccionHlbPage } from './agregar-inspeccion-hlb.page';
 
-import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
+//import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
 
 @NgModule({
   imports: [
@@ -17,8 +17,7 @@ import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
     IonicModule,
     AgregarInspeccionHlbPageRoutingModule,
     FormsModule,
-    ReactiveFormsModule,
-    MapViewerPageModule
+    ReactiveFormsModule
   ],
   declarations: [AgregarInspeccionHlbPage]
 })

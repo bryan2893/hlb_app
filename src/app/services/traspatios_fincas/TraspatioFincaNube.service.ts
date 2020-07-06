@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
 import {TraspatioFincaNubeSubida} from '../../../DTO/server/TraspatioFincaNubeSubida';
+import {SyncInfoService} from '../syncInfo/sync-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class TraspatioFincaNubeService {
   private urlToUpload = 'http://hlb.ticofrut.com/api/traspatios_fincas/sincronizar';
   private urlToCountRecords = 'http://hlb.ticofrut.com/api/traspatios_fincas/contarRegistros/';
 
-  constructor(private http: HTTP) {
+  constructor(private http: HTTP,private syncInfoService:SyncInfoService) {
     this.http.setHeader('*', String("Accept"), String("application/json"));
     this.http.setDataSerializer('json');
   }
@@ -30,23 +31,23 @@ export class TraspatioFincaNubeService {
   syncListOfTraspatiosFincas(listaDetraspatiosFincas:TraspatioFincaNubeSubida[]){
     return new Promise((resolve,reject)=>{
 
-      let paqueteDeSincronizacion = {
-        registros:listaDetraspatiosFincas,
-        informacionDeSincronizacion:[
-          {
-            direccion_mac:'aaab1',
-            codigo_usuario:'knajera',
-            nombre_aplicacion:'AppHlb',
-            version_aplicacion:'1.1',
-            fabricante_telefono:'CAT'
-          }
-        ]
-      };
+      this.syncInfoService.getSyncInfo().then((info)=>{
 
-      this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
-        resolve(response);
-      }).catch((error)=>{
-        reject(JSON.stringify(error));
+        let paqueteDeSincronizacion = {
+          registros:listaDetraspatiosFincas,
+          informacionDeSincronizacion:[
+            info
+          ]
+        };
+  
+        this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
+          resolve(response);
+        }).catch((error)=>{
+          reject(JSON.stringify(error));
+        });
+
+      }).catch((error) =>{
+        reject(error);
       });
 
     });

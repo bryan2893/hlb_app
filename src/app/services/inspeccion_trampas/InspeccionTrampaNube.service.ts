@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
 import {InspeccionTrampaNubeSubida} from '../../../DTO/server/InspeccionTrampaNubeSubida';
+import {SyncInfoService} from '../../services/syncInfo/sync-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class InspeccionTrampaNubeService {
   private urlToUpload = 'http://hlb.ticofrut.com/api/inspeccion_trampas/sincronizar/';
   private urlToCountRecords = 'http://hlb.ticofrut.com/api/inspeccion_trampas/contarRegistros/';
 
-  constructor(private http: HTTP) {
+  constructor(private http: HTTP, private syncInfoService:SyncInfoService) {
     this.http.setHeader('*', String("Accept"), String("application/json"));
     this.http.setDataSerializer('json');
   }
@@ -35,22 +36,22 @@ export class InspeccionTrampaNubeService {
   syncListOfInspTramp(listaDeInspeccionesTrampas:InspeccionTrampaNubeSubida[]){
     return new Promise((resolve,reject)=>{
       
-      let paqueteDeSincronizacion = {
-        registros:listaDeInspeccionesTrampas,
-        informacionDeSincronizacion:[
-          {
-            direccion_mac:'aaab1',
-            codigo_usuario:'knajera',
-            nombre_aplicacion:'AppHlb',
-            version_aplicacion:'1.1',
-            fabricante_telefono:'CAT'
-          }
-        ]
-      };
+      this.syncInfoService.getSyncInfo().then((info)=>{
 
-      this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
-        resolve(response);
-      }).catch((error)=>{
+        let paqueteDeSincronizacion = {
+          registros:listaDeInspeccionesTrampas,
+          informacionDeSincronizacion:[
+            info
+          ]
+        };
+  
+        this.http.post(this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
+          resolve(response);
+        }).catch((error)=>{
+          reject(JSON.stringify(error));
+        });
+
+      }).catch((error) =>{
         reject(error);
       });
       
@@ -74,8 +75,6 @@ export class InspeccionTrampaNubeService {
     return new Promise((resolve,reject)=>{
       this.countLastDaysRecords(pais,lastDays).then((response:number)=>{
         let quantity = response;
-
-        console.log("Cantidad de páginas insp trampas = "+quantity);
 
         if(quantity === 0){
           resolve(0);

@@ -60,10 +60,6 @@ const routes: Routes = [
     loadChildren: () => import('./modals/fincas-poblados/fincas-poblados.module').then( m => m.FincasPobladosPageModule)
   },
   {
-    path: 'lotes-propietarios',
-    loadChildren: () => import('./modals/lotes-propietarios/lotes-propietarios.module').then( m => m.LotesPropietariosPageModule)
-  },
-  {
     path: 'main-inspeccion-hlb',
     loadChildren: () => import('./main-inspeccion-hlb/main-inspeccion-hlb.module').then( m => m.MainInspeccionHlbPageModule)
   },
@@ -105,7 +101,17 @@ const routes: Routes = [
   },
   {
     path: 'ver-editar-inspeccion-trampa',
+    resolve:{
+      data: DataResolverService
+    },
     loadChildren: () => import('./ver-editar-inspeccion-trampa/ver-editar-inspeccion-trampa.module').then( m => m.VerEditarInspeccionTrampaPageModule)
+  },
+  {
+    path: 'busqueda-traspatios-gps',
+    resolve:{
+      data: DataResolverService
+    },
+    loadChildren: () => import('./busqueda-traspatios-gps/busqueda-traspatios-gps.module').then( m => m.BusquedaTraspatiosGpsPageModule)
   }
 
 ];

@@ -15,7 +15,7 @@
 
       <ion-item>
         <ion-label position="stacked">Número de trampa</ion-label>
-        <ion-input formControlName="num_trampa" type="number" readonly></ion-input>
+        <ion-input formControlName="num_trampa" type="number" disabled></ion-input>
       </ion-item>
 
       <ion-radio-group formControlName="tipo" (ionChange)="changeType($event)">
@@ -26,15 +26,15 @@
         </ion-list-header>
         <ion-item>
           <ion-label>Traspatio</ion-label>
-          <ion-radio value="traspatio"></ion-radio>
+          <ion-radio value="TRASPATIO"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Productor</ion-label>
-          <ion-radio value="productor"></ion-radio>
+          <ion-radio value="PRODUCTOR"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Ticofrut</ion-label>
-          <ion-radio value="ticofrut"></ion-radio>
+          <ion-radio value="TICOFRUT"></ion-radio>
         </ion-item>
       </ion-radio-group>
 
@@ -54,12 +54,12 @@
 
       <ion-item>
         <ion-label position="stacked">Latitud</ion-label>
-        <ion-input formControlName="latitud" type="number" readonly></ion-input>
+        <ion-input formControlName="latitud" type="number" disabled></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Longitud</ion-label>
-        <ion-input formControlName="longitud" type="number" readonly></ion-input>
+        <ion-input formControlName="longitud" type="number" disabled></ion-input>
       </ion-item>
 
       
@@ -69,7 +69,7 @@
       
     </ion-list>
   
-    <ion-button expand="block" type="submit">Guardar</ion-button>
+    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
 
   </form>
 

@@ -41,7 +41,6 @@ export class InspeccionHlbLocalService {
         }).catch((e) => {
           reject(e);
         });
-      
     });
   }
 
@@ -146,7 +145,7 @@ export class InspeccionHlbLocalService {
     return new Promise((resolve,reject) => {
 
       
-      if(hlbInspection.tipo === "traspatio"){
+      if(hlbInspection.tipo === "TRASPATIO"){
         this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.nombre_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,hlbInspection.labor,hlbInspection.categoria,hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,'na',0,'na',0,'na',hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
           resolve(hlbInspection);
         }).catch((error) => {
@@ -177,8 +176,6 @@ export class InspeccionHlbLocalService {
   }
 
   insertManyHlbInspections(inspHlbList:InspeccionHlbNubeBajada[]){
-
-    console.log("Registros en insertManyHlbInp = "+ JSON.stringify(inspHlbList));
 
     let sql = 'INSERT INTO inspecciones_hlb(id_inspec_hlb,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     let createTableQuery = 'create table IF NOT EXISTS inspecciones_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_hlb INTEGER NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,ciclo INTEGER NOT NULL,labor TEXT,categoria TEXT,variedad TEXT NOT NULL,sintomatologia INTEGER NOT NULL,estado INTEGER NOT NULL,diagnostico INTEGER NOT NULL,latitud REAL NOT NULL,longitud REAL NOT NULL,patron TEXT,calle INTEGER,direccion_calle TEXT,numero_arbol INTEGER,dir_arbol TEXT,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';

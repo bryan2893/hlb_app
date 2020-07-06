@@ -1,9 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>fincas-poblados</ion-title>
+    <ion-title>{{tituloCabecera}}</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar (ionChange)="whenUserPressAKey($event)"></ion-searchbar>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
+
+  <ion-list>
+    <ion-item *ngFor="let finca_poblado of lista_fincas_poblados" button (click) = "onItemClick(finca_poblado)">
+      <ion-label>
+        <h1>{{finca_poblado}}</h1>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
 </ion-content>

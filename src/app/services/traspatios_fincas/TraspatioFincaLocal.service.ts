@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
-
-import {DbServiceService} from '../database/db-service.service';
 import {TraspatioFincaNuevo} from '../../../DTO/local/TraspatioFincaNuevo';
 import {TraspatioFincaNubeBajada} from '../../../DTO/server/TraspatioFincaNubeBajada';
 
@@ -12,7 +10,7 @@ export class TraspatioFincaLocalService {
 
   db:SQLiteObject = null;
 
-  constructor(private dbService: DbServiceService) {}
+  constructor() {}
 
   setDatabase(db:SQLiteObject){
     if(this.db === null){
@@ -32,6 +30,31 @@ export class TraspatioFincaLocalService {
 
           let offset = (pageNumber - 1) * rowsPerPage;
           this.db.executeSql(sql,[offset,rowsPerPage]).then((data)=>{
+
+            let hlbMantainPage = [];
+            if (data.rows.length > 0) {
+              for (var i = 0; i < data.rows.length; i++) { 
+                hlbMantainPage.push(data.rows.item(i));
+              }
+            }
+
+            resolve(hlbMantainPage);
+
+          }).catch((e) => {
+            reject(e);
+          });
+
+    });
+    
+  }
+
+  getAllTraspatiosFincas(){
+
+    let sql = 'SELECT * FROM traspatios_fincas';
+    return new Promise((resolve,reject)=>{
+
+          
+          this.db.executeSql(sql,[]).then((data)=>{
 
             let hlbMantainPage = [];
             if (data.rows.length > 0) {
@@ -159,9 +182,8 @@ export class TraspatioFincaLocalService {
             }).catch((error) => {
               reject(error);
             });
-      
     });
-
+    
   }
 
   updateATraspatioFinca(id_local:string,traspatioFincaRecord:TraspatioFincaNuevo){
