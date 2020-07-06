@@ -4,6 +4,7 @@ import {IonSearchbar} from '@ionic/angular';
 import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
 import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
+import {DateService} from '../services/date/date.service';
 
 @Component({
   selector: 'app-main-inspeccion-hlb',
@@ -21,7 +22,8 @@ export class MainInspeccionHlbPage implements OnInit {
 
   constructor(private inspeccionHlbLocalService: InspeccionHlbLocalService,
     private dataContainerService:DataContainerService,
-    private router:Router) {}
+    private router:Router,
+    private dateService:DateService) {}
 
   ngOnInit() {
   }
@@ -88,7 +90,10 @@ export class MainInspeccionHlbPage implements OnInit {
   onItemClick(inspHlbItem:any){
     this.dataContainerService.setData(inspHlbItem);
     this.router.navigateByUrl('/ver-editar-inspeccion-hlb');
+  }
 
+  convertirFecha(date:string){
+    return this.dateService.getBeautyDate(date);
   }
 
 }

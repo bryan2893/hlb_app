@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalController,NavParams} from '@ionic/angular';
+import {TraspatioFincaLocalService} from '../../services/traspatios_fincas/TraspatioFincaLocal.service';
 
 @Component({
   selector: 'app-fincas-poblados',
@@ -9,15 +10,47 @@ import {ModalController,NavParams} from '@ionic/angular';
 export class FincasPobladosPage implements OnInit {
   modalTitle:string;
 
-  constructor(private modalController:ModalController,private navParams:NavParams) { }
+  lista_fincas_poblados = [];
+  lista_respaldo = [];
+  tipo:string;
+  tituloCabecera:string;
+  
+
+  constructor(private modalController:ModalController,private navParams:NavParams,
+    private traspatiosFincasLocalService:TraspatioFincaLocalService) { }
 
   ngOnInit() {
-    console.log(JSON.stringify(this.navParams.data));
+
+    this.tituloCabecera = this.navParams.data.cabecera;
+    this.tipo = this.navParams.data.tipo;
+
+    this.traspatiosFincasLocalService.getTraspatiosFincasByType(this.tipo).then((data:any)=>{
+      this.lista_fincas_poblados = data;
+      this.lista_respaldo = data;
+    });
+
   }
 
-  async closeModal(){
-    const onClosedData: string = "Probando";
-    await this.modalController.dismiss(onClosedData);
+  onItemClick(finca_poblado:string){
+    this.closeModal(finca_poblado);
+  }
+
+  whenUserPressAKey(event:any){
+    let value = event.target.value.toUpperCase();
+
+    if(value !== ''){
+      let arrayTemporal = this.lista_fincas_poblados.slice();
+      this.lista_fincas_poblados = arrayTemporal.filter((nombre) => {
+        return nombre.includes(value);
+      });
+    }else{
+      this.lista_fincas_poblados = this.lista_respaldo.slice();
+    }
+    
+  }
+
+  async closeModal(finca_poblado:string){
+    await this.modalController.dismiss(finca_poblado);
   }
 
 }

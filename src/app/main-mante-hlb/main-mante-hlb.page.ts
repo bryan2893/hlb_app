@@ -57,7 +57,8 @@ export class MainManteHlbPage implements OnInit {
   }
 
   whenUserPressAKey(event:any){
-    let value = event.target.value;
+    let value = event.target.value.toUpperCase();
+    
     this.traspatioFincaLocalService.findTraspatiosFincas(value).then((listaDetraspatiosEncontrados:any)=>{
       this.mantains = listaDetraspatiosEncontrados;
     }).catch((error)=>{

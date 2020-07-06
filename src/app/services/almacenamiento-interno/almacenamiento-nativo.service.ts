@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
-import Settings from '../../../DTO/settings.dto';
+import {Settings} from '../../../DTO/settings.dto';
 import {User} from '../../../DTO/User.dto';
 
 @Injectable({

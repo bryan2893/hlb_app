@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
-import {InspeccionHlbNubeSubida} from '../../../DTO/server/InspeccionHlbNubeSubida';
+import {InspeccionTrampaNubeSubida} from '../../../DTO/server/InspeccionTrampaNubeSubida';
 import {SyncInfoService} from '../../services/syncInfo/sync-info.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InspeccionHlbNubeService {
+export class InspeccionTrampaNubeService {
 
-  private urlToDownload = 'http://hlb.ticofrut.com/api/inspeccion_hlb/obtener_pagina/';
-  private urlToUpload = 'http://hlb.ticofrut.com/api/inspeccion_hlb/sincronizar/';
-  private urlToCountRecords = 'http://hlb.ticofrut.com/api/inspeccion_hlb/contarRegistros/';
+  private urlToDownload = 'http://hlb.ticofrut.com/api/inspeccion_trampas/obtener_pagina/';
+  private urlToUpload = 'http://hlb.ticofrut.com/api/inspeccion_trampas/sincronizar/';
+  private urlToCountRecords = 'http://hlb.ticofrut.com/api/inspeccion_trampas/contarRegistros/';
 
-  constructor(private http: HTTP,private syncInfoService:SyncInfoService) {
+  constructor(private http: HTTP, private syncInfoService:SyncInfoService) {
     this.http.setHeader('*', String("Accept"), String("application/json"));
     this.http.setDataSerializer('json');
   }
   
-  getInspHlbPage(pageNumber:number,amountPerPage:number,oldDays:number,pais:string){
+  getInspTrampPage(pageNumber:number,amountPerPage:number,oldDays:number,pais:string){
 
-    console.log("Entró a intentar descargar inspecciones");
+    console.log("Entró a intentar descargar inspecciones de trampas amarillas");
 
     return new Promise((resolve,reject)=>{
       let completedUrl = this.urlToDownload + pageNumber + '/' + amountPerPage+'/'+oldDays+'/'+pais;
@@ -33,12 +33,13 @@ export class InspeccionHlbNubeService {
     });
   }
 
-  syncListOfInspHlb(listaDeInspeccionesHlb:InspeccionHlbNubeSubida[]){
+  syncListOfInspTramp(listaDeInspeccionesTrampas:InspeccionTrampaNubeSubida[]){
     return new Promise((resolve,reject)=>{
+      
       this.syncInfoService.getSyncInfo().then((info)=>{
 
         let paqueteDeSincronizacion = {
-          registros:listaDeInspeccionesHlb,
+          registros:listaDeInspeccionesTrampas,
           informacionDeSincronizacion:[
             info
           ]
@@ -53,7 +54,7 @@ export class InspeccionHlbNubeService {
       }).catch((error) =>{
         reject(error);
       });
-
+      
     });
   }
 
@@ -74,8 +75,6 @@ export class InspeccionHlbNubeService {
     return new Promise((resolve,reject)=>{
       this.countLastDaysRecords(pais,lastDays).then((response:number)=>{
         let quantity = response;
-
-        console.log("Cantidad de páginas insp hlb = "+quantity);
 
         if(quantity === 0){
           resolve(0);

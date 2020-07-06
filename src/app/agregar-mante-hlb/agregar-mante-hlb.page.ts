@@ -8,6 +8,7 @@ import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/al
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
 
 @Component({
   selector: 'app-agregar-mante-hlb',
@@ -15,7 +16,7 @@ import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
   styleUrls: ['./agregar-mante-hlb.page.scss'],
 })
 export class AgregarManteHlbPage implements OnInit {
-  tipo = "traspatio";
+  tipo = "TRASPATIO";
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
 
@@ -35,7 +36,7 @@ export class AgregarManteHlbPage implements OnInit {
     ) {
 
     this.traspatioFincaForm = this.formBuilder.group({
-      tipo:['traspatio',Validators.required],
+      tipo:['TRASPATIO',Validators.required],
       finca_poblado:['',Validators.required],
       lote_propietario:['',Validators.required],
       latitud:[''],
@@ -50,12 +51,12 @@ export class AgregarManteHlbPage implements OnInit {
     this.traspatioFincaForm.controls['lote_propietario'].patchValue('');
    
     
-    if(this.tipo === "traspatio"){
+    if(this.tipo === "TRASPATIO"){
       this.poblado_finca_key = "Poblado";
       this.lote_propietario_key = "Propietario";
     }
 
-    if(this.tipo === "productor" || this.tipo === "ticofrut"){
+    if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
       this.poblado_finca_key = "Finca";
       this.lote_propietario_key = "Lote";
     }
@@ -84,10 +85,10 @@ export class AgregarManteHlbPage implements OnInit {
   
         let paisRecuperado:string = parametrosDeConfiguracion.pais;
   
-        hlbMantainRegisterToSave['pais'] = paisRecuperado;
-        hlbMantainRegisterToSave['tipo'] = this.traspatioFincaForm.controls['tipo'].value;
-        hlbMantainRegisterToSave['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value;
-        hlbMantainRegisterToSave['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value;
+        hlbMantainRegisterToSave['pais'] = paisRecuperado.toUpperCase();
+        hlbMantainRegisterToSave['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
+        hlbMantainRegisterToSave['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
+        hlbMantainRegisterToSave['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
         hlbMantainRegisterToSave['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
         hlbMantainRegisterToSave['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
         hlbMantainRegisterToSave['estado'] = 1;
@@ -120,6 +121,26 @@ export class AgregarManteHlbPage implements OnInit {
 
     this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
+  }
+
+  async openModal() {
+    const modal = await this.modalController.create({
+      component: FincasPobladosPage,
+      componentProps: {
+        "tipo": this.tipo,
+        "cabecera":this.poblado_finca_key + 's'
+      }
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null) {
+
+        this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+        
+      }
+    });
+
+    return await modal.present();
   }
   
 }

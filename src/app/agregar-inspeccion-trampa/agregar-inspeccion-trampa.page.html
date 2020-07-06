@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Ver/editar trampa amarilla</ion-title>
+    <ion-title>+ Nueva inspeccion trampa</ion-title>
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/main-inspeccion-trampa"></ion-back-button>
     </ion-buttons>
@@ -9,14 +9,9 @@
 
 <ion-content>
 
-  <form [formGroup]="addTrapForm" (ngSubmit)="submit()">
+  <form [formGroup]="inspTrampaForm" (ngSubmit)="submit()">
 
     <ion-list>
-
-      <ion-item>
-        <ion-label position="stacked">Número de trampa</ion-label>
-        <ion-input formControlName="num_trampa" type="number" disabled></ion-input>
-      </ion-item>
 
       <ion-radio-group formControlName="tipo" (ionChange)="changeType($event)">
         <ion-list-header>
@@ -38,6 +33,26 @@
         </ion-item>
       </ion-radio-group>
 
+      <ion-item>
+        <ion-label position="stacked">Numero de trampa</ion-label>
+        <ion-input formControlName="num_trampa" type="number" (ionChange)="onTrapNumberIsSet($event)"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Latitud de trampa</ion-label>
+        <ion-input formControlName="latitud_trampa" type="number" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Longitud de trampa</ion-label>
+        <ion-input formControlName="longitud_trampa" type="number" disabled></ion-input>
+      </ion-item>
+
+      <ion-button (click)="openMap()">
+        <!--<ion-icon slot="icon-only" name="location-outline"></ion-icon>-->
+        Ver ubicacion
+      </ion-button>
+
       <ion-item *ngIf="isSelectPobladoFincaActive">
         <ion-label>{{poblado_finca_key}}</ion-label>
         <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)">
@@ -53,23 +68,33 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Latitud</ion-label>
-        <ion-input formControlName="latitud" type="number" disabled></ion-input>
+        <ion-label position="stacked">Cantidad de bichitos</ion-label>
+        <ion-input formControlName="cantidad_total" type="number"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Longitud</ion-label>
-        <ion-input formControlName="longitud" type="number" disabled></ion-input>
+        <ion-label>Diagnostico?</ion-label>
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="diagnostico">
+          <ion-select-option value='1'>Sí</ion-select-option>
+          <ion-select-option value='0'>No</ion-select-option>
+        </ion-select>
       </ion-item>
 
+      <ion-item>
+        <ion-label position="stacked">Cantidad a diagnostico</ion-label>
+        <ion-input formControlName="cantidad_diagnostico" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Notas</ion-label>
+        <ion-textarea value="" formControlName="notas"></ion-textarea>
+      </ion-item>
       
-      <ion-button (click)="openMap()">
-        <ion-icon slot="icon-only" name="location-outline"></ion-icon>
-      </ion-button>
-      
+  
     </ion-list>
   
-    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
+    <ion-button expand="block" type="submit">Guardar</ion-button>
+
 
   </form>
 

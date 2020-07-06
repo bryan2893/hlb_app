@@ -19,7 +19,7 @@
 
     <ion-item *ngFor="let inspeccionTraspatioFinca of inspeccionTraspatiosFincasList" button (click)="onItemClick(inspeccionTraspatioFinca)">
       <ion-label>
-        <h2>Fecha-Hora: {{inspeccionTraspatioFinca.fecha_hora}}</h2>
+        <h2>Fecha-Hora: {{convertirFecha(inspeccionTraspatioFinca.fecha_hora)}}</h2>
         <h3>Tipo: {{inspeccionTraspatioFinca.tipo}}</h3>
         <p>{{inspeccionTraspatioFinca.finca_poblado}}, {{inspeccionTraspatioFinca.lote_propietario}}</p>
       </ion-label>

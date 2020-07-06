@@ -9,6 +9,8 @@ import { AgregarManteHlbPageRoutingModule } from './agregar-mante-hlb-routing.mo
 
 import { AgregarManteHlbPage } from './agregar-mante-hlb.page';
 
+import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +18,8 @@ import { AgregarManteHlbPage } from './agregar-mante-hlb.page';
     IonicModule,
     AgregarManteHlbPageRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FincasPobladosPageModule
   ],
   declarations: [AgregarManteHlbPage]
 })

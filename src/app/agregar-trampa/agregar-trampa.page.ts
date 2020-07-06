@@ -16,7 +16,7 @@ import {PreviousUrlStructure} from '../../DTO/previuousUrlStructure.dto';
 })
 export class AgregarTrampaPage implements OnInit {
 
-  tipo = "traspatio";
+  tipo = "TRASPATIO";
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
 
@@ -59,12 +59,12 @@ export class AgregarTrampaPage implements OnInit {
     this.poblados_fincas = [];
     this.propietarios_lotes = [];
     
-    if(this.tipo === "traspatio"){
+    if(this.tipo === "TRASPATIO"){
       this.poblado_finca_key = "Poblado";
       this.lote_propietario_key = "Propietario";
     }
 
-    if(this.tipo === "productor" || this.tipo === "ticofrut"){
+    if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
       this.poblado_finca_key = "Finca";
       this.lote_propietario_key = "Lote";
     }
@@ -105,10 +105,10 @@ export class AgregarTrampaPage implements OnInit {
   
         trapMantainRegisterToSave['id_trampa'] = -1;
         trapMantainRegisterToSave['num_trampa'] = this.addTrapForm.controls['num_trampa'].value;
-        trapMantainRegisterToSave['tipo'] = this.addTrapForm.controls['tipo'].value;
-        trapMantainRegisterToSave['pais'] = pais;
-        trapMantainRegisterToSave['finca_poblado'] = this.addTrapForm.controls['finca_poblado'].value;
-        trapMantainRegisterToSave['lote_propietario'] = this.addTrapForm.controls['lote_propietario'].value;
+        trapMantainRegisterToSave['tipo'] = this.addTrapForm.controls['tipo'].value.toUpperCase();
+        trapMantainRegisterToSave['pais'] = pais.toUpperCase();
+        trapMantainRegisterToSave['finca_poblado'] = this.addTrapForm.controls['finca_poblado'].value.toUpperCase();
+        trapMantainRegisterToSave['lote_propietario'] = this.addTrapForm.controls['lote_propietario'].value.toUpperCase();
         trapMantainRegisterToSave['latitud'] = this.addTrapForm.controls['latitud'].value;
         trapMantainRegisterToSave['longitud'] = this.addTrapForm.controls['longitud'].value;
         trapMantainRegisterToSave['estado'] = 1;

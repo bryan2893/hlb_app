@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Settings from '../../DTO/settings.dto';
+import {Settings} from '../../DTO/settings.dto';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {ToastService} from '../services/toast-service/toast.service';
@@ -23,7 +23,7 @@ export class SettingsPage implements OnInit {
       radio_de_alcance:[''],
       volumen_de_registros:[''],
       link_de_sincronizacion:[''],
-      pais:['costa rica'],
+      pais:['COSTA RICA'],
       dias_permitidos:[''],
       version:['']
     });
