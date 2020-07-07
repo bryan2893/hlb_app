@@ -1,5 +1,6 @@
 export interface InspeccionHlbNuevo{
     id_inspec_hlb:number,
+    consecutivo:string,
     fecha_hora:string,
     codigo_responsable:string,
     nombre_responsable:string,

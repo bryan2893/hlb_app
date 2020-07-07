@@ -1,5 +1,6 @@
 export interface InspeccionHlbNubeBajada{
     ID_INSPEC_HLB:number,
+    CONSECUTIVO:string,
     FECHA_HORA:string,
     CODIGO_RESPONSABLE:string,
     NOMBRE_RESPONSABLE:string,

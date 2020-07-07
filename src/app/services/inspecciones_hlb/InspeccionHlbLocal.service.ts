@@ -21,7 +21,7 @@ export class InspeccionHlbLocalService {
   }
 
   createTable(){
-    let sql = 'create table IF NOT EXISTS inspecciones_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_hlb INTEGER NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,ciclo INTEGER NOT NULL,labor TEXT,categoria TEXT,variedad TEXT NOT NULL,sintomatologia INTEGER NOT NULL,estado INTEGER NOT NULL,diagnostico INTEGER NOT NULL,latitud REAL NOT NULL,longitud REAL NOT NULL,patron TEXT,calle INTEGER,direccion_calle TEXT,numero_arbol INTEGER,dir_arbol TEXT,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
+    let sql = 'create table IF NOT EXISTS inspecciones_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_hlb INTEGER NOT NULL,consecutivo TEXT NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,ciclo INTEGER NOT NULL,labor TEXT,categoria TEXT,variedad TEXT NOT NULL,sintomatologia INTEGER NOT NULL,estado INTEGER NOT NULL,diagnostico INTEGER NOT NULL,latitud REAL NOT NULL,longitud REAL NOT NULL,patron TEXT,calle INTEGER,direccion_calle TEXT,numero_arbol INTEGER,dir_arbol TEXT,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
     return this.db.executeSql(sql,[]);
   }
 
@@ -46,7 +46,7 @@ export class InspeccionHlbLocalService {
 
   getNoSincronizedInspHlbPage(pageNumber:number,rowsPerPage:number){
     
-    let sql = 'SELECT id_inspec_hlb,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas FROM inspecciones_hlb where sincronizado = ? limit ?,?';
+    let sql = 'SELECT id_inspec_hlb,consecutivo,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas FROM inspecciones_hlb where sincronizado = ? limit ?,?';
     return new Promise((resolve,reject)=>{
         let offset = (pageNumber - 1) * rowsPerPage;
         this.db.executeSql(sql,[0,offset,rowsPerPage]).then((registrosInspHlb)=>{
@@ -141,18 +141,18 @@ export class InspeccionHlbLocalService {
   }
 
   insertAnHlbInspection(hlbInspection:InspeccionHlbNuevo){
-    let sql = 'INSERT INTO inspecciones_hlb(id_inspec_hlb,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    let sql = 'INSERT INTO inspecciones_hlb(id_inspec_hlb,consecutivo,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
 
       
       if(hlbInspection.tipo === "TRASPATIO"){
-        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.nombre_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,hlbInspection.labor,hlbInspection.categoria,hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,'na',0,'na',0,'na',hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
+        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.consecutivo,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.nombre_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,hlbInspection.labor,hlbInspection.categoria,hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,'na',0,'na',0,'na',hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
           resolve(hlbInspection);
         }).catch((error) => {
           reject(new Error("Error intentando ingresar un registro de de inspeccion hlb en sqlite: "+error.message));
         });
-      }else{//Suponer que es tipo "ticofrut" o "productor"
-        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.nombre_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,'na','na',hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,hlbInspection.patron,hlbInspection.calle,hlbInspection.direccion_calle,hlbInspection.numero_arbol,hlbInspection.dir_arbol,hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
+      }else{//Suponer que es tipo "TICOFRUT" o "PRODUCTOR"
+        this.db.executeSql(sql,[hlbInspection.id_inspec_hlb,hlbInspection.consecutivo,hlbInspection.fecha_hora,hlbInspection.codigo_responsable,hlbInspection.nombre_responsable,hlbInspection.tipo,hlbInspection.pais,hlbInspection.finca_poblado,hlbInspection.lote_propietario,hlbInspection.ciclo,'na','na',hlbInspection.variedad,hlbInspection.sintomatologia,hlbInspection.estado,hlbInspection.diagnostico,hlbInspection.latitud,hlbInspection.longitud,hlbInspection.patron,hlbInspection.calle,hlbInspection.direccion_calle,hlbInspection.numero_arbol,hlbInspection.dir_arbol,hlbInspection.notas,hlbInspection.sincronizado]).then(()=>{
           resolve(hlbInspection);
         }).catch((error) => {
           reject(new Error("Error intentando ingresar un registro de de inspeccion hlb en sqlite: "+error.message));
@@ -177,14 +177,14 @@ export class InspeccionHlbLocalService {
 
   insertManyHlbInspections(inspHlbList:InspeccionHlbNubeBajada[]){
 
-    let sql = 'INSERT INTO inspecciones_hlb(id_inspec_hlb,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    let createTableQuery = 'create table IF NOT EXISTS inspecciones_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_hlb INTEGER NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,ciclo INTEGER NOT NULL,labor TEXT,categoria TEXT,variedad TEXT NOT NULL,sintomatologia INTEGER NOT NULL,estado INTEGER NOT NULL,diagnostico INTEGER NOT NULL,latitud REAL NOT NULL,longitud REAL NOT NULL,patron TEXT,calle INTEGER,direccion_calle TEXT,numero_arbol INTEGER,dir_arbol TEXT,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
+    let sql = 'INSERT INTO inspecciones_hlb(id_inspec_hlb,consecutivo,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,finca_poblado,lote_propietario,ciclo,labor,categoria,variedad,sintomatologia,estado,diagnostico,latitud,longitud,patron,calle,direccion_calle,numero_arbol,dir_arbol,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    let createTableQuery = 'create table IF NOT EXISTS inspecciones_hlb(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_hlb INTEGER NOT NULL,consecutivo TEXT NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,ciclo INTEGER NOT NULL,labor TEXT,categoria TEXT,variedad TEXT NOT NULL,sintomatologia INTEGER NOT NULL,estado INTEGER NOT NULL,diagnostico INTEGER NOT NULL,latitud REAL NOT NULL,longitud REAL NOT NULL,patron TEXT,calle INTEGER,direccion_calle TEXT,numero_arbol INTEGER,dir_arbol TEXT,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
     return new Promise((resolve,reject) => {
       let generalStatement = [];
       generalStatement.push(createTableQuery);
       for(let i=0;i<inspHlbList.length;i++){
         let hlbInspection = inspHlbList[i];
-        let valuesArray = [hlbInspection.ID_INSPEC_HLB,hlbInspection.FECHA_HORA,hlbInspection.CODIGO_RESPONSABLE,hlbInspection.NOMBRE_RESPONSABLE,hlbInspection.TIPO,hlbInspection.PAIS,hlbInspection.FINCA_POBLADO,hlbInspection.LOTE_PROPIETARIO,hlbInspection.CICLO,hlbInspection.LABOR,hlbInspection.CATEGORIA,hlbInspection.VARIEDAD,hlbInspection.SINTOMATOLOGIA,hlbInspection.ESTADO,hlbInspection.DIAGNOSTICO,hlbInspection.LATITUD,hlbInspection.LONGITUD,hlbInspection.PATRON,hlbInspection.CALLE,hlbInspection.DIRECCION_CALLE,hlbInspection.NUMERO_ARBOL,hlbInspection.DIR_ARBOL,hlbInspection.NOTAS,1]
+        let valuesArray = [hlbInspection.ID_INSPEC_HLB,hlbInspection.CONSECUTIVO,hlbInspection.FECHA_HORA,hlbInspection.CODIGO_RESPONSABLE,hlbInspection.NOMBRE_RESPONSABLE,hlbInspection.TIPO,hlbInspection.PAIS,hlbInspection.FINCA_POBLADO,hlbInspection.LOTE_PROPIETARIO,hlbInspection.CICLO,hlbInspection.LABOR,hlbInspection.CATEGORIA,hlbInspection.VARIEDAD,hlbInspection.SINTOMATOLOGIA,hlbInspection.ESTADO,hlbInspection.DIAGNOSTICO,hlbInspection.LATITUD,hlbInspection.LONGITUD,hlbInspection.PATRON,hlbInspection.CALLE,hlbInspection.DIRECCION_CALLE,hlbInspection.NUMERO_ARBOL,hlbInspection.DIR_ARBOL,hlbInspection.NOTAS,1]
         let insertionListStatement = [];
         insertionListStatement.push(sql);
         insertionListStatement.push(valuesArray);

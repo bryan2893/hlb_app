@@ -46,7 +46,9 @@ export class AgregarInspeccionHlbPage implements OnInit {
     private userService:UserService) {
 
       this.inspHlbForm = this.formBuilder.group({
-        //id_inspec_hlb,fecha_hora se guardan pero no se muestran en la interfaz
+        //id_inspec_hlb se guarda pero no se miestra...
+        consevutivo:['TRASPATIO',Validators.required],
+        //fecha_hora se guardan pero no se muestran en la interfaz
         //codigo_responsable,nombre_responsable se obtiene del usuario que esta logueado.
         tipo:['TRASPATIO',Validators.required],
         //pais se obtiene desde almacenamiento local pero no se muestra en interrfaz.
@@ -117,7 +119,6 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
   validarFormSegunTipo(hlbForm:any):any{
@@ -151,6 +152,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
         let hlbInspectionToSave:any = {};
   
         hlbInspectionToSave['id_inspec_hlb'] = -1;
+        hlbInspectionToSave['consecutivo'] = 'na';
         hlbInspectionToSave['fecha_hora'] = this.dateService.getCurrentDateTime();
         hlbInspectionToSave['codigo_responsable'] = usuario.username;
         hlbInspectionToSave['nombre_responsable'] = usuario.fullName;

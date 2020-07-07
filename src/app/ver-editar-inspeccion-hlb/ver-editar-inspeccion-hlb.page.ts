@@ -46,8 +46,9 @@ export class VerEditarInspeccionHlbPage implements OnInit {
         //id_inspec_hlb,fecha_hora se guardan pero no se muestran en la interfaz
         //codigo_responsable,nombre_responsable se obtiene del usuario que esta logueado.
         tipo:['',Validators.required],
+        consecutivo:['',Validators.required],
         //pais se obtiene desde almacenamiento local pero no se muestra en interrfaz.
-        fecha_hora:[''],
+        fecha_hora:['',Validators.required],
         codigo_responsable:[''],
         nombre_responsable:[''],
         finca_poblado:['',Validators.required],
@@ -87,7 +88,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
   ionViewDidEnter(){
     let inData = this.route.snapshot.data['data'];
     if (inData) {
-      if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa
+      if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa.
         if (this.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
@@ -95,11 +96,9 @@ export class VerEditarInspeccionHlbPage implements OnInit {
            this.poblado_finca_key = "Finca";
            this.lote_propietario_key = "Lote";
         }
-
-        console.log("Datos de inspeccion hlb"+JSON.stringify(inData));
- 
-        this.inspHlbForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
         
+        this.inspHlbForm.controls['consecutivo'].patchValue(inData.consecutivo);
+        this.inspHlbForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
         this.inspHlbForm.controls['codigo_responsable'].patchValue(inData.codigo_responsable);
         this.inspHlbForm.controls['nombre_responsable'].patchValue(inData.nombre_responsable);
         this.inspHlbForm.controls['tipo'].patchValue(inData.tipo);
@@ -170,6 +169,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
         let hlbInspectionToSave:any = {};
   
         hlbInspectionToSave['id_inspec_hlb'] = -1;
+        hlbInspectionToSave['consecutivo'] = this.inspHlbForm.controls['consecutivo'].value;
         hlbInspectionToSave['fecha_hora'] = this.dateService.getCurrentDateTime();
         hlbInspectionToSave['codigo_responsable'] = usuario.username;
         hlbInspectionToSave['nombre_responsable'] = usuario.fullName;

@@ -115,7 +115,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         this.inspTrampaForm.controls['finca_poblado'].patchValue(inData.finca_poblado);
         this.inspTrampaForm.controls['lote_propietario'].patchValue(inData.lote_propietario);
         this.inspTrampaForm.controls['cantidad_total'].patchValue(inData.cantidad_total);
-        this.inspTrampaForm.controls['diagnostico'].patchValue(inData.diagnostico);
+        this.inspTrampaForm.controls['diagnostico'].patchValue(String(inData.diagnostico));
         
         this.inspTrampaForm.controls['cantidad_diagnostico'].patchValue(inData.cantidad_diagnostico);
         this.inspTrampaForm.controls['notas'].patchValue(inData.notas);
@@ -158,27 +158,6 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
 
     }
   }
-
-  /*
-  validarFormSegunTipo(hlbForm:any):any{
-    let tipo:string = hlbForm.tipo;
-
-    if(tipo === 'traspatio'){
-      return (hlbForm.labor !== '' &&
-      hlbForm.categoria !== ''
-      );
-    }else{
-      return(
-        hlbForm.patron !== ''&&
-        hlbForm.calle !== null &&
-        hlbForm.direccion_calle !== '' &&
-        hlbForm.numero_arbol !== null &&
-        hlbForm.dir_arbol !== ''
-      );
-    }
-
-  }
-  */
 
   async submit(){
 
