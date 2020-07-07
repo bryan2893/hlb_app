@@ -121,7 +121,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         this.inspTrampaForm.controls['notas'].patchValue(inData.notas);
 
         this.seObtienenListasPorPrimeraVez = false;//Se indica que de ahora en adelante la carga de listas de traspatios/fincas y lotes/propietarios no se cargan por primera vez.
-
+        
       }
 
     }
