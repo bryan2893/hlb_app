@@ -22,7 +22,7 @@ export class InspeccionTrampaLocalService {
 
 
   createTable(){
-    let sql = 'create table IF NOT EXISTS inspecciones_trampas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_tramp INTEGER NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,latitud_trampa REAL NOT NULL,longitud_trampa REAL NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,cantidad_total INTEGER NOT NULL,diagnostico INTEGER NOT NULL,cantidad_diagnostico INTEGER NOT NULL,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
+    let sql = 'create table IF NOT EXISTS inspecciones_trampas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_tramp INTEGER NOT NULL,consecutivo TEXT NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,latitud_trampa REAL NOT NULL,longitud_trampa REAL NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,cantidad_total INTEGER NOT NULL,diagnostico INTEGER NOT NULL,cantidad_diagnostico INTEGER NOT NULL,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
     return this.db.executeSql(sql,[]);
   }
 
@@ -48,7 +48,7 @@ export class InspeccionTrampaLocalService {
 
   getNoSincronizedInspTrampasPage(pageNumber:number,rowsPerPage:number){
     
-    let sql = 'SELECT id_inspec_tramp,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,num_trampa,latitud_trampa,longitud_trampa,finca_poblado,lote_propietario,cantidad_total,diagnostico,cantidad_diagnostico,notas FROM inspecciones_trampas where sincronizado = ? limit ?,?';
+    let sql = 'SELECT id_inspec_tramp,consecutivo,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,num_trampa,latitud_trampa,longitud_trampa,finca_poblado,lote_propietario,cantidad_total,diagnostico,cantidad_diagnostico,notas FROM inspecciones_trampas where sincronizado = ? limit ?,?';
     return new Promise((resolve,reject)=>{
         let offset = (pageNumber - 1) * rowsPerPage;
         this.db.executeSql(sql,[0,offset,rowsPerPage]).then((registrosInspTrampas)=>{
@@ -143,10 +143,10 @@ export class InspeccionTrampaLocalService {
   }
 
   insertATrapInspection(trapInspection:InspeccionTrampaNuevo){
-    let sql = 'INSERT INTO inspecciones_trampas(id_inspec_tramp,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,num_trampa,latitud_trampa,longitud_trampa,finca_poblado,lote_propietario,cantidad_total,diagnostico,cantidad_diagnostico,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    let sql = 'INSERT INTO inspecciones_trampas(id_inspec_tramp,consecutivo,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,num_trampa,latitud_trampa,longitud_trampa,finca_poblado,lote_propietario,cantidad_total,diagnostico,cantidad_diagnostico,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
 
-      this.db.executeSql(sql,[trapInspection.id_inspec_tramp,trapInspection.fecha_hora,trapInspection.codigo_responsable,trapInspection.nombre_responsable,trapInspection.tipo,trapInspection.pais,trapInspection.num_trampa,trapInspection.latitud_trampa,trapInspection.longitud_trampa,trapInspection.finca_poblado,trapInspection.lote_propietario,trapInspection.cantidad_total,trapInspection.diagnostico,trapInspection.cantidad_diagnostico,trapInspection.notas,trapInspection.sincronizado]).then(()=>{
+      this.db.executeSql(sql,[trapInspection.id_inspec_tramp,trapInspection.consecutivo,trapInspection.fecha_hora,trapInspection.codigo_responsable,trapInspection.nombre_responsable,trapInspection.tipo,trapInspection.pais,trapInspection.num_trampa,trapInspection.latitud_trampa,trapInspection.longitud_trampa,trapInspection.finca_poblado,trapInspection.lote_propietario,trapInspection.cantidad_total,trapInspection.diagnostico,trapInspection.cantidad_diagnostico,trapInspection.notas,trapInspection.sincronizado]).then(()=>{
         resolve(trapInspection);
       }).catch((error) => {
         reject(new Error("Error intentando ingresar un registro de inspeccion trampa amarilla en sqlite: "+error.message));
@@ -169,14 +169,15 @@ export class InspeccionTrampaLocalService {
 
   insertManyTrapInspections(trapsInspecList:InspeccionTrampaNubeBajada[]){
 
-    let sql = 'INSERT INTO inspecciones_trampas(id_inspec_tramp,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,num_trampa,latitud_trampa,longitud_trampa,finca_poblado,lote_propietario,cantidad_total,diagnostico,cantidad_diagnostico,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    let createTableQuery = 'create table IF NOT EXISTS inspecciones_trampas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_tramp INTEGER NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,latitud_trampa REAL NOT NULL,longitud_trampa REAL NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,cantidad_total INTEGER NOT NULL,diagnostico INTEGER NOT NULL,cantidad_diagnostico INTEGER NOT NULL,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
+    let sql = 'INSERT INTO inspecciones_trampas(id_inspec_tramp,consecutivo,fecha_hora,codigo_responsable,nombre_responsable,tipo,pais,num_trampa,latitud_trampa,longitud_trampa,finca_poblado,lote_propietario,cantidad_total,diagnostico,cantidad_diagnostico,notas,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    let createTableQuery = 'create table IF NOT EXISTS inspecciones_trampas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_inspec_tramp INTEGER NOT NULL,consecutivo TEXT NOT NULL,fecha_hora TEXT NOT NULL,codigo_responsable TEXT NOT NULL,nombre_responsable TEXT NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,latitud_trampa REAL NOT NULL,longitud_trampa REAL NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,cantidad_total INTEGER NOT NULL,diagnostico INTEGER NOT NULL,cantidad_diagnostico INTEGER NOT NULL,notas TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
+    
     return new Promise((resolve,reject) => {
       let generalStatement = [];
       generalStatement.push(createTableQuery);
       for(let i=0;i<trapsInspecList.length;i++){
         let trapInspection = trapsInspecList[i];
-        let valuesArray = [trapInspection.ID_INSPEC_TRAMP,trapInspection.FECHA_HORA,trapInspection.CODIGO_RESPONSABLE,trapInspection.NOMBRE_RESPONSABLE,trapInspection.TIPO,trapInspection.PAIS,trapInspection.NUM_TRAMPA,trapInspection.LATITUD_TRAMPA,trapInspection.LONGITUD_TRAMPA,trapInspection.FINCA_POBLADO,trapInspection.LOTE_PROPIETARIO,trapInspection.CANTIDAD_TOTAL,trapInspection.DIAGNOSTICO,trapInspection.CANTIDAD_DIAGNOSTICO,trapInspection.NOTAS,1]
+        let valuesArray = [trapInspection.ID_INSPEC_TRAMP,trapInspection.CONSECUTIVO,trapInspection.FECHA_HORA,trapInspection.CODIGO_RESPONSABLE,trapInspection.NOMBRE_RESPONSABLE,trapInspection.TIPO,trapInspection.PAIS,trapInspection.NUM_TRAMPA,trapInspection.LATITUD_TRAMPA,trapInspection.LONGITUD_TRAMPA,trapInspection.FINCA_POBLADO,trapInspection.LOTE_PROPIETARIO,trapInspection.CANTIDAD_TOTAL,trapInspection.DIAGNOSTICO,trapInspection.CANTIDAD_DIAGNOSTICO,trapInspection.NOTAS,1]
         let insertionListStatement = [];
         insertionListStatement.push(sql);
         insertionListStatement.push(valuesArray);

@@ -48,7 +48,8 @@ export class AgregarInspeccionTrampaPage implements OnInit {
     private trampaAmarillaLocalService:TrampaAmarillaLocalService) {
 
       this.inspTrampaForm = this.formBuilder.group({
-        //id_inspec_hlb,fecha_hora se guardan pero no se muestran en la interfaz
+        //id_inspec_hlb,fecha_hora se guardan pero no se muestran en la interfaz.
+        //consecutivo se guarda pero no se muestra en la interfaz.
         //codigo_responsable,nombre_responsable se obtiene del usuario que esta logueado.
         tipo:['TRASPATIO',Validators.required],
         //pais se obtiene desde almacenamiento local pero no se muestra en interrfaz.
@@ -152,6 +153,7 @@ export class AgregarInspeccionTrampaPage implements OnInit {
         let trapInspectionToSave:any = {};
   
         trapInspectionToSave['id_inspec_tramp'] = -1;
+        trapInspectionToSave['consecutivo'] = 'na';
         trapInspectionToSave['fecha_hora'] = this.dateService.getCurrentDateTime();
         trapInspectionToSave['codigo_responsable'] = usuario.username;
         trapInspectionToSave['nombre_responsable'] = usuario.fullName;

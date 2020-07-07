@@ -1,5 +1,6 @@
 export interface InspeccionTrampaNubeBajada{
     ID_INSPEC_TRAMP:number,
+    CONSECUTIVO:string,
     FECHA_HORA:string,
     CODIGO_RESPONSABLE:string,
     NOMBRE_RESPONSABLE:string,

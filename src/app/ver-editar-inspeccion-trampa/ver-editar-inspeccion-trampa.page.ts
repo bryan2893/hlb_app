@@ -51,6 +51,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
     private userService:UserService) {
       this.inspTrampaForm = this.formBuilder.group({
         //id_inspec_hlb,
+        consecutivo:['',Validators.required],
         fecha_hora:['',Validators.required],
         codigo_responsable:['',Validators.required],
         nombre_responsable:['',Validators.required],
@@ -101,6 +102,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
 
         console.log("En viewDinEnter" + JSON.stringify(inData));
   
+        this.inspTrampaForm.controls['consecutivo'].patchValue(inData.consecutivo);
         this.inspTrampaForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
         
         this.inspTrampaForm.controls['codigo_responsable'].patchValue(inData.codigo_responsable);
@@ -137,12 +139,12 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
       this.poblados_fincas = [];
       this.propietarios_lotes = [];
       
-      if(this.tipo === "traspatio"){
+      if(this.tipo === "TRASPATIO"){
         this.poblado_finca_key = "Poblado";
         this.lote_propietario_key = "Propietario";
       }
 
-      if(this.tipo === "productor" || this.tipo === "ticofrut"){
+      if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
         this.poblado_finca_key = "Finca";
         this.lote_propietario_key = "Lote";
       }
@@ -190,6 +192,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         let trapInspectionToSave:any = {};
   
         trapInspectionToSave['id_inspec_tramp'] = -1;
+        trapInspectionToSave['consecutivo'] = this.inspTrampaForm.controls['consecutivo'].value;
         trapInspectionToSave['fecha_hora'] = this.dateService.getCurrentDateTime();
         trapInspectionToSave['codigo_responsable'] = usuario.username;
         trapInspectionToSave['nombre_responsable'] = usuario.fullName;
