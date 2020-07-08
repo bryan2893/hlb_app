@@ -14,5 +14,7 @@ export interface InspeccionTrampaNubeBajada{
     CANTIDAD_TOTAL:number,
     DIAGNOSTICO:number,
     CANTIDAD_DIAGNOSTICO:number,
-    NOTAS:string
+    NOTAS:string,
+    INDICA_REVISION:number,
+    COMENTARIO:string
 }

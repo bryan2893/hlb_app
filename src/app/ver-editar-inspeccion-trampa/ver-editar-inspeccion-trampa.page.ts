@@ -38,6 +38,8 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
 
   trapInspectionRecord:any;
 
+  mostrarComentario = false;
+
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
@@ -65,7 +67,9 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         cantidad_total:['',Validators.required],
         diagnostico:['',Validators.required],
         cantidad_diagnostico:['',Validators.required],
-        notas:['']
+        notas:[''],
+        indica_revision:['',Validators.required],
+        comentario:['']
         //sincronizado por default se guarda como 0 ya que es un registro modificado que debe ser sincronizado.
       });
     }
@@ -119,6 +123,9 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         
         this.inspTrampaForm.controls['cantidad_diagnostico'].patchValue(inData.cantidad_diagnostico);
         this.inspTrampaForm.controls['notas'].patchValue(inData.notas);
+
+        this.inspTrampaForm.controls['indica_revision'].patchValue(String(inData.indica_revision));
+         this.inspTrampaForm.controls['comentario'].patchValue(inData.comentario);
 
         this.seObtienenListasPorPrimeraVez = false;//Se indica que de ahora en adelante la carga de listas de traspatios/fincas y lotes/propietarios no se cargan por primera vez.
         
@@ -193,6 +200,14 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
           trapInspectionToSave['notas'] = this.inspTrampaForm.controls['notas'].value;
         }
 
+        trapInspectionToSave['indica_revision'] = this.inspTrampaForm.controls['indica_revision'].value;
+
+        if(this.inspTrampaForm.controls['comentario'].value === ''){
+          trapInspectionToSave['comentario'] = 'na';
+        }else{
+          trapInspectionToSave['comentario'] = this.inspTrampaForm.controls['comentario'].value;
+        }
+
         trapInspectionToSave['sincronizado'] = 0;
         
         await  this.inspeccionTrampaLocalService.updateAnTrapInspection(this.trapInspectionRecord.id_local,trapInspectionToSave);
@@ -248,21 +263,13 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
     this.router.navigateByUrl('/map-viewer');
   }
 
-  /*
-  async onTrapNumberIsSet(event:any){
-
-    if(event.target.value === ''){
-      this.inspTrampaForm.controls['latitud_trampa'].patchValue('');
-      this.inspTrampaForm.controls['longitud_trampa'].patchValue('');
+  marcarRegistro(event:any){
+    if(event.target.value === '0'){
+      this.inspTrampaForm.controls['comentario'].patchValue('');
+      this.mostrarComentario = false;
     }else{
-      let trap:any = await this.trampaAmarillaLocalService.findAtrap(event.target.value);
-      let trapFounded = trap[0];
-      if(trapFounded){
-        this.inspTrampaForm.controls['latitud_trampa'].patchValue(trapFounded.latitud);
-        this.inspTrampaForm.controls['longitud_trampa'].patchValue(trapFounded.longitud);
-      }
+      this.mostrarComentario = true;
     }
   }
-  */
 
 }

@@ -89,6 +89,27 @@
         <ion-label position="stacked">Notas</ion-label>
         <ion-textarea value="" formControlName="notas"></ion-textarea>
       </ion-item>
+
+      <ion-radio-group formControlName="indica_revision" (ionChange)="marcarRegistro($event)">
+        <ion-list-header>
+          <ion-label>
+            Marcar para revisión ?
+          </ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Sí</ion-label>
+          <ion-radio value="1"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>No</ion-label>
+          <ion-radio value="0"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+
+      <ion-item *ngIf="mostrarComentario">
+        <ion-label position="stacked">Comentario</ion-label>
+        <ion-textarea value="" formControlName="comentario"></ion-textarea>
+      </ion-item>
       
   
     </ion-list>

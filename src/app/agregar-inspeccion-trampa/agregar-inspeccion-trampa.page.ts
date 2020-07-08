@@ -34,6 +34,8 @@ export class AgregarInspeccionTrampaPage implements OnInit {
 
   inspTrampaForm: FormGroup;
 
+  mostrarComentario = false;
+
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
@@ -61,10 +63,12 @@ export class AgregarInspeccionTrampaPage implements OnInit {
         cantidad_total:['',Validators.required],
         diagnostico:['',Validators.required],
         cantidad_diagnostico:['',Validators.required],
-        notas:['']
+        notas:[''],
+        indica_revision:['0',Validators.required],
+        comentario:[''],
         //sincronizado por default se guarda como 0 ya que es un registro nuevo que debe ser sincronizado.
       });
-
+      
   }
 
   changeType(event:any){
@@ -176,6 +180,14 @@ export class AgregarInspeccionTrampaPage implements OnInit {
           trapInspectionToSave['notas'] = this.inspTrampaForm.controls['notas'].value;
         }
 
+        trapInspectionToSave['indica_revision'] = this.inspTrampaForm.controls['indica_revision'].value;
+
+        if(this.inspTrampaForm.controls['comentario'].value === ''){
+          trapInspectionToSave['comentario'] = 'na';
+        }else{
+          trapInspectionToSave['comentario'] = this.inspTrampaForm.controls['comentario'].value;
+        }
+
         trapInspectionToSave['sincronizado'] = 0;
         
         await  this.inspeccionTrampaLocalService.insertATrapInspection(trapInspectionToSave);
@@ -242,6 +254,15 @@ export class AgregarInspeccionTrampaPage implements OnInit {
         this.inspTrampaForm.controls['latitud_trampa'].patchValue('');
         this.inspTrampaForm.controls['longitud_trampa'].patchValue('');
       }
+    }
+  }
+
+  marcarRegistro(event:any){
+    if(event.target.value === '0'){
+      this.inspTrampaForm.controls['comentario'].patchValue('');
+      this.mostrarComentario = false;
+    }else{
+      this.mostrarComentario = true;
     }
   }
 
