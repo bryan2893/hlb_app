@@ -15,5 +15,7 @@ export interface InspeccionTrampaNuevo{
     diagnostico:number,
     cantidad_diagnostico:number,
     notas:string,
+    indica_revision:number,
+    comentario:string,
     sincronizado:number
 }
