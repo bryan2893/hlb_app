@@ -23,5 +23,7 @@ export interface InspeccionHlbNuevo{
     numero_arbol:number,
     dir_arbol:string,
     notas:string,
+    indica_revision:number,
+    comentario:string,
     sincronizado:number
 }
