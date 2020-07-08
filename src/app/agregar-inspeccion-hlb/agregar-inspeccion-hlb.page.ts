@@ -33,6 +33,8 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
   inspHlbForm: FormGroup;
 
+  mostrarComentario = false;
+
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private inspeccionHlbLocalService:InspeccionHlbLocalService,
@@ -45,32 +47,33 @@ export class AgregarInspeccionHlbPage implements OnInit {
     private dateService:DateService,
     private userService:UserService) {
 
-      this.inspHlbForm = this.formBuilder.group({
-        //id_inspec_hlb se guarda pero no se miestra...
-        consevutivo:['TRASPATIO',Validators.required],
-        //fecha_hora se guardan pero no se muestran en la interfaz
-        //codigo_responsable,nombre_responsable se obtiene del usuario que esta logueado.
-        tipo:['TRASPATIO',Validators.required],
-        //pais se obtiene desde almacenamiento local pero no se muestra en interrfaz.
-        finca_poblado:['',Validators.required],
-        lote_propietario:['',Validators.required],
-        ciclo:['',Validators.required],
-        labor:[''],
-        categoria:[''],
-        variedad:['',Validators.required],
-        sintomatologia:['',Validators.required],
-        estado:['',Validators.required],
-        diagnostico:['',Validators.required],
-        latitud:['',Validators.required],
-        longitud:['',Validators.required],
-        patron:[''],
-        calle:[''],
-        direccion_calle:[''],
-        numero_arbol:[''],
-        dir_arbol:[''],
-        notas:['']
-        //sincronizado por default se guarda como 0 ya que es un registro nuevo que debe ser sincronizado.
-      });
+    this.inspHlbForm = this.formBuilder.group({
+      //id_inspec_hlb se guarda pero no se muestra...
+      //fecha_hora se guardan pero no se muestran en la interfaz
+      //codigo_responsable,nombre_responsable se obtiene del usuario que esta logueado.
+      tipo:['TRASPATIO',Validators.required],
+      //pais se obtiene desde almacenamiento local pero no se muestra en interrfaz.
+      finca_poblado:['',Validators.required],
+      lote_propietario:['',Validators.required],
+      ciclo:['',Validators.required],
+      labor:[''],
+      categoria:[''],
+      variedad:['',Validators.required],
+      sintomatologia:['',Validators.required],
+      estado:['',Validators.required],
+      diagnostico:['',Validators.required],
+      latitud:['',Validators.required],
+      longitud:['',Validators.required],
+      patron:[''],
+      calle:[''],
+      direccion_calle:[''],
+      numero_arbol:[''],
+      dir_arbol:[''],
+      notas:[''],
+      indica_revision:['0',Validators.required],
+      comentario:[''],
+      //sincronizado por default se guarda como 0 ya que es un registro nuevo que debe ser sincronizado.
+    });
 
   }
 
@@ -199,9 +202,16 @@ export class AgregarInspeccionHlbPage implements OnInit {
           hlbInspectionToSave['notas'] = this.inspHlbForm.controls['notas'].value;
         }
 
-        hlbInspectionToSave['sincronizado'] = 0;
+        hlbInspectionToSave['indica_revision'] = this.inspHlbForm.controls['indica_revision'].value;
 
-        console.log("Datos a guardar = "+ JSON.stringify(hlbInspectionToSave));
+        if(this.inspHlbForm.controls['comentario'].value === ''){
+          hlbInspectionToSave['comentario'] = 'na';
+        }else{
+          hlbInspectionToSave['comentario'] = this.inspHlbForm.controls['comentario'].value;
+        }
+
+        hlbInspectionToSave['sincronizado'] = 0;
+        
 
         if(this.validarFormSegunTipo(hlbInspectionToSave)){
           
@@ -235,7 +245,6 @@ export class AgregarInspeccionHlbPage implements OnInit {
       this.propietarios_lotes = propietariosLotesList;
       this.isSelectPropietarioLoteActive = true;
     }).catch((error)=>{
-      
     });
   }
 
@@ -248,6 +257,15 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
     this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
+  }
+
+  marcarRegistro(event:any){
+    if(event.target.value === '0'){
+      this.inspHlbForm.controls['comentario'].patchValue('');
+      this.mostrarComentario = false;
+    }else{
+      this.mostrarComentario = true;
+    }
   }
 
 }

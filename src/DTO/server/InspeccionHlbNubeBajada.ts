@@ -22,5 +22,7 @@ export interface InspeccionHlbNubeBajada{
     DIRECCION_CALLE:string,
     NUMERO_ARBOL:number,
     DIR_ARBOL:string,
-    NOTAS:string
+    NOTAS:string,
+    INDICA_REVISION:number,
+    COMENTARIO:string
 }

@@ -24,6 +24,8 @@
         <p>{{inspeccionTraspatioFinca.finca_poblado}}, {{inspeccionTraspatioFinca.lote_propietario}}</p>
       </ion-label>
 
+      <ion-icon color="danger" *ngIf="inspeccionTraspatioFinca.indica_revision === 1" name="medical-outline" slot="end"></ion-icon>
+
       <ion-icon *ngIf="inspeccionTraspatioFinca.sincronizado === 0" name="sync-outline" size="large" slot="end" ></ion-icon>
 
       <ion-icon *ngIf="inspeccionTraspatioFinca.sincronizado === 1" name="checkmark" size="large" slot="end" ></ion-icon>

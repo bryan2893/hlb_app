@@ -75,8 +75,6 @@ export class InspeccionHlbNubeService {
       this.countLastDaysRecords(pais,lastDays).then((response:number)=>{
         let quantity = response;
 
-        console.log("Cantidad de páginas insp hlb = "+quantity);
-
         if(quantity === 0){
           resolve(0);
         }

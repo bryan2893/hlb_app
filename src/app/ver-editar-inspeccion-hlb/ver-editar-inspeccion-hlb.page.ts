@@ -31,6 +31,8 @@ export class VerEditarInspeccionHlbPage implements OnInit {
 
   hlbInspectionRecord:any;
 
+  mostrarComentario = false;
+
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private router: Router,
@@ -67,7 +69,9 @@ export class VerEditarInspeccionHlbPage implements OnInit {
         direccion_calle:[''],
         numero_arbol:[''],
         dir_arbol:[''],
-        notas:['']
+        notas:[''],
+        indica_revision:['',Validators.required],
+        comentario:['']
         //sincronizado por default se guarda como 0 ya que es un registro nuevo que debe ser sincronizado.
       });
   }
@@ -131,6 +135,10 @@ export class VerEditarInspeccionHlbPage implements OnInit {
          }
  
          this.inspHlbForm.controls['notas'].patchValue(inData.notas);
+
+         this.inspHlbForm.controls['indica_revision'].patchValue(String(inData.indica_revision));
+         this.inspHlbForm.controls['comentario'].patchValue(inData.comentario);
+
       }
     }
   }
@@ -216,6 +224,14 @@ export class VerEditarInspeccionHlbPage implements OnInit {
           hlbInspectionToSave['notas'] = this.inspHlbForm.controls['notas'].value;
         }
 
+        hlbInspectionToSave['indica_revision'] = this.inspHlbForm.controls['indica_revision'].value;
+
+        if(this.inspHlbForm.controls['comentario'].value === ''){
+          hlbInspectionToSave['comentario'] = 'na';
+        }else{
+          hlbInspectionToSave['comentario'] = this.inspHlbForm.controls['comentario'].value;
+        }
+
         hlbInspectionToSave['sincronizado'] = 0;
 
         if(this.validarFormSegunTipo(hlbInspectionToSave)){
@@ -251,6 +267,15 @@ export class VerEditarInspeccionHlbPage implements OnInit {
 
     this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
+  }
+
+  marcarRegistro(event:any){
+    if(event.target.value === '0'){
+      this.inspHlbForm.controls['comentario'].patchValue('');
+      this.mostrarComentario = false;
+    }else{
+      this.mostrarComentario = true;
+    }
   }
 
 }
