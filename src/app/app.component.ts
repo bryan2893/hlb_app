@@ -10,6 +10,7 @@ import {InspeccionTrampaLocalService} from './services/inspeccion_trampas/Inspec
 import {DateService} from './services/date/date.service';
 import {AlmacenamientoNativoService} from './services/almacenamiento-interno/almacenamiento-nativo.service';
 import {UserService} from './services/user/user.service';
+import {ACTIONS} from '../constants/user_actions';
 
 @Component({
   selector: 'app-root',
@@ -68,18 +69,18 @@ export class AppComponent {
     });
   }
 
-  //En este método se registra la fecha en que la aplicación arranco por primera vez.
-  //
+  //En este método registra la fecha en que la aplicación arrancó por primera vez.
   setFirstDate(){
     this.almacenamientoNativoService.almacenarFechaDeSincronizacion(this.dateService.getCurrentDateOnly()).then((result)=>{
-      console.log("se almacenó la fecha: "+result);
+      console.log("se almacenó la fecha: "+ result);
     }).catch((error)=>{
       console.log(error);
     });
   }
 
+  //Se almacena usuario por defecto para la aplicacion.
   setDefaultUser(){
-    this.almacenamientoNativoService.almacenarUsuarioPorDefault({fullName:"Default User HLB APP",username:"aa",password:'aa',permissions:['super usuario'],token:''}).then((usuario)=>{
+    this.almacenamientoNativoService.almacenarUsuarioPorDefault({fullName:"AREA TI",username:"areati",password:'areati',actions:[ACTIONS.ADD,ACTIONS.READ,ACTIONS.UPDATE,ACTIONS.SETTINGS],token:''}).then((usuario)=>{
       console.log("Usuario por defecto almacenado!");
     }).catch((error)=>{
       console.log("Error al intentar almacenar usuario por defecto "+ error);
@@ -89,12 +90,13 @@ export class AppComponent {
   //Esta funcion es para loguear a un usuario y no tener que estar haciendolo cada vez que se entra a la aplcacion mienstras se desarrolla.
   logueoPaPruebas(){
     let user = {
-      fullName:"super usuario",
+      fullName:"BRYAN HERNANDEZ ARGUELLO",
       username:"bhernandeza",
-      password:"casajaja",
-      permissions:['super administrador'],
+      password:"Az123456",
+      actions:[ACTIONS.ADD,ACTIONS.READ,ACTIONS.UPDATE,ACTIONS.SETTINGS],
       token:""
     }
+
     this.userService.setLogedUser(user);
   }
 
