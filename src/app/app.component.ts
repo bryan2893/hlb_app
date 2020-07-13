@@ -9,7 +9,7 @@ import {InspeccionHlbLocalService} from './services/inspecciones_hlb/InspeccionH
 import {InspeccionTrampaLocalService} from './services/inspeccion_trampas/InspeccionTrampaLocal.service';
 import {DateService} from './services/date/date.service';
 import {AlmacenamientoNativoService} from './services/almacenamiento-interno/almacenamiento-nativo.service';
-import {UserService} from './services/user/user.service';
+import {AuthService} from './services/auth/auth.service';
 import {ACTIONS} from '../constants/user_actions';
 
 @Component({
@@ -29,7 +29,7 @@ export class AppComponent {
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
     private dateService:DateService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
-    private userService:UserService
+    private authService:AuthService
   ) {
     this.initializeApp();
   }
@@ -96,8 +96,8 @@ export class AppComponent {
       actions:[ACTIONS.ADD,ACTIONS.READ,ACTIONS.UPDATE,ACTIONS.SETTINGS],
       token:""
     }
-
-    this.userService.setLogedUser(user);
+    
+    this.authService.setLogedUser(user);
   }
 
 }

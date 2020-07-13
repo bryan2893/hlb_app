@@ -7,7 +7,7 @@ import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/al
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
 import {DateService} from '../services/date/date.service';
-import {UserService} from '../services/user/user.service';
+import {AuthService} from '../services/auth/auth.service';
 import { User } from 'src/DTO/User.dto';
 import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
@@ -45,7 +45,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
     private alertService:AlertService,
     private toastService:ToastService,
     private dateService:DateService,
-    private userService:UserService) {
+    private authService:AuthService) {
 
     this.inspHlbForm = this.formBuilder.group({
       //id_inspec_hlb se guarda pero no se muestra...
@@ -151,7 +151,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
         let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
         let pais:string = configuracionesGenerales.pais.toUpperCase();
-        let usuario:User = this.userService.getLogedUser();
+        let usuario:User = this.authService.getLogedUser();
         let hlbInspectionToSave:any = {};
   
         hlbInspectionToSave['id_inspec_hlb'] = -1;
