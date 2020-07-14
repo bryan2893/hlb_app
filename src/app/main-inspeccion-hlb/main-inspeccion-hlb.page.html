@@ -51,7 +51,7 @@
 
  <!-- fab placed to the bottom start -->
  <ion-fab *ngIf="!searchBarActive" vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button [routerLink]="['/agregar-inspeccion-hlb']">
+  <ion-fab-button [routerLink]="['/agregar-inspeccion-hlb']" [disabled] = "!this.authService.logedUserhavePermission(this.actions.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
 </ion-fab>

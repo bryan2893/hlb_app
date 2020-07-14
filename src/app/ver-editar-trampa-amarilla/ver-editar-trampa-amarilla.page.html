@@ -26,28 +26,28 @@
         </ion-list-header>
         <ion-item>
           <ion-label>Traspatio</ion-label>
-          <ion-radio value="TRASPATIO"></ion-radio>
+          <ion-radio value="TRASPATIO" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Productor</ion-label>
-          <ion-radio value="PRODUCTOR"></ion-radio>
+          <ion-radio value="PRODUCTOR" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Ticofrut</ion-label>
-          <ion-radio value="TICOFRUT"></ion-radio>
+          <ion-radio value="TICOFRUT" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)"></ion-radio>
         </ion-item>
       </ion-radio-group>
 
       <ion-item *ngIf="isSelectPobladoFincaActive">
         <ion-label>{{poblado_finca_key}}</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)">
           <ion-select-option *ngFor="let poblado_finca of poblados_fincas" value={{poblado_finca}}>{{poblado_finca}}</ion-select-option>
         </ion-select>
       </ion-item>
 
       <ion-item *ngIf="isSelectPropietarioLoteActive">
         <ion-label>{{lote_propietario_key}}</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="lote_propietario">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="lote_propietario" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)">
           <ion-select-option *ngFor="let propietario_lote of propietarios_lotes" value={{propietario_lote}}>{{propietario_lote}}</ion-select-option>
         </ion-select>
       </ion-item>
@@ -63,13 +63,12 @@
       </ion-item>
 
       
-      <ion-button (click)="openMap()">
+      <ion-button *ngIf="this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)" (click)="openMap()">
         <ion-icon slot="icon-only" name="location-outline"></ion-icon>
       </ion-button>
       
     </ion-list>
-  
-    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
+    <ion-button *ngIf="this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)" expand="block" type="submit">Guardar cambios</ion-button>
 
   </form>
 

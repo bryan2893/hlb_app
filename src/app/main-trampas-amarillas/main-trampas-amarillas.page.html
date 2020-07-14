@@ -48,7 +48,7 @@
 
  <!-- fab placed to the bottom start -->
  <ion-fab *ngIf="!searchBarActive" vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button [routerLink]="['/agregar-trampa']">
+  <ion-fab-button [routerLink]="['/agregar-trampa']" [disabled]="!this.authService.logedUserhavePermission(this.actions.AGREGAR_REGISTROS_TRAMPAS)">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
 </ion-fab>

@@ -9,6 +9,9 @@ import { ToastService } from '../services/toast-service/toast.service';
 import { TraspatioFincaLocalService } from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 
+import {AuthService} from '../services/auth/auth.service';
+import {ACTIONS} from '../../constants/user_actions';
+
 @Component({
   selector: 'app-ver-editar-trampa-amarilla',
   templateUrl: './ver-editar-trampa-amarilla.page.html',
@@ -26,6 +29,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   addTrapForm: FormGroup;
   trapRecord:any;
   seObtienenListasPorPrimeraVez = true;
+  actions = ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -35,7 +39,8 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
     private alertService:AlertService,
     private toastService:ToastService,
     private trampaAmarillaLocalService:TrampaAmarillaLocalService,
-    private traspatioFincaLocalService:TraspatioFincaLocalService) {
+    private traspatioFincaLocalService:TraspatioFincaLocalService,
+    private authService:AuthService) {
 
       this.addTrapForm = this.formBuilder.group({
         num_trampa:[''],

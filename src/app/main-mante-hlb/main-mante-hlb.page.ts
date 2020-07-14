@@ -4,6 +4,9 @@ import {TraspatioFincaLocalService} from '../services/traspatios_fincas/Traspati
 import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
 
+import {AuthService} from '../services/auth/auth.service';
+import {ACTIONS} from '../../constants/user_actions';
+
 @Component({
   selector: 'app-main-mante-hlb',
   templateUrl: './main-mante-hlb.page.html',
@@ -17,10 +20,12 @@ export class MainManteHlbPage implements OnInit {
   private pageCounter = 1;
   pagesQuantity = 0;
   mantains = [];
+  actions = ACTIONS;
 
   constructor(private traspatioFincaLocalService:TraspatioFincaLocalService,
     private dataContainerService:DataContainerService,
-    private router: Router) { }
+    private router: Router,
+    private authService:AuthService) { }
 
   ionViewWillEnter(){
     this.mantains = [];

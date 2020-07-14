@@ -22,17 +22,17 @@
 
       <ion-item>
         <ion-label position="stacked">Radio de búsquedas GPS(unidad metros)</ion-label>
-        <ion-input formControlName="radio_de_alcance" type="number" clearOnEdit="true"></ion-input>
+        <ion-input formControlName="radio_de_alcance" type="number" clearOnEdit="true" [disabled]="!this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)"></ion-input>
       </ion-item>
   
       <ion-item>
         <ion-label position="stacked">Antiguedad de registros(unidad días)</ion-label>
-        <ion-input formControlName="volumen_de_registros" type="number"></ion-input>
+        <ion-input formControlName="volumen_de_registros" type="number" [disabled]="!this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)"></ion-input>
       </ion-item>
   
       <ion-item>
         <ion-label position="stacked">Direccion del servidor de sincronizacion</ion-label>
-        <ion-input formControlName="link_de_sincronizacion" type="url"></ion-input>
+        <ion-input formControlName="link_de_sincronizacion" type="url" [disabled]="!this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)"></ion-input>
       </ion-item>
   
       <ion-radio-group formControlName="pais">
@@ -43,28 +43,28 @@
         </ion-list-header>
         <ion-item>
           <ion-label>Costa Rica</ion-label>
-          <ion-radio value="costa rica"></ion-radio>
+          <ion-radio value="costa rica" [disabled]="!this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>Nicaragua</ion-label>
-          <ion-radio value="nicaragua"></ion-radio>
+          <ion-radio value="nicaragua" [disabled]="!this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)"></ion-radio>
         </ion-item>
       </ion-radio-group>
   
       <ion-item>
         <ion-label position="stacked">Frecuencia de sincronización(unidad días)</ion-label>
-        <ion-input formControlName="dias_permitidos" type="number" focus></ion-input>
+        <ion-input formControlName="dias_permitidos" type="number" [disabled]="!this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)"></ion-input>
       </ion-item>
   
       <ion-item>
         <ion-label position="stacked">Versión de aplicación</ion-label>
-        <ion-input formControlName="version" type="text" focus></ion-input>
+        <ion-input formControlName="version" type="text" [disabled]="!this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)"></ion-input>
       </ion-item>
       
   
     </ion-list>
   
-    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
+    <ion-button *ngIf="this.authService.logedUserhavePermission(this.actions.ACCESO_A_CONFIGURACIONES)" expand="block" type="submit">Guardar cambios</ion-button>
 
   </form>
 

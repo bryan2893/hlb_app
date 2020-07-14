@@ -5,6 +5,9 @@ import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/al
 import {ToastService} from '../services/toast-service/toast.service';
 import {AlertService} from '../services/alert/alert.service';
 
+import {AuthService} from '../services/auth/auth.service';
+import {ACTIONS} from '../../constants/user_actions';
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
@@ -13,11 +16,13 @@ import {AlertService} from '../services/alert/alert.service';
 export class SettingsPage implements OnInit {
 
   seetingsForm: FormGroup;
+  actions = ACTIONS;
 
   constructor(private almacenamientoNativoService: AlmacenamientoNativoService,
     private formBuilder: FormBuilder,
     private toastService:ToastService,
-    private alertService:AlertService) {
+    private alertService:AlertService,
+    private authService:AuthService) {
 
     this.seetingsForm = this.formBuilder.group({
       radio_de_alcance:[''],
