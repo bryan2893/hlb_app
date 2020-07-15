@@ -7,8 +7,10 @@ import {PreviousUrlHolderService} from '../services/data/previous-url-holder.ser
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
-import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import {PreviousUrlStructure} from 'src/DTO/previuousUrlStructure.dto';
 import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
+import {DateService} from '../services/date/date.service';
+import {Settings} from '../../DTO/settings.dto';
 
 @Component({
   selector: 'app-agregar-mante-hlb',
@@ -32,7 +34,8 @@ export class AgregarManteHlbPage implements OnInit {
     private previousUrlHolderService: PreviousUrlHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
-    private toastService:ToastService
+    private toastService:ToastService,
+    private dateService:DateService
     ) {
 
     this.traspatioFincaForm = this.formBuilder.group({
@@ -72,6 +75,7 @@ export class AgregarManteHlbPage implements OnInit {
   }
 
   async submit(){
+
     try{
 
       if(this.traspatioFincaForm.dirty && this.traspatioFincaForm.valid){
@@ -81,7 +85,13 @@ export class AgregarManteHlbPage implements OnInit {
         hlbMantainRegisterToSave['id_traspatio_finca'] = -1;
   
         //Se obtiene el pais del almacenamiento interno del telefono.
-        let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+        let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+
+        let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+
+        if(!puedeSincronizar){
+          throw new Error("Sincroniza primero y vuelve a intentarlo");
+        }
   
         let paisRecuperado:string = parametrosDeConfiguracion.pais;
   

@@ -9,6 +9,8 @@ import { TraspatioFincaLocalService } from '../services/traspatios_fincas/Traspa
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
 import {ModalController} from '@ionic/angular';
+import {DateService} from '../services/date/date.service';
+import {Settings} from '../../DTO/settings.dto';
 
 import {AuthService} from '../services/auth/auth.service';
 import {ACTIONS} from '../../constants/user_actions';
@@ -41,7 +43,8 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     private toastService:ToastService,
     public modalController:ModalController,
     private traspatioFincaLocalService:TraspatioFincaLocalService,
-    private authService:AuthService) {
+    private authService:AuthService,
+    private dateService:DateService) {
       this.traspatioFincaForm = this.formBuilder.group({
         tipo:['',Validators.required],
         pais:['',Validators.required],
@@ -137,8 +140,15 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   
         if(this.traspatioFincaForm.valid){
   
-          let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-          let pais:string = configuracionesGenerales.pais;
+          let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+          let pais:string = parametrosDeConfiguracion.pais;
+
+          let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+
+          if(!puedeSincronizar){
+            throw new Error("Sincroniza primero y vuelve a intentarlo");
+          }
+
           let traspatioFincaToUpdate:any = {};
 
           traspatioFincaToUpdate['pais'] = pais.toUpperCase();

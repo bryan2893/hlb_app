@@ -71,11 +71,19 @@ export class AppComponent {
 
   //En este método registra la fecha en que la aplicación arrancó por primera vez.
   setFirstDate(){
-    this.almacenamientoNativoService.almacenarFechaDeSincronizacion(this.dateService.getCurrentDateOnly()).then((result)=>{
-      console.log("se almacenó la fecha: "+ result);
-    }).catch((error)=>{
-      console.log(error);
+
+    this.almacenamientoNativoService.obtenerUltimaFechaDeSincronizacion().then((fecha)=>{
+      console.log("Fecha ya existe!");
+    }).catch((error)=>{//Si la ultima fecha no se encuentra almacenada...
+
+      this.almacenamientoNativoService.almacenarFechaDeSincronizacion(this.dateService.getCurrentDateOnly()).then((result)=>{
+        console.log("se almacenó la fecha: "+ result);
+      }).catch((error)=>{
+        console.log(error);
+      });
+
     });
+    
   }
 
   //Se almacena usuario por defecto para la aplicacion.

@@ -6,12 +6,13 @@ import {PreviousUrlHolderService} from '../services/data/previous-url-holder.ser
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
-import {DateService} from '../services/date/date.service';
 import {AuthService} from '../services/auth/auth.service';
 import { User } from 'src/DTO/User.dto';
 import {InspeccionTrampaLocalService} from '../services/inspeccion_trampas/InspeccionTrampaLocal.service';
 import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import {DateService} from '../services/date/date.service';
+import {Settings} from '../../DTO/settings.dto';
 
 @Component({
   selector: 'app-agregar-inspeccion-trampa',
@@ -151,8 +152,15 @@ export class AgregarInspeccionTrampaPage implements OnInit {
 
       if(this.inspTrampaForm.dirty && this.inspTrampaForm.valid){
 
-        let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-        let pais:string = configuracionesGenerales.pais.toUpperCase();
+        let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+
+        let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+
+        if(!puedeSincronizar){
+          throw new Error("Sincroniza primero y vuelve a intentarlo");
+        }
+
+        let pais:string = parametrosDeConfiguracion.pais.toUpperCase();
         let usuario:User = this.authService.getLogedUser();
         let trapInspectionToSave:any = {};
   

@@ -84,7 +84,7 @@ export class DateService {
   }
 
   //Verifica que no se excedan el numero de días segun la fecha de ultima sincronizacion y y la fecha actual de la consulta.
-  isValidDateRestriction(diasPermitidos:number){
+  isValidDateRestriction(diasPermitidos:number):Promise<Boolean>{
 
     return new Promise((resolve,reject)=>{
         this.almacenamientoInternoService.obtenerUltimaFechaDeSincronizacion().then((fechaUltimaSincronizacion:string)=>{
