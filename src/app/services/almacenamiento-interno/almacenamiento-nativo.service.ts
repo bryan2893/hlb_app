@@ -14,7 +14,7 @@ export class AlmacenamientoNativoService {
 
   constructor(private nativeStorage: NativeStorage) {}
 
-  obtenerParametrosDeConfiguracion(){
+  obtenerParametrosDeConfiguracion():Promise<Settings>{
 
     return new Promise((resolve,reject)=>{
       this.nativeStorage.getItem(this.llaveConfiguracionesGenerales).then((parametrosDeConfiguracion:Settings)=>{
@@ -23,7 +23,7 @@ export class AlmacenamientoNativoService {
         reject(new Error("Configuraciones generales no existen!"));
       });
     });
-    
+
   }
 
   validarParametrosDeConfiguracion(parametrosDeConfiguracion:Settings){
@@ -36,7 +36,7 @@ export class AlmacenamientoNativoService {
       }
   }
 
-  almacenarParametrosDeConfiguracion(parametrosDeConfiguracion:Settings){
+  almacenarParametrosDeConfiguracion(parametrosDeConfiguracion:Settings):Promise<Settings>{
 
     return new Promise((resolve,reject)=>{
         if(this.validarParametrosDeConfiguracion(parametrosDeConfiguracion)){
@@ -53,7 +53,7 @@ export class AlmacenamientoNativoService {
     
   }
 
-  obtenerUltimaFechaDeSincronizacion(){
+  obtenerUltimaFechaDeSincronizacion():Promise<string>{
 
     return new Promise((resolve,reject)=>{
       this.nativeStorage.getItem(this.llaveFechaSincronizacion).then((fechaSincronizacion:string)=>{
@@ -62,10 +62,10 @@ export class AlmacenamientoNativoService {
         reject(new Error("No hay última fecha de sincronización registrada!"));
       });
     });
-    
+
   }
 
-  almacenarFechaDeSincronizacion(fechaSincronizacion:string){
+  almacenarFechaDeSincronizacion(fechaSincronizacion:string):Promise<string>{
 
     return new Promise((resolve,reject)=>{
       this.nativeStorage.setItem(this.llaveFechaSincronizacion,fechaSincronizacion).then(()=> {
@@ -77,7 +77,7 @@ export class AlmacenamientoNativoService {
 
   }
 
-  obtenerUsuarioPorDefault(){
+  obtenerUsuarioPorDefault():Promise<User>{
 
     return new Promise((resolve,reject)=>{
       this.nativeStorage.getItem(this.llaveUsuarioDefault).then((usuario:User)=>{
@@ -89,7 +89,7 @@ export class AlmacenamientoNativoService {
     
   }
 
-  almacenarUsuarioPorDefault(usuario:User){
+  almacenarUsuarioPorDefault(usuario:User):Promise<User>{
 
     return new Promise((resolve,reject)=>{
       this.nativeStorage.setItem(this.llaveUsuarioDefault,usuario).then(()=> {

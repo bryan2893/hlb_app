@@ -8,6 +8,8 @@ import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/al
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
 import {PreviousUrlStructure} from '../../DTO/previuousUrlStructure.dto';
+import { Settings } from '../../DTO/settings.dto';
+import {DateService} from '../services/date/date.service';
 
 @Component({
   selector: 'app-agregar-trampa',
@@ -38,7 +40,8 @@ export class AgregarTrampaPage implements OnInit {
     private previousUrlHolderService:PreviousUrlHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
-    private toastService:ToastService) {
+    private toastService:ToastService,
+    private dateService:DateService) {
 
     this.addTrapForm = this.formBuilder.group({
       num_trampa:['',Validators.required],
@@ -97,9 +100,14 @@ export class AgregarTrampaPage implements OnInit {
       if(this.addTrapForm.dirty && this.addTrapForm.valid){//si todos los campos estan completados...
 
         let pais:string;
-        let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-        pais = configuracionesGenerales.pais;
+        let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+        pais = parametrosDeConfiguracion.pais;
         
+        let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+
+        if(!puedeSincronizar){
+          throw new Error("Sincroniza primero y vuelve a intentarlo");
+        }
   
         let trapMantainRegisterToSave:any = {};
   
