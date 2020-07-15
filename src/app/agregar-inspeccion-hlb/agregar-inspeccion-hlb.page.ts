@@ -6,11 +6,12 @@ import {PreviousUrlHolderService} from '../services/data/previous-url-holder.ser
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
-import {DateService} from '../services/date/date.service';
 import {AuthService} from '../services/auth/auth.service';
 import { User } from 'src/DTO/User.dto';
 import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import {DateService} from '../services/date/date.service';
+import {Settings} from '../../DTO/settings.dto';
 
 @Component({
   selector: 'app-agregar-inspeccion-hlb',
@@ -149,9 +150,17 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
       if(this.inspHlbForm.dirty && this.inspHlbForm.valid){
 
-        let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-        let pais:string = configuracionesGenerales.pais.toUpperCase();
+        let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+
+        let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+
+        if(!puedeSincronizar){
+          throw new Error("Sincroniza primero y vuelve a intentarlo");
+        }
+
+        let pais:string = parametrosDeConfiguracion.pais.toUpperCase();
         let usuario:User = this.authService.getLogedUser();
+
         let hlbInspectionToSave:any = {};
   
         hlbInspectionToSave['id_inspec_hlb'] = -1;
@@ -220,7 +229,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
           await toast.present();
           
         }else{
-          let alert = await this.alertService.presentAlert("Verifique que los datos están completos");
+          let alert = await this.alertService.presentAlert("Verifique que los datos están completos!");
           await alert.present();
         }
         

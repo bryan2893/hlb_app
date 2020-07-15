@@ -7,9 +7,10 @@ import { PreviousUrlHolderService } from '../services/data/previous-url-holder.s
 import { AlmacenamientoNativoService } from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
-import { DateService } from '../services/date/date.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import { User } from 'src/DTO/User.dto';
+import {DateService} from '../services/date/date.service';
+import {Settings} from '../../DTO/settings.dto';
 
 import {ACTIONS} from '../../constants/user_actions';
 import {AuthService} from '../services/auth/auth.service';
@@ -175,8 +176,15 @@ export class VerEditarInspeccionHlbPage implements OnInit {
 
       if(this.inspHlbForm.valid){
 
-        let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-        let pais:string = configuracionesGenerales.pais;
+        let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+
+        let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+
+        if(!puedeSincronizar){
+          throw new Error("Sincroniza primero y vuelve a intentarlo");
+        }
+
+        let pais:string = parametrosDeConfiguracion.pais;
         let usuario:User = this.authService.getLogedUser();
         let hlbInspectionToSave:any = {};
   
