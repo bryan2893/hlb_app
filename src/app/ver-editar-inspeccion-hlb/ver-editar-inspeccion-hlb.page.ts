@@ -8,9 +8,11 @@ import { AlmacenamientoNativoService } from '../services/almacenamiento-interno/
 import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
 import { DateService } from '../services/date/date.service';
-import { UserService } from '../services/user/user.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import { User } from 'src/DTO/User.dto';
+
+import {ACTIONS} from '../../constants/user_actions';
+import {AuthService} from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-ver-editar-inspeccion-hlb',
@@ -33,6 +35,8 @@ export class VerEditarInspeccionHlbPage implements OnInit {
 
   mostrarComentario = false;
 
+  actions = ACTIONS;
+
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private router: Router,
@@ -41,7 +45,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
     private alertService:AlertService,
     private toastService:ToastService,
     private dateService:DateService,
-    private userService:UserService,
+    private authService:AuthService,
     private inspeccionHlbLocalService:InspeccionHlbLocalService) {
 
       this.inspHlbForm = this.formBuilder.group({
@@ -173,7 +177,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
 
         let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
         let pais:string = configuracionesGenerales.pais;
-        let usuario:User = this.userService.getLogedUser();
+        let usuario:User = this.authService.getLogedUser();
         let hlbInspectionToSave:any = {};
   
         hlbInspectionToSave['id_inspec_hlb'] = -1;

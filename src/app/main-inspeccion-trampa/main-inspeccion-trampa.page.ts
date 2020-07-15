@@ -6,6 +6,9 @@ import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
 import {DateService} from '../services/date/date.service';
 
+import {AuthService} from '../services/auth/auth.service';
+import {ACTIONS} from '../../constants/user_actions';
+
 @Component({
   selector: 'app-main-inspeccion-trampa',
   templateUrl: './main-inspeccion-trampa.page.html',
@@ -19,11 +22,13 @@ export class MainInspeccionTrampaPage implements OnInit {
   private pageCounter = 1;
   pagesQuantity = 0;
   inspeccionTrampasList = [];
+  actions = ACTIONS;
 
   constructor(private inspeccionTrampaLocalService: InspeccionTrampaLocalService,
     private dataContainerService:DataContainerService,
     private router:Router,
-    private dateService:DateService) {}
+    private dateService:DateService,
+    private authService:AuthService) {}
 
   ngOnInit() {
   }

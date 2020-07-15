@@ -6,6 +6,9 @@ import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
 import {DateService} from '../services/date/date.service';
 
+import {AuthService} from '../services/auth/auth.service';
+import {ACTIONS} from '../../constants/user_actions';
+
 @Component({
   selector: 'app-main-inspeccion-hlb',
   templateUrl: './main-inspeccion-hlb.page.html',
@@ -19,14 +22,15 @@ export class MainInspeccionHlbPage implements OnInit {
   private pageCounter = 1;
   pagesQuantity = 0;
   inspeccionTraspatiosFincasList = [];
+  actions = ACTIONS;
 
   constructor(private inspeccionHlbLocalService: InspeccionHlbLocalService,
     private dataContainerService:DataContainerService,
     private router:Router,
-    private dateService:DateService) {}
+    private dateService:DateService,
+    private authService:AuthService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ionViewWillEnter(){
     this.inspeccionTraspatiosFincasList = [];

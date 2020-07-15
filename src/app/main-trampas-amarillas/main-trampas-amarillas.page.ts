@@ -5,6 +5,9 @@ import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAm
 import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
 
+import {AuthService} from '../services/auth/auth.service';
+import {ACTIONS} from '../../constants/user_actions';
+
 @Component({
   selector: 'app-main-trampas-amarillas',
   templateUrl: './main-trampas-amarillas.page.html',
@@ -18,10 +21,12 @@ export class MainTrampasAmarillasPage implements OnInit {
   private pageCounter = 1;
   pagesQuantity = 0;
   traps = [];
+  actions = ACTIONS;
 
   constructor(private trampaAmarillaLocalService: TrampaAmarillaLocalService,
     private dataContainerService:DataContainerService,
-    private router: Router) {}
+    private router: Router,
+    private authService:AuthService) {}
 
   ngOnInit() {
   }

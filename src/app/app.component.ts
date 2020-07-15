@@ -9,7 +9,7 @@ import {InspeccionHlbLocalService} from './services/inspecciones_hlb/InspeccionH
 import {InspeccionTrampaLocalService} from './services/inspeccion_trampas/InspeccionTrampaLocal.service';
 import {DateService} from './services/date/date.service';
 import {AlmacenamientoNativoService} from './services/almacenamiento-interno/almacenamiento-nativo.service';
-import {UserService} from './services/user/user.service';
+import {AuthService} from './services/auth/auth.service';
 import {ACTIONS} from '../constants/user_actions';
 
 @Component({
@@ -29,7 +29,7 @@ export class AppComponent {
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
     private dateService:DateService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
-    private userService:UserService
+    private authService:AuthService
   ) {
     this.initializeApp();
   }
@@ -80,7 +80,12 @@ export class AppComponent {
 
   //Se almacena usuario por defecto para la aplicacion.
   setDefaultUser(){
-    this.almacenamientoNativoService.almacenarUsuarioPorDefault({fullName:"AREA TI",username:"areati",password:'areati',actions:[ACTIONS.ADD,ACTIONS.READ,ACTIONS.UPDATE,ACTIONS.SETTINGS],token:''}).then((usuario)=>{
+    this.almacenamientoNativoService.almacenarUsuarioPorDefault({fullName:"AREA TI",username:"areati",password:'areati',actions:[ACTIONS.ACCESO_A_CONFIGURACIONES,ACTIONS.LEER_REGISTROS_TRAMPAS,
+      ACTIONS.EDITAR_REGISTROS_TRAMPAS,ACTIONS.AGREGAR_REGISTROS_TRAMPAS,ACTIONS.LEER_REGISTROS_TRASPATIOS_FINCAS,
+      ACTIONS.EDITAR_REGISTROS_TRASPATIOS_FINCAS,ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS,
+      ACTIONS.LEER_REGISTROS_INSP_TRASPATIOS_FINCAS,ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS,ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS,
+      ACTIONS.LEER_REGISTROS_INSP_TRAMPAS,ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS,ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS,ACTIONS.EDITAR_MARCA_A_INSPECCION
+  ],token:''}).then((usuario)=>{
       console.log("Usuario por defecto almacenado!");
     }).catch((error)=>{
       console.log("Error al intentar almacenar usuario por defecto "+ error);
@@ -93,11 +98,15 @@ export class AppComponent {
       fullName:"BRYAN HERNANDEZ ARGUELLO",
       username:"bhernandeza",
       password:"Az123456",
-      actions:[ACTIONS.ADD,ACTIONS.READ,ACTIONS.UPDATE,ACTIONS.SETTINGS],
+      actions:[ACTIONS.ACCESO_A_CONFIGURACIONES,ACTIONS.LEER_REGISTROS_TRAMPAS,
+        ACTIONS.EDITAR_REGISTROS_TRAMPAS,ACTIONS.AGREGAR_REGISTROS_TRAMPAS,ACTIONS.LEER_REGISTROS_TRASPATIOS_FINCAS,
+        ACTIONS.EDITAR_REGISTROS_TRASPATIOS_FINCAS,ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS,
+        ACTIONS.LEER_REGISTROS_INSP_TRASPATIOS_FINCAS,ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS,ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS,
+        ACTIONS.LEER_REGISTROS_INSP_TRAMPAS,ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS,ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS/*,ACTIONS.EDITAR_MARCA_A_INSPECCION*/
+    ],
       token:""
     }
-
-    this.userService.setLogedUser(user);
+    this.authService.setLogedUser(user);
   }
-
+  
 }

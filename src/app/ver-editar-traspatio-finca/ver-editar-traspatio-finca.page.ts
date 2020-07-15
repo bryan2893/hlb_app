@@ -10,6 +10,9 @@ import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
 import {ModalController} from '@ionic/angular';
 
+import {AuthService} from '../services/auth/auth.service';
+import {ACTIONS} from '../../constants/user_actions';
+
 @Component({
   selector: 'app-ver-editar-traspatio-finca',
   templateUrl: './ver-editar-traspatio-finca.page.html',
@@ -27,6 +30,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   traspatioFincaForm: FormGroup;
   traspatioFincaRecord:any;
   seObtienenListasPorPrimeraVez = true;
+  actions = ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -36,7 +40,8 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     private alertService:AlertService,
     private toastService:ToastService,
     public modalController:ModalController,
-    private traspatioFincaLocalService:TraspatioFincaLocalService) { 
+    private traspatioFincaLocalService:TraspatioFincaLocalService,
+    private authService:AuthService) {
       this.traspatioFincaForm = this.formBuilder.group({
         tipo:['',Validators.required],
         pais:['',Validators.required],

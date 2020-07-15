@@ -40,27 +40,27 @@
 
       <ion-item>
         <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
-        <ion-input formControlName="finca_poblado" type="text" readonly></ion-input>
+        <ion-input formControlName="finca_poblado" type="text" disabled></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
-        <ion-input formControlName="lote_propietario" type="text" readonly></ion-input>
+        <ion-input formControlName="lote_propietario" type="text" disabled></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Ciclo</ion-label>
-        <ion-input formControlName="ciclo" type="number"></ion-input>
+        <ion-input formControlName="ciclo" type="number" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)"></ion-input>
       </ion-item>
 
       <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label position="stacked">Calle</ion-label>
-        <ion-input formControlName="calle" type="number"></ion-input>
+        <ion-input formControlName="calle" type="number" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)"></ion-input>
       </ion-item>
 
       <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label>Direccion de calle</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="direccion_calle">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="direccion_calle" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value="N-S">N-S</ion-select-option>
           <ion-select-option value="S-N">S-N</ion-select-option>
           <ion-select-option value="O-E">O-E</ion-select-option>
@@ -70,12 +70,12 @@
 
       <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label position="stacked">Número de arbol</ion-label>
-        <ion-input formControlName="numero_arbol" type="number"></ion-input>
+        <ion-input formControlName="numero_arbol" type="number" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)"></ion-input>
       </ion-item>
 
       <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label>Direccion de arbol</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="dir_arbol">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="dir_arbol" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value="N-S">N-S</ion-select-option>
           <ion-select-option value="S-N">S-N</ion-select-option>
           <ion-select-option value="O-E">O-E</ion-select-option>
@@ -85,7 +85,7 @@
 
       <ion-item *ngIf="tipo === 'PRODUCTOR' || tipo === 'TICOFRUT'">
         <ion-label>Patrón</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="patron">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="patron" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value="FYD">FYD</ion-select-option>
           <ion-select-option value="SWIN">SWIN</ion-select-option>
           <ion-select-option value="CAR">CAR</ion-select-option>
@@ -94,7 +94,7 @@
 
       <ion-item *ngIf="tipo === 'TRASPATIO'">
         <ion-label>Labor</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="labor" type="text">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="labor" type="text" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value="APLICACION">Aplicacion</ion-select-option>
           <ion-select-option value="CENSO">Censo</ion-select-option>
         </ion-select>
@@ -102,7 +102,7 @@
 
       <ion-item *ngIf="tipo === 'TRASPATIO'">
         <ion-label>Categoria</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="categoria" type="text">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="categoria" type="text" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value="PLANTACION">Plantacion</ion-select-option>
           <ion-select-option value="TRASPATIO">Traspatio</ion-select-option>
         </ion-select>
@@ -110,7 +110,7 @@
 
       <ion-item>
         <ion-label>Variedad</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="variedad">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="variedad" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value="NARANJA">Naranja</ion-select-option>
           <ion-select-option value="LIMON">Limón</ion-select-option>
           <ion-select-option value="MANDARINA">Mandarina</ion-select-option>
@@ -122,7 +122,7 @@
 
       <ion-item>
         <ion-label>Sintomatología</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="sintomatologia">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="sintomatologia" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value='1'>Si</ion-select-option>
           <ion-select-option value='0'>No</ion-select-option>
         </ion-select>
@@ -130,7 +130,7 @@
 
       <ion-item>
         <ion-label>Estado</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="estado">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="estado" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value='0'>Pendiente</ion-select-option>
           <ion-select-option value='1'>Erradicado</ion-select-option>
         </ion-select>
@@ -139,7 +139,7 @@
 
       <ion-item>
         <ion-label>Diagnóstico</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="diagnostico">
+        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="diagnostico" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
           <ion-select-option value='1'>Si</ion-select-option>
           <ion-select-option value='0'>No</ion-select-option>
         </ion-select>
@@ -147,21 +147,21 @@
 
       <ion-item>
         <ion-label position="stacked">Latitud</ion-label>
-        <ion-input formControlName="latitud" type="number" readonly></ion-input>
+        <ion-input formControlName="latitud" type="number" disabled></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Longitud</ion-label>
-        <ion-input formControlName="longitud" type="number" readonly></ion-input>
+        <ion-input formControlName="longitud" type="number" disabled></ion-input>
       </ion-item>
 
-      <ion-button (click)="openMap()">
+      <ion-button *ngIf="this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)" (click)="openMap()">
         <ion-icon slot="icon-only" name="location-outline"></ion-icon>
       </ion-button>
 
       <ion-item>
         <ion-label position="stacked">Notas</ion-label>
-        <ion-textarea value="" formControlName="notas"></ion-textarea>
+        <ion-textarea value="" formControlName="notas" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)"></ion-textarea>
       </ion-item>
 
       <ion-radio-group formControlName="indica_revision" (ionChange)="marcarRegistro($event)">
@@ -172,24 +172,22 @@
         </ion-list-header>
         <ion-item>
           <ion-label>Sí</ion-label>
-          <ion-radio value="1"></ion-radio>
+          <ion-radio value="1" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS) || !this.authService.logedUserhavePermission(this.actions.EDITAR_MARCA_A_INSPECCION)"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>No</ion-label>
-          <ion-radio value="0"></ion-radio>
+          <ion-radio value="0" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS) || !this.authService.logedUserhavePermission(this.actions.EDITAR_MARCA_A_INSPECCION)"></ion-radio>
         </ion-item>
       </ion-radio-group>
 
       <ion-item *ngIf="mostrarComentario">
         <ion-label position="stacked">Comentario</ion-label>
-        <ion-textarea value="" formControlName="comentario"></ion-textarea>
+        <ion-textarea value="" formControlName="comentario" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)"></ion-textarea>
       </ion-item>
-      
 
     </ion-list>
-  
-    <ion-button expand="block" type="submit">Guardar cambios</ion-button>
 
+    <ion-button *ngIf="this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)" expand="block" type="submit">Guardar cambios</ion-button>
 
   </form>
 
