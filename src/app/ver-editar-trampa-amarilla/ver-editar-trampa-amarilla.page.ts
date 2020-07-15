@@ -8,9 +8,11 @@ import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
 import { TraspatioFincaLocalService } from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import { DateService } from '../services/date/date.service';
 
 import {AuthService} from '../services/auth/auth.service';
 import {ACTIONS} from '../../constants/user_actions';
+import { Settings } from '../../DTO/settings.dto';
 
 @Component({
   selector: 'app-ver-editar-trampa-amarilla',
@@ -40,7 +42,8 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
     private toastService:ToastService,
     private trampaAmarillaLocalService:TrampaAmarillaLocalService,
     private traspatioFincaLocalService:TraspatioFincaLocalService,
-    private authService:AuthService) {
+    private authService:AuthService,
+    private dateService:DateService) {
 
       this.addTrapForm = this.formBuilder.group({
         num_trampa:[''],
@@ -140,8 +143,15 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
 
       if(this.addTrapForm.valid){
 
-        let configuracionesGenerales:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
-        let pais:string = configuracionesGenerales.pais;
+        let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+        let pais:string = parametrosDeConfiguracion.pais;
+
+        let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+
+        if(!puedeSincronizar){
+          throw new Error("Sincroniza primero y vuelve a intentarlo");
+        }
+
         let trampaToSave:any = {};
 
         trampaToSave['id_trampa'] = this.trapRecord.id_trampa;
