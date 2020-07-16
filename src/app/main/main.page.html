@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-item lines="none" slot="end" button [routerLink]="['/']">
+    <ion-item lines="none" slot="end" button (click)="logOut()">
       <ion-icon slot="end" name="log-out-outline" size="large"></ion-icon>
     </ion-item>
     <ion-title>Menú principal</ion-title>
@@ -17,7 +17,7 @@
         </ion-avatar>
         <ion-label>Inspecciones</ion-label>
       </ion-item><br>
-
+      
       <ion-item button detail [routerLink]="['/menu-mantenimientos']">
         <ion-avatar slot="start">
           <ion-icon name="construct-outline" size="large"></ion-icon>
