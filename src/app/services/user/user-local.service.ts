@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import {UserLoged} from '../../../DTO/UserLoged.dto';
-import {Usuario} from '../../../DTO/server/Usuario';
+import {Usuario} from '../../../DTO/local/Usuario';
 import {AlmacenamientoNativoService} from '../almacenamiento-interno/almacenamiento-nativo.service';
 
 @Injectable({
