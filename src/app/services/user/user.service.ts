@@ -15,26 +15,6 @@ export class UserService {
 
   }
 
-  getDefaultUser(){
-    return new Promise((resolve,reject)=>{
-      this.almacenamientoNativoService.obtenerUsuarioPorDefault().then((usuario:UserLoged)=>{
-        resolve(usuario);
-      }).catch((error)=>{
-        reject(error);
-      });
-    });
-  }
-
-  setDefaultUser(user:UserLoged){
-    return new Promise((resolve,reject)=>{
-      this.almacenamientoNativoService.almacenarUsuarioPorDefault(user).then((user)=>{
-        resolve(user);
-      }).catch((error)=>{
-        reject(error);
-      });
-    });
-  }
-
   findUser(){
     
   }

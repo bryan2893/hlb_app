@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {UserLoged} from '../../DTO/UserLoged.dto';
 import {Router} from '@angular/router';
-import {UserService} from '../services/user/user.service';
+import {UserLocalService} from '../services/user/user-local.service';
 import {AlertService} from '../services/alert/alert.service';
 
 @Component({
@@ -17,9 +17,9 @@ export class HomePage {
 
 
   constructor(private router: Router,
-    private userService:UserService,
+    private userLocalService:UserLocalService,
     private alertService:AlertService) {}
-
+    
   todoLoNecesarioEstaCompleto(){
     return (this.username !== '' && this.password !== '' && this.tipoLogueo !== '');
   }

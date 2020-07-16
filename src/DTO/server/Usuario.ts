@@ -1,4 +1,4 @@
-export interface UsuarioNubeBajada{
+export interface Usuario{
     nombre_completo:string,
     usuario:string,
     contraseña:string,

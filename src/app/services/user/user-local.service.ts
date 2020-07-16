@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import {UserLoged} from '../../../DTO/UserLoged.dto';
-import {UsuarioNubeBajada} from '../../../DTO/server/UsuarioNubeBajada';
+import {Usuario} from '../../../DTO/server/Usuario';
+import {AlmacenamientoNativoService} from '../almacenamiento-interno/almacenamiento-nativo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class UserLocalService {
 
   db:SQLiteObject = null;
 
-  constructor() {}
+  constructor(private almacenamientoNativoService:AlmacenamientoNativoService) {}
 
   setDatabase(db:SQLiteObject){
     if(this.db === null){
@@ -47,7 +48,7 @@ export class UserLocalService {
     
   }
 
-  insertManyUsers(usuariosDesdeLaNube:UsuarioNubeBajada[]){
+  insertManyUsers(usuariosDesdeLaNube:Usuario[]){
 
     let createTableQuery = 'create table IF NOT EXISTS usuarios(nombre_completo TEXT NOT NULL,usuario TEXT NOT NULL,contraseña TEXT NOT NULL,accion TEXT NOT NULL)';
     let sql = 'INSERT INTO usuarios(nombre_completo,usuario,contraseña,accion) VALUES (?,?,?,?)';
@@ -112,6 +113,26 @@ export class UserLocalService {
       this.db.executeSql(sql,[]).then(()=>{
         resolve(true);
       }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
+
+  getDefaultUser():Promise<UserLoged>{
+    return new Promise((resolve,reject)=>{
+      this.almacenamientoNativoService.obtenerUsuarioPorDefault().then((usuario:UserLoged)=>{
+        resolve(usuario);
+      }).catch((error)=>{
+        reject(error);
+      });
+    });
+  }
+
+  setDefaultUser(user:UserLoged):Promise<UserLoged>{
+    return new Promise((resolve,reject)=>{
+      this.almacenamientoNativoService.almacenarUsuarioPorDefault(user).then((user)=>{
+        resolve(user);
+      }).catch((error)=>{
         reject(error);
       });
     });
