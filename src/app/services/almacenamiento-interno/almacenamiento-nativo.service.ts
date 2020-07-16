@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {Settings} from '../../../DTO/settings.dto';
-import {User} from '../../../DTO/User.dto';
+import {UserLoged} from '../../../DTO/UserLoged.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -77,10 +77,10 @@ export class AlmacenamientoNativoService {
 
   }
 
-  obtenerUsuarioPorDefault():Promise<User>{
+  obtenerUsuarioPorDefault():Promise<UserLoged>{
 
     return new Promise((resolve,reject)=>{
-      this.nativeStorage.getItem(this.llaveUsuarioDefault).then((usuario:User)=>{
+      this.nativeStorage.getItem(this.llaveUsuarioDefault).then((usuario:UserLoged)=>{
         resolve(usuario);
       }).catch(()=>{
         reject(new Error("No hay usuario registrado!"));
@@ -89,7 +89,7 @@ export class AlmacenamientoNativoService {
     
   }
 
-  almacenarUsuarioPorDefault(usuario:User):Promise<User>{
+  almacenarUsuarioPorDefault(usuario:UserLoged):Promise<UserLoged>{
 
     return new Promise((resolve,reject)=>{
       this.nativeStorage.setItem(this.llaveUsuarioDefault,usuario).then(()=> {

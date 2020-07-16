@@ -6,7 +6,7 @@ import {PreviousUrlHolderService} from '../services/data/previous-url-holder.ser
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
-import { User } from 'src/DTO/User.dto';
+import { UserLoged } from 'src/DTO/UserLoged.dto';
 import {InspeccionTrampaLocalService} from '../services/inspeccion_trampas/InspeccionTrampaLocal.service';
 import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
@@ -186,7 +186,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         }
 
         let pais:string = parametrosDeConfiguracion.pais;
-        let usuario:User = this.authService.getLogedUser();
+        let usuario:UserLoged = this.authService.getLogedUser();
         let trapInspectionToSave:any = {};
   
         trapInspectionToSave['id_inspec_tramp'] = -1;

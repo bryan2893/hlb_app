@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {User} from '../../../DTO/User.dto';
+import {UserLoged} from '../../../DTO/UserLoged.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  logedUser:User;
+  logedUser:UserLoged;
 
   constructor() {}
 
@@ -28,7 +28,7 @@ export class AuthService {
     return false;
   }
 
-  setLogedUser(user:User){
+  setLogedUser(user:UserLoged){
     this.logedUser = user;
   }
 

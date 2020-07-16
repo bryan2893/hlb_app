@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {User} from '../../DTO/User.dto';
+import {UserLoged} from '../../DTO/UserLoged.dto';
 import {Router} from '@angular/router';
 import {UserService} from '../services/user/user.service';
 import {AlertService} from '../services/alert/alert.service';
