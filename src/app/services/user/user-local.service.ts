@@ -24,21 +24,20 @@ export class UserLocalService {
     return this.db.executeSql(sql,[]);
   }
 
-  getAUserByCredentials(usuario:string,contraseña:string){
+  getAUserByCredentials(usuario:string,contraseña:string):Promise<Usuario>{
 
     let sql = 'SELECT * FROM usuarios where usuario = ? AND contraseña = ? limit 1';
     return new Promise((resolve,reject)=>{
 
         this.db.executeSql(sql,[usuario,contraseña]).then((data)=>{
 
-        let userFounded = [];
+        let user = null;
         if (data.rows.length > 0) {
-          for (var i = 0; i < data.rows.length; i++) { 
-            userFounded.push(data.rows.item(i));
-          }
+          user = data.rows.item(0);
+          resolve(user);
+        }else{
+          reject(new Error("Las credenciales no existen para el usuario!"));
         }
-
-        resolve(userFounded);
 
         }).catch((e) => {
           reject(e);
@@ -83,9 +82,9 @@ export class UserLocalService {
         if (data.rows.length > 0) {
           userBuilded = {};
           let firstRow = data.rows.item(0);
-          userBuilded["fullName"] = firstRow.fullName;
-          userBuilded["username"] = firstRow.username;
-          userBuilded["password"] = firstRow.password;
+          userBuilded["fullName"] = firstRow.nombre_completo;
+          userBuilded["username"] = firstRow.usuario;
+          userBuilded["password"] = firstRow.contraseña;
           userBuilded["actions"] = [];
           userBuilded["token"] = "";
           for (var i = 0; i < data.rows.length; i++) {
