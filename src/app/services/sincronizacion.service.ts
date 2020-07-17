@@ -44,12 +44,22 @@ export class SincronizacionService {
                     {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS},
                     {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
                     {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_MARCA_A_INSPECCION},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.ACCESO_A_CONFIGURACIONES},
+
                     {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
-                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS}
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS}
                     ];
 
     return usuarios;
+    
   }
 
   async sincronizarTodo(){

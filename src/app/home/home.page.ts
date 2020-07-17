@@ -6,6 +6,7 @@ import {UserLocalService} from '../services/user/user-local.service';
 import {AlertService} from '../services/alert/alert.service';
 import { Usuario } from 'src/DTO/local/Usuario';
 import {AuthService} from '../services/auth/auth.service';
+import {LoaderService} from '../services/loader.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,8 @@ export class HomePage {
     private userLocalService:UserLocalService,
     private formBuilder: FormBuilder,
     private alertService:AlertService,
-    private authService:AuthService) {
+    private authService:AuthService,
+    private loaderService:LoaderService) {
       this.loginForm = this.formBuilder.group({
         username:['',Validators.required],
         password:['',Validators.required],
@@ -76,23 +78,43 @@ export class HomePage {
     try{
       if(this.loginForm.dirty && this.loginForm.valid){
 
+        let tipoLogueo = this.loginForm.controls['type'].value;
         let username = this.loginForm.controls['username'].value;
         let password = this.loginForm.controls['password'].value;
-        let usuario:Usuario = await this.userLocalService.getAUserByCredentials(username,password);
-        //Loguear usuario en el servicio.
-        let userLogued:UserLoged = await this.userLocalService.buildUserLogued(usuario.usuario);
-        
-        console.log("El usuario logueado es "+ JSON.stringify(userLogued));
+        let userLogued:UserLoged;
+
+        if(tipoLogueo === "normal"){
+
+          let usuario:Usuario = await this.userLocalService.getAUserByCredentials(username,password);
+          //Loguear usuario en el servicio.
+          userLogued = await this.userLocalService.buildUserLogued(usuario.usuario);
+
+        }else{//es tipo "super"
+
+          userLogued = await this.userLocalService.getDefaultUser();
+          if(userLogued.username !== username || userLogued.password !== password){
+            throw new Error("Credenciales no corresponden al super usuario!");
+          }
+
+        }
 
         this.authService.setLogedUser(userLogued);
-
-        this.router.navigate(['/main']);
+        let loadingElement = await this.loaderService.showLoader("Iniciando sesión...");
+        await loadingElement.present();
+        setTimeout(async ()=>{
+          await loadingElement.dismiss();
+          console.log("Usuario logueado "+JSON.stringify(userLogued));
+          this.router.navigate(['/main']);
+        },1000);
+        
       }else{
-        console.log("Credenciales son requeridas!");
+        let alert = await this.alertService.presentAlert("Credenciales son requeridas!");
+        alert.present();
       }
     }catch(error){
       //Lanzar alert.
-      console.log("Hubo error en el login "+error);
+      let alert = await this.alertService.presentAlert(error);
+      alert.present();
     }
 
     
