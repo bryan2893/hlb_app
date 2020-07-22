@@ -1,5 +1,5 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header [translucent]="false">
+  <ion-toolbar color="primary">
     <ion-title>
       App para el control HLB
     </ion-title>
@@ -8,41 +8,42 @@
 
 <ion-content [fullscreen]="true">
 
-  <form [formGroup]="loginForm" (ngSubmit)="submit()">
-    <ion-list>
+  <div class="flex-container">
 
-      <ion-item>
-        <ion-label position="floating">Usuario</ion-label>
-        <ion-input formControlName="username" inputmode="text"></ion-input>
-      </ion-item>
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+      <ion-list>
   
-      <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input formControlName="password" type="password"></ion-input>
-      </ion-item>
-  
-      <ion-radio-group (ionChange)="chooseUserType($event)" formControlName="type">
-        <ion-list-header>
-          <ion-label>
-            <h2>Tipo de usuario</h2>
-          </ion-label>
-        </ion-list-header>
-        <ion-item lines="none">
-          <ion-label>Super Usuario</ion-label>
-          <ion-radio value="super"></ion-radio>
+        <ion-item>
+          <ion-label position="floating">Usuario</ion-label>
+          <ion-input formControlName="username" inputmode="text"></ion-input>
         </ion-item>
-        <ion-item lines="none">
-          <ion-label>Otro</ion-label>
-          <ion-radio value="normal"></ion-radio>
+    
+        <ion-item>
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input formControlName="password" type="password"></ion-input>
         </ion-item>
-      </ion-radio-group>
-  
-      <ion-button expand="block" shape="round" strong="true" type="submit">Ingresar</ion-button>
-      
-    </ion-list>
-  </form>
+    
+        <ion-radio-group (ionChange)="chooseUserType($event)" formControlName="type">
+          <ion-list-header>
+            <ion-label>
+              <h2>Tipo de usuario</h2>
+            </ion-label>
+          </ion-list-header>
+          <ion-item lines="none">
+            <ion-label>Super Usuario</ion-label>
+            <ion-radio value="super"></ion-radio>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>Otro</ion-label>
+            <ion-radio value="normal"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+    
+        <ion-button expand="block" shape="round" strong="true" type="submit">Ingresar</ion-button>
+        
+      </ion-list>
+    </form>
 
-  <div id="container">
   </div>
   
 </ion-content>

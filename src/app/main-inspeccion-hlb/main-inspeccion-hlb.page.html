@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar *ngIf="!searchBarActive">
+  <ion-toolbar color="primary" *ngIf="!searchBarActive">
     <ion-title>Insp. Traspatios/Fincas</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="change()">
@@ -26,9 +26,9 @@
 
       <ion-icon color="danger" *ngIf="inspeccionTraspatioFinca.indica_revision === 1" name="medical-outline" slot="end"></ion-icon>
 
-      <ion-icon *ngIf="inspeccionTraspatioFinca.sincronizado === 0" name="sync-outline" size="large" slot="end" ></ion-icon>
+      <ion-icon color="warning" *ngIf="inspeccionTraspatioFinca.sincronizado === 0" name="sync-outline" size="large" slot="end" ></ion-icon>
 
-      <ion-icon *ngIf="inspeccionTraspatioFinca.sincronizado === 1" name="checkmark" size="large" slot="end" ></ion-icon>
+      <ion-icon color="success" *ngIf="inspeccionTraspatioFinca.sincronizado === 1" name="checkmark" size="large" slot="end" ></ion-icon>
 
     </ion-item>
 
