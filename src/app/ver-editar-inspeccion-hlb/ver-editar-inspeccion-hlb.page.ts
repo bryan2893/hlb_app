@@ -8,7 +8,7 @@ import { AlmacenamientoNativoService } from '../services/almacenamiento-interno/
 import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
-import { User } from 'src/DTO/User.dto';
+import { UserLoged } from 'src/DTO/UserLoged.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 
@@ -185,7 +185,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
         }
 
         let pais:string = parametrosDeConfiguracion.pais;
-        let usuario:User = this.authService.getLogedUser();
+        let usuario:UserLoged = this.authService.getLogedUser();
         let hlbInspectionToSave:any = {};
   
         hlbInspectionToSave['id_inspec_hlb'] = -1;

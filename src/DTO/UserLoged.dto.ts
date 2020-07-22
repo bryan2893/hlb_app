@@ -1,4 +1,4 @@
-export interface User{
+export interface UserLoged{
     fullName: string,
     username: string,
     password: string,

@@ -7,7 +7,7 @@ import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/al
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
 import {AuthService} from '../services/auth/auth.service';
-import { User } from 'src/DTO/User.dto';
+import { UserLoged } from 'src/DTO/UserLoged.dto';
 import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import {DateService} from '../services/date/date.service';
@@ -159,7 +159,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
         }
 
         let pais:string = parametrosDeConfiguracion.pais.toUpperCase();
-        let usuario:User = this.authService.getLogedUser();
+        let usuario:UserLoged = this.authService.getLogedUser();
 
         let hlbInspectionToSave:any = {};
   

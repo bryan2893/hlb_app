@@ -9,8 +9,10 @@ import {InspeccionHlbLocalService} from './inspecciones_hlb/InspeccionHlbLocal.s
 import {InspeccionHlbNubeService} from './inspecciones_hlb/InspeccionHlbNube.service';
 import {InspeccionTrampaLocalService} from './inspeccion_trampas/InspeccionTrampaLocal.service';
 import {InspeccionTrampaNubeService} from './inspeccion_trampas/InspeccionTrampaNube.service';
+import {UserLocalService} from '../services/user/user-local.service';
 
 import {DateService} from './date/date.service';
+import {ACTIONS} from '../../constants/user_actions';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +30,37 @@ export class SincronizacionService {
     private inspeccionHlbNubeService:InspeccionHlbNubeService,
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
     private inspeccionTrampaNubeService:InspeccionTrampaNubeService,
-    private dateService:DateService) { }
+    private dateService:DateService,
+    private userLocalService:UserLocalService) { }
+
+  //Creacion de usuarios fake
+  obtenerUsuariosFake(){
+    let usuarios = [{nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_MARCA_A_INSPECCION},
+
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS}
+                    ];
+
+    return usuarios;
+    
+  }
 
   async sincronizarTodo(){
     try{
@@ -83,7 +115,8 @@ export class SincronizacionService {
       await this.traspatiosFincasLocalService.deleteAllInfo();
       await this.inspeccionHlbLocalService.deleteAllInfo();
       await this.inspeccionTrampaLocalService.deleteAllInfo();
-      console.log("Se eliminaron los datos de las trampas,traspatiosFincas, inspecciones HLB e inspecciones de trampas!!");
+      await this.userLocalService.deleteAllInfo();
+      console.log("Se eliminaron los datos de usuarios,trampas ,traspatiosFincas ,inspecciones HLB e inspecciones de trampas!!");
 
       let pais = parametrosDeConfiguracion.pais.toUpperCase();
       //Se descargan los registros de trampas amarillas y se insertan en la bd local...
@@ -125,6 +158,10 @@ export class SincronizacionService {
         listaDeInspDeTrampas = JSON.parse(respuesta.data);
         await this.inspeccionTrampaLocalService.insertManyTrapInspections(listaDeInspDeTrampas);
       }
+
+      //Se descargan los registros de usuarios.
+      await this.userLocalService.insertManyUsers(this.obtenerUsuariosFake());
+      console.log("Se insertaron los usuarios usuarios");
       
       //Al terminar la sincronizacion se registra la fecha actual de sincronización.
       let currentDate = this.dateService.getCurrentDateOnly();
