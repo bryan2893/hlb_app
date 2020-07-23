@@ -11,7 +11,7 @@ export class AuthService {
   constructor() {}
 
   //indica si hay un usuario autenticado.
-  isLogued(){
+  isLogued():boolean{
     if (this.logedUser){
       return true;
     }

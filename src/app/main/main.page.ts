@@ -49,7 +49,7 @@ export class MainPage implements OnInit {
     setTimeout(async ()=>{
       this.authService.logOutUser();
       await loadingElement.dismiss();
-      this.router.navigateByUrl('/');
+      this.router.navigate(['/']);
     },1500);
   }
 
