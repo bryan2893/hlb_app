@@ -195,7 +195,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         trapInspectionToSave['codigo_responsable'] = usuario.username;
         trapInspectionToSave['nombre_responsable'] = usuario.fullName;
         trapInspectionToSave['tipo'] = this.inspTrampaForm.controls['tipo'].value;
-        trapInspectionToSave['pais'] = pais;
+        trapInspectionToSave['pais'] = pais.toUpperCase();
         trapInspectionToSave['num_trampa'] = this.inspTrampaForm.controls['num_trampa'].value;
         trapInspectionToSave['latitud_trampa'] = this.inspTrampaForm.controls['latitud_trampa'].value;
         trapInspectionToSave['longitud_trampa'] = this.inspTrampaForm.controls['longitud_trampa'].value;

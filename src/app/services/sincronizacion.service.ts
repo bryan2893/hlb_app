@@ -35,18 +35,18 @@ export class SincronizacionService {
 
   //Creacion de usuarios fake
   obtenerUsuariosFake(){
-    let usuarios = [{nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRAMPAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRAMPAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRASPATIOS_FINCAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
-                    {nombre_completo:'Bryan Hernandez A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.EDITAR_MARCA_A_INSPECCION},
-
+    let usuarios = [{nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS},
                     {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
                     {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRAMPAS},
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
+                    {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:ACTIONS.EDITAR_MARCA_A_INSPECCION},
+
+                    {nombre_completo:'Bryan Hernández A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRAMPAS},
+                    {nombre_completo:'Bryan Hernández A',usuario:'bhernandeza',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_INSP_TRASPATIOS_FINCAS},
 
                     {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRAMPAS},
                     {nombre_completo:'Kendall Nájera Vindas',usuario:'knajera',contraseña:'123',accion:ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS},
@@ -107,6 +107,9 @@ export class SincronizacionService {
         console.log("Si entro a CUATRO");
         let listaDeInspTrampas:any;
         listaDeInspTrampas = await this.inspeccionTrampaLocalService.getNoSincronizedInspTrampasPage(i,this.rowsPerPage);
+
+        console.log("Registros no sincronizados de trampas -> "+JSON.stringify(listaDeInspTrampas));
+
         await this.inspeccionTrampaNubeService.syncListOfInspTramp(listaDeInspTrampas);
       }
 
