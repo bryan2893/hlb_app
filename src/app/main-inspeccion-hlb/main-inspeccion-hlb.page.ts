@@ -54,7 +54,7 @@ export class MainInspeccionHlbPage implements OnInit {
   
 
   whenUserPressAKey(event:any){
-    let value = event.target.value;
+    let value = event.target.value.toUpperCase();
     this.inspeccionHlbLocalService.findHlbInspections(value).then((listaDeInspeccionesEncontradas:any)=>{
       this.inspeccionTraspatiosFincasList = listaDeInspeccionesEncontradas;
     }).catch((error)=>{
