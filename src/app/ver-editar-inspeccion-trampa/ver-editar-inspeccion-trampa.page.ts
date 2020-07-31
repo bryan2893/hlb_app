@@ -101,7 +101,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
     ionViewDidEnter(){
       let inData = this.route.snapshot.data['data'];
       if (inData) {
-        if (this.tipo === "traspatio"){
+        if (this.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
         }else{
@@ -177,7 +177,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
 
       if(this.inspTrampaForm.dirty && this.inspTrampaForm.valid){
 
-        let parametrosDeConfiguracion:any = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
+        let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
 
         let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
 
