@@ -11,6 +11,12 @@ import { AgregarTrampaPage } from './agregar-trampa.page';
 
 import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
 
+import {ProvinciasPageModule} from '../modals/provincias/provincias.module';
+import {CantonesPageModule} from '../modals/cantones/cantones.module';
+import {DistritosPageModule} from '../modals/distritos/distritos.module';
+import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+import {LotesPropietariosPageModule} from '../modals/lotes-propietarios/lotes-propietarios.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -18,7 +24,12 @@ import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
     IonicModule,
     AgregarTrampaPageRoutingModule,
     ReactiveFormsModule,
-    MapViewerPageModule
+    MapViewerPageModule,
+    ProvinciasPageModule,
+    CantonesPageModule,
+    DistritosPageModule,
+    FincasPobladosPageModule,
+    LotesPropietariosPageModule
   ],
   declarations: [AgregarTrampaPage]
 })

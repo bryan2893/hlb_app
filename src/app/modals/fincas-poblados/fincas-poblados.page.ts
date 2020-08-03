@@ -13,6 +13,7 @@ export class FincasPobladosPage implements OnInit {
   lista_fincas_poblados = [];
   lista_respaldo = [];
   tipo:string;
+  distrito:string;
   tituloCabecera:string;
   
 
@@ -20,11 +21,10 @@ export class FincasPobladosPage implements OnInit {
     private traspatiosFincasLocalService:TraspatioFincaLocalService) { }
 
   ngOnInit() {
-
-    this.tituloCabecera = this.navParams.data.cabecera;
     this.tipo = this.navParams.data.tipo;
+    this.distrito = this.navParams.data.distrito;
 
-    this.traspatiosFincasLocalService.getTraspatiosFincasByType(this.tipo).then((data:any)=>{
+    this.traspatiosFincasLocalService.getTraspatiosFincasByType(this.tipo,this.distrito).then((data:any)=>{
       this.lista_fincas_poblados = data;
       this.lista_respaldo = data;
     });

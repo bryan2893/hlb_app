@@ -2,13 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import {Validators,FormBuilder,FormGroup, FormControl} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
 import {ModalController} from '@ionic/angular';
+import {ProvinciasPage} from '../modals/provincias/provincias.page';
+import {CantonesPage} from '../modals/cantones/cantones.page';
+import {DistritosPage} from '../modals/distritos/distritos.page';
+import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
+import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
 import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
 import {PreviousUrlStructure} from 'src/DTO/previuousUrlStructure.dto';
-import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 
@@ -23,7 +27,6 @@ export class AgregarManteHlbPage implements OnInit {
   lote_propietario_key = "Propietario";
 
   coords:any;
-
   traspatioFincaForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
@@ -40,6 +43,9 @@ export class AgregarManteHlbPage implements OnInit {
 
     this.traspatioFincaForm = this.formBuilder.group({
       tipo:['TRASPATIO',Validators.required],
+      provincia:[''],
+      canton:[''],
+      distrito:[''],
       finca_poblado:['',Validators.required],
       lote_propietario:['',Validators.required],
       latitud:[''],
@@ -47,11 +53,12 @@ export class AgregarManteHlbPage implements OnInit {
     });
   }
 
+  getCurrenType(){
+    return this.traspatioFincaForm.controls['tipo'].value;
+  }
+
   changeType(event:any){
     this.tipo = event.target.value;
-    
-    this.traspatioFincaForm.controls['finca_poblado'].patchValue('');
-    this.traspatioFincaForm.controls['lote_propietario'].patchValue('');
    
     
     if(this.tipo === "TRASPATIO"){
@@ -97,6 +104,9 @@ export class AgregarManteHlbPage implements OnInit {
   
         hlbMantainRegisterToSave['pais'] = paisRecuperado.toUpperCase();
         hlbMantainRegisterToSave['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
+        hlbMantainRegisterToSave['provincia'] = this.traspatioFincaForm.controls['provincia'].value.toUpperCase();
+        hlbMantainRegisterToSave['canton'] = this.traspatioFincaForm.controls['canton'].value.toUpperCase();
+        hlbMantainRegisterToSave['distrito'] = this.traspatioFincaForm.controls['distrito'].value.toUpperCase();
         hlbMantainRegisterToSave['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
         hlbMantainRegisterToSave['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
         hlbMantainRegisterToSave['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
@@ -114,7 +124,7 @@ export class AgregarManteHlbPage implements OnInit {
       }
 
     }catch(error){
-      let alert = await this.alertService.presentAlert(error);
+      let alert = await this.alertService.presentAlert(JSON.stringify(error));
       alert.present();
     }
   }
@@ -133,9 +143,9 @@ export class AgregarManteHlbPage implements OnInit {
     this.router.navigateByUrl('/map-viewer');
   }
 
-  async openModal() {
+  async openProvinciasModal() {
     const modal = await this.modalController.create({
-      component: FincasPobladosPage,
+      component: ProvinciasPage,
       componentProps: {
         "tipo": this.tipo,
         "cabecera":this.poblado_finca_key + 's'
@@ -144,13 +154,106 @@ export class AgregarManteHlbPage implements OnInit {
 
     modal.onDidDismiss().then((dataReturned) => {
       if (dataReturned !== null) {
-
-        this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
-        
+        this.traspatioFincaForm.controls['provincia'].patchValue(dataReturned.data);
       }
     });
 
     return await modal.present();
+  }
+
+  async openCantonesModal() {
+
+    let provincia = "";
+    provincia = this.traspatioFincaForm.controls['provincia'].value;
+
+    if(provincia !== ""){
+      const modal = await this.modalController.create({
+        component: CantonesPage,
+        componentProps: {
+          "provincia": provincia
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null) {
+          this.traspatioFincaForm.controls['canton'].patchValue(dataReturned.data);
+        }
+      });
+  
+      return await modal.present();
+    }
+  }
+
+  async openDistritosModal() {
+
+    let canton = "";
+    canton = this.traspatioFincaForm.controls['canton'].value;
+
+    if(canton !== ""){
+      const modal = await this.modalController.create({
+        component: DistritosPage,
+        componentProps: {
+          "canton": canton
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null) {
+          this.traspatioFincaForm.controls['distrito'].patchValue(dataReturned.data);
+        }
+      });
+  
+      return await modal.present();
+    }
+
+  }
+
+  async openPobladosFincasModal() {
+
+    let distrito = "";
+    distrito = this.traspatioFincaForm.controls['distrito'].value;
+
+    if(distrito !== ""){
+      const modal = await this.modalController.create({
+        component: FincasPobladosPage,
+        componentProps: {
+          "tipo": this.tipo,
+          "distrito": distrito
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null) {
+          this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+        }
+      });
+  
+      return await modal.present();
+    }
+
+  }
+
+  async openPropieatariosLotesModal() {
+
+    let finca_poblado = "";
+    finca_poblado = this.traspatioFincaForm.controls['finca_poblado'].value;
+
+    if(finca_poblado !== ""){
+      const modal = await this.modalController.create({
+        component: LotesPropietariosPage,
+        componentProps: {
+          "finca_poblado":finca_poblado
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null) {
+          this.traspatioFincaForm.controls['lote_propietario'].patchValue(dataReturned.data);
+        }
+      });
+  
+      return await modal.present();
+    }
   }
   
 }

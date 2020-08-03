@@ -34,17 +34,43 @@
       </ion-radio-group>
 
       <ion-item>
-        <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
-        <ion-input formControlName="finca_poblado" type="text" autocapitalize='on'></ion-input>
+        <ion-label position="stacked">Provincia</ion-label>
+        <ion-input formControlName="provincia" type="text"></ion-input>
+        <ion-button (click)="openProvinciasModal()" slot="end">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
-      <ion-button (click)="openModal()">
-        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
-      </ion-button><br>
+      <ion-item>
+        <ion-label position="stacked">Canton</ion-label>
+        <ion-input formControlName="canton" type="text"></ion-input>
+        <ion-button (click)="openCantonesModal()" slot="end">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Distrito</ion-label>
+        <ion-input formControlName="distrito" type="text"></ion-input>
+        <ion-button (click)="openDistritosModal()" slot="end">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
+        <ion-input formControlName="finca_poblado" type="text"></ion-input>
+        <ion-button (click)="openPobladosFincasModal()" slot="end">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
 
       <ion-item>
         <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
-        <ion-input formControlName="lote_propietario" type="text" autocapitalize='on'></ion-input>
+        <ion-input formControlName="lote_propietario" type="text"></ion-input>
+        <ion-button (click)="openPropieatariosLotesModal()" slot="end">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-item>
