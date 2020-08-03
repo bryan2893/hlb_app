@@ -206,9 +206,9 @@ export class InspeccionTrampaLocalService {
 
   //devuelve lista con elemento o lista vacía.
   findTrapInspections(finca_poblado_o_lote_propietario:string){
-    let sql = 'SELECT * FROM inspecciones_trampas where finca_poblado = ? OR lote_propietario = ?';
+    let sql = 'SELECT * FROM inspecciones_trampas where finca_poblado = ? OR lote_propietario = ? OR num_trampa = ? OR tipo = ?';
     return new Promise((resolve,reject) => {
-      this.db.executeSql(sql,[finca_poblado_o_lote_propietario,finca_poblado_o_lote_propietario]).then((data)=>{
+      this.db.executeSql(sql,[finca_poblado_o_lote_propietario,finca_poblado_o_lote_propietario,finca_poblado_o_lote_propietario,finca_poblado_o_lote_propietario]).then((data)=>{
         let inspTrampasEncontrados = [];
         for(let i= 0;i<data.rows.length;i++){
           inspTrampasEncontrados.push(data.rows.item(i));

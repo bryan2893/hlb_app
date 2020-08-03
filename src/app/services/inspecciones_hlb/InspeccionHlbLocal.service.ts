@@ -214,9 +214,9 @@ export class InspeccionHlbLocalService {
 
   //devuelve lista con elemento o lista vacía.
   findHlbInspections(finca_poblado_o_lote_propietario:string){
-    let sql = 'SELECT * FROM inspecciones_hlb where finca_poblado = ? OR lote_propietario = ?';
+    let sql = 'SELECT * FROM inspecciones_hlb where finca_poblado = ? OR lote_propietario = ? OR tipo = ?';
     return new Promise((resolve,reject) => {
-      this.db.executeSql(sql,[finca_poblado_o_lote_propietario,finca_poblado_o_lote_propietario]).then((data)=>{
+      this.db.executeSql(sql,[finca_poblado_o_lote_propietario,finca_poblado_o_lote_propietario,finca_poblado_o_lote_propietario]).then((data)=>{
         let inspHlbEncontradas = [];
         for(let i= 0;i<data.rows.length;i++){
           inspHlbEncontradas.push(data.rows.item(i));

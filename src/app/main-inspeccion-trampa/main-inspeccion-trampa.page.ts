@@ -52,10 +52,8 @@ export class MainInspeccionTrampaPage implements OnInit {
     this.pagesQuantity = 0;
   }
 
-  
-
   whenUserPressAKey(event:any){
-    let value = event.target.value;
+    let value = event.target.value.toUpperCase();
     this.inspeccionTrampaLocalService.findTrapInspections(value).then((listaDeInspeccionesEncontradas:any)=>{
       this.inspeccionTrampasList = listaDeInspeccionesEncontradas;
     }).catch((error)=>{
