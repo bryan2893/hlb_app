@@ -88,6 +88,7 @@ export class MainManteHlbPage implements OnInit {
   }
 
   onItemClick(traspatioFincaItem:any){
+    console.log("Item en main = "+JSON.stringify(traspatioFincaItem));
     this.dataContainerService.setData(traspatioFincaItem);
     this.router.navigateByUrl('/ver-editar-traspatio-finca');
   }

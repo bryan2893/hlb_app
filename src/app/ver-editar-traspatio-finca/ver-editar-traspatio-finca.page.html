@@ -39,17 +39,43 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
-        <ion-input formControlName="finca_poblado" type="text" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-label position="stacked">Provincia</ion-label>
+        <ion-input formControlName="provincia" type="text" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-button (click)="openProvinciasModal()" slot="end" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
-      <ion-button *ngIf="this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)" (click)="openModal()">
-        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
-      </ion-button><br>
-      
+      <ion-item>
+        <ion-label position="stacked">Canton</ion-label>
+        <ion-input formControlName="canton" type="text" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-button (click)="openCantonesModal()" slot="end" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Distrito</ion-label>
+        <ion-input formControlName="distrito" type="text" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-button (click)="openDistritosModal()" slot="end" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
+        <ion-input formControlName="finca_poblado" type="text" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-button (click)="openPobladosFincasModal()" slot="end" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
       <ion-item>
         <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
         <ion-input formControlName="lote_propietario" type="text" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-button (click)="openPropieatariosLotesModal()" slot="end" [disabled]="!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRASPATIOS_FINCAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-item>
