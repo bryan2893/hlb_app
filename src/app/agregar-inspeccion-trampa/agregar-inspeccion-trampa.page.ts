@@ -90,13 +90,14 @@ export class AgregarInspeccionTrampaPage implements OnInit {
       this.lote_propietario_key = "Lote";
     }
 
-    
+    /*
     this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{
       
     });
+    */
 
   }
 
@@ -110,13 +111,14 @@ export class AgregarInspeccionTrampaPage implements OnInit {
     }
     */
 
-    
+    /*
     this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{
       
     });
+    */
 
   }
   

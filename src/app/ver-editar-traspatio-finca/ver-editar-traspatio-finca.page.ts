@@ -75,12 +75,13 @@ export class VerEditarTraspatioFincaPage implements OnInit {
           this.lote_propietario_key = "Lote";
         }
   
-        
+        /*
         this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
           this.poblados_fincas = fincasPobladosList;
           this.isSelectPobladoFincaActive = true;
         }).catch((error)=>{
         });
+        */
   
       }
     }
@@ -95,8 +96,8 @@ export class VerEditarTraspatioFincaPage implements OnInit {
           this.traspatioFincaRecord = inData;
           this.tipo = inData.tipo;
   
-          let fincas_poblados:any = await this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo);
-          this.poblados_fincas = fincas_poblados;
+          //let fincas_poblados:any = await this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo);
+          //this.poblados_fincas = fincas_poblados;
   
           let propietariosLotes:any = await this.traspatioFincaLocalService.getPropietariosLotesByFincaPobladoName(this.traspatioFincaRecord.finca_poblado);
           this.propietarios_lotes = propietariosLotes;

@@ -96,13 +96,14 @@ export class AgregarInspeccionHlbPage implements OnInit {
       this.lote_propietario_key = "Lote";
     }
 
-    
+    /*
     this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{
       
     });
+    */
 
   }
 
@@ -113,12 +114,13 @@ export class AgregarInspeccionHlbPage implements OnInit {
       this.inspHlbForm.controls['longitud'].patchValue(this.coords.longitud);
     }
 
-    
+    /*
     this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
       this.poblados_fincas = fincasPobladosList;
       this.isSelectPobladoFincaActive = true;
     }).catch((error)=>{
     });
+    */
 
   }
 

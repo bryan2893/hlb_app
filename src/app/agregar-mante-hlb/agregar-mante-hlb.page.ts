@@ -124,7 +124,7 @@ export class AgregarManteHlbPage implements OnInit {
       }
 
     }catch(error){
-      let alert = await this.alertService.presentAlert(JSON.stringify(error));
+      let alert = await this.alertService.presentAlert(error);
       alert.present();
     }
   }
