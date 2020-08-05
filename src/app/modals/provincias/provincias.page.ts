@@ -24,6 +24,7 @@ export class ProvinciasPage implements OnInit {
     this.tipo = this.navParams.data.tipo;
 
     this.traspatiosFincasLocalService.getProvincias().then((data:any)=>{
+      console.log(this.lista_provincias);
       this.lista_provincias = data;
       this.lista_respaldo = data;
     });
