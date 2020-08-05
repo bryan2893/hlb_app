@@ -24,7 +24,7 @@ export class FincasPobladosPage implements OnInit {
     this.tipo = this.navParams.data.tipo;
     this.distrito = this.navParams.data.distrito;
 
-    this.traspatiosFincasLocalService.getTraspatiosFincasByType(this.tipo,this.distrito).then((data:any)=>{
+    this.traspatiosFincasLocalService.getTraspatiosFincasByTypeAndByDistrito(this.tipo,this.distrito).then((data:any)=>{
       this.lista_fincas_poblados = data;
       this.lista_respaldo = data;
     });
