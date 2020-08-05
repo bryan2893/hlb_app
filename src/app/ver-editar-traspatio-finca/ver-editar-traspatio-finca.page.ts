@@ -186,8 +186,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
       });
   
       modal.onDidDismiss().then((dataReturned) => {
-        if (dataReturned !== null) {
-          this.traspatioFincaForm.controls['provincia'].patchValue(dataReturned.data);
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.traspatioFincaForm.controls['provincia'].patchValue(dataReturned.data);
+          }
         }
       });
   
@@ -208,8 +210,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['canton'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned !== ""){
+              this.traspatioFincaForm.controls['canton'].patchValue(dataReturned.data);
+            }
           }
         });
     
@@ -231,8 +235,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['distrito'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned.data !== ""){
+              this.traspatioFincaForm.controls['distrito'].patchValue(dataReturned.data);
+            }
           }
         });
     
@@ -256,8 +262,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned.data !== ""){
+              this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+            }
           }
         });
     
@@ -280,8 +288,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['lote_propietario'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned.data !== ""){
+              this.traspatioFincaForm.controls['lote_propietario'].patchValue(dataReturned.data);
+            }
           }
         });
     
