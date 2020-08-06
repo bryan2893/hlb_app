@@ -38,6 +38,7 @@ export class MainTrampasAmarillasPage implements OnInit {
       this.pagesQuantity = pagesQuantity;
     }).then(()=>{
       this.trampaAmarillaLocalService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
+        console.log("datos de trampas amarillas ---> "+JSON.stringify(trapsList));
         this.addMoreTrapItems(trapsList);
         this.pageCounter += 1;
       });

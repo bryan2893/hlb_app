@@ -22,7 +22,7 @@ export class TrampaAmarillaLocalService {
   }
 
   createTable(){
-    let sql = 'create table IF NOT EXISTS trampas_amarillas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_trampa INTEGER NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL,provincia TEXT NOT NULL,canton TEXT NOT NULL,distrito TEXT NOT NULL)';
+    let sql = 'create table IF NOT EXISTS trampas_amarillas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_trampa INTEGER NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,provincia TEXT NOT NULL,canton TEXT NOT NULL,distrito TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
     return this.db.executeSql(sql,[]);
   }
 
@@ -142,9 +142,9 @@ export class TrampaAmarillaLocalService {
   }
 
   insertAtrap(newTrapRecord:TrampaAmarillaSinIdLocalDTO):Promise<TrampaAmarillaSinIdLocalDTO>{
-    let sql = 'INSERT INTO trampas_amarillas(id_trampa,num_trampa,tipo,pais,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado,provincia,canton,distrito) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    let sql = 'INSERT INTO trampas_amarillas(id_trampa,num_trampa,tipo,pais,finca_poblado,lote_propietario,latitud,longitud,estado,provincia,canton,distrito,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
-      this.db.executeSql(sql,[newTrapRecord.id_trampa,newTrapRecord.num_trampa,newTrapRecord.tipo,newTrapRecord.pais,newTrapRecord.finca_poblado,newTrapRecord.lote_propietario,newTrapRecord.latitud,newTrapRecord.longitud,newTrapRecord.estado,newTrapRecord.sincronizado,newTrapRecord.provincia,newTrapRecord.canton,newTrapRecord.distrito]).then(()=>{
+      this.db.executeSql(sql,[newTrapRecord.id_trampa,newTrapRecord.num_trampa,newTrapRecord.tipo,newTrapRecord.pais,newTrapRecord.finca_poblado,newTrapRecord.lote_propietario,newTrapRecord.latitud,newTrapRecord.longitud,newTrapRecord.estado,newTrapRecord.provincia,newTrapRecord.canton,newTrapRecord.distrito,newTrapRecord.sincronizado]).then(()=>{
         resolve(newTrapRecord);
       }).catch((error) => {
         reject(error);
@@ -155,9 +155,9 @@ export class TrampaAmarillaLocalService {
   }
 
   updateATrap(id_local:Number,trapToAdd:TrampaAmarillaSinIdLocalDTO):Promise<TrampaAmarillaSinIdLocalDTO>{
-    let sql = 'UPDATE trampas_amarillas set tipo = ?,pais = ?,finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?,sincronizado = ?, provincia = ?, canton = ?, distrito = ? WHERE id_local = ?';
+    let sql = 'UPDATE trampas_amarillas set tipo = ?,pais = ?,finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?, provincia = ?, canton = ?, distrito = ?, sincronizado = ? WHERE id_local = ?';
     return new Promise((resolve,reject) => {
-      this.db.executeSql(sql,[trapToAdd.tipo,trapToAdd.pais,trapToAdd.finca_poblado,trapToAdd.lote_propietario,trapToAdd.latitud,trapToAdd.longitud,trapToAdd.estado,trapToAdd.sincronizado,trapToAdd.provincia,trapToAdd.canton,trapToAdd.distrito,id_local]).then(()=>{
+      this.db.executeSql(sql,[trapToAdd.tipo,trapToAdd.pais,trapToAdd.finca_poblado,trapToAdd.lote_propietario,trapToAdd.latitud,trapToAdd.longitud,trapToAdd.estado,trapToAdd.provincia,trapToAdd.canton,trapToAdd.distrito,trapToAdd.sincronizado,id_local]).then(()=>{
         resolve(trapToAdd);
       }).catch((error) => {
         reject(error);
@@ -167,8 +167,8 @@ export class TrampaAmarillaLocalService {
 
   insertManyTraps(trapsListToAdd:ProvenienteDelServerDTO[]):Promise<boolean>{
 
-    let sql = 'INSERT INTO trampas_amarillas(id_trampa,tipo,pais,num_trampa,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado,provincia,canton,distrito) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    let createTableQuery = 'create table IF NOT EXISTS trampas_amarillas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_trampa INTEGER NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL,provincia TEXT NOT NULL,canton TEXT NOT NULL,distrito TEXT NOT NULL)';
+    let sql = 'INSERT INTO trampas_amarillas(id_trampa,tipo,pais,num_trampa,finca_poblado,lote_propietario,latitud,longitud,estado,provincia,canton,distrito,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    let createTableQuery = 'create table IF NOT EXISTS trampas_amarillas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_trampa INTEGER NOT NULL,tipo TEXT NOT NULL,pais TEXT NOT NULL,num_trampa INTEGER NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,provincia TEXT NOT NULL,canton TEXT NOT NULL,distrito TEXT NOT NULL,sincronizado INTEGER NOT NULL)';
     return new Promise((resolve,reject) => {
       let generalStatement = [];
       generalStatement.push(createTableQuery);

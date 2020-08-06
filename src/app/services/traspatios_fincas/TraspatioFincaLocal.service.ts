@@ -296,6 +296,23 @@ export class TraspatioFincaLocalService {
     });
   }
 
+  getTraspatiosFincasByType(tipo:string):Promise<string[]>{
+    let sql = 'SELECT DISTINCT finca_poblado FROM traspatios_fincas where tipo = ?';
+    return new Promise((resolve,reject) => {
+      this.db.executeSql(sql,[tipo]).then((data)=>{
+        let fincasPoblados = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) { 
+            fincasPoblados.push(data.rows.item(i).finca_poblado);
+          }
+        }
+        resolve(fincasPoblados);
+      }).catch((e) => {
+        reject(e);
+      });
+    });
+  }
+
   getPropietariosLotesByFincaPobladoName(fincaPoblado:string):Promise<string[]>{
     let sql = 'SELECT lote_propietario FROM traspatios_fincas where finca_poblado = ?';
     return new Promise((resolve,reject) => {

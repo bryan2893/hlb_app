@@ -129,6 +129,7 @@ export class SincronizacionService {
         let listaDeTrampasAmarillas:any;
         let respuesta:any = await this.TrampaAmarillaNubeService.getTrapsPage(i,this.rowsPerPage,pais);
         listaDeTrampasAmarillas = JSON.parse(respuesta.data);
+        console.log("Trampas del server = "+JSON.stringify(listaDeTrampasAmarillas));
         await this.TrampaAmarillaLocalService.insertManyTraps(listaDeTrampasAmarillas);
       }
 
