@@ -9,8 +9,8 @@ export interface TrampaAmarillaConIdLocalDTO{
     latitud: Number;
     longitud: Number;
     estado:Number;
-    sincronizado:Number;
     provincia:String;
     canton:String;
     distrito:String;
+    sincronizado:Number;
 }

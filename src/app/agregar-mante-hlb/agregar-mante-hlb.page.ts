@@ -59,7 +59,7 @@ export class AgregarManteHlbPage implements OnInit {
 
   changeType(event:any){
     this.tipo = event.target.value;
-   
+    
     
     if(this.tipo === "TRASPATIO"){
       this.poblado_finca_key = "Poblado";

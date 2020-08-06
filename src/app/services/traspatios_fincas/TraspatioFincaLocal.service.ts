@@ -189,7 +189,7 @@ export class TraspatioFincaLocalService {
     
   }
 
-  updateATraspatioFinca(id_local:string,traspatioFincaRecord:TraspatioFincaSinIdLocalDTO):Promise<TraspatioFincaSinIdLocalDTO>{
+  updateATraspatioFinca(id_local:Number,traspatioFincaRecord:TraspatioFincaSinIdLocalDTO):Promise<TraspatioFincaSinIdLocalDTO>{
 
     let sql = 'UPDATE traspatios_fincas set tipo = ?, finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?, provincia = ?, canton = ?, distrito = ?, sincronizado = ? WHERE id_local = ?';
     return new Promise((resolve,reject) => {

@@ -15,7 +15,7 @@ import { TraspatioFincaLocalService } from '../services/traspatios_fincas/Traspa
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
-import {TraspatioFincaNuevo} from '../../DTO/local/TraspatioFincaNuevo';
+import {TraspatioFincaConIdLocalDTO} from '../../DTO/traspatio_finca/traspatio-finca-con-id-local.dto';
 
 import {AuthService} from '../services/auth/auth.service';
 import {ACTIONS} from '../../constants/user_actions';
@@ -27,7 +27,7 @@ import {ACTIONS} from '../../constants/user_actions';
 })
 export class VerEditarTraspatioFincaPage implements OnInit {
 
-  tipo:string;
+  //tipo:string;
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
   isSelectPobladoFincaActive = true;
@@ -35,7 +35,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   poblados_fincas = [];
   propietarios_lotes = [];
   traspatioFincaForm: FormGroup;
-  traspatioFincaRecord:any;//al inicair la vista se iguala esta variable a un registro de traspatio/finca.
+  traspatioFincaRecord:TraspatioFincaConIdLocalDTO;//al inicair la vista se iguala esta variable a un registro de traspatio/finca.
   actions = ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
@@ -92,9 +92,9 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     ionViewDidEnter(){
       let inData:any = this.route.snapshot.data['data'];
       if (inData) {
-        if(!(Object.keys(inData).length === 2)){//Igresa si la anterior vista no es la vista del mapa.
+        if(!(Object.keys(inData).length === 2)){//Ingresa si la anterior vista no es la vista del mapa.
           this.traspatioFincaRecord = inData;
-          if (this.tipo === "TRASPATIO"){
+          if (this.traspatioFincaRecord.tipo === "TRASPATIO"){
             this.poblado_finca_key = "Poblado";
             this.lote_propietario_key = "Propietario";
           }else{
@@ -180,8 +180,6 @@ export class VerEditarTraspatioFincaPage implements OnInit {
       const modal = await this.modalController.create({
         component: ProvinciasPage,
         componentProps: {
-          "tipo": this.tipo,
-          "cabecera":this.poblado_finca_key + 's'
         }
       });
   
@@ -211,7 +209,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     
         modal.onDidDismiss().then((dataReturned) => {
           if (dataReturned !== null && !dataReturned.role) {
-            if (dataReturned !== ""){
+            if (dataReturned.data !== ""){
               this.traspatioFincaForm.controls['canton'].patchValue(dataReturned.data);
             }
           }
@@ -256,7 +254,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         const modal = await this.modalController.create({
           component: FincasPobladosPage,
           componentProps: {
-            "tipo": this.tipo,
+            "tipo": this.traspatioFincaForm.controls['tipo'].value.toUpperCase(),
             "distrito": distrito
           }
         });

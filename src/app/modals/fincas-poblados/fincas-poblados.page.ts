@@ -8,7 +8,6 @@ import {TraspatioFincaLocalService} from '../../services/traspatios_fincas/Trasp
   styleUrls: ['./fincas-poblados.page.scss'],
 })
 export class FincasPobladosPage implements OnInit {
-  modalTitle:string;
 
   lista_fincas_poblados = [];
   lista_respaldo = [];
@@ -25,6 +24,7 @@ export class FincasPobladosPage implements OnInit {
     this.distrito = this.navParams.data.distrito;
 
     this.traspatiosFincasLocalService.getTraspatiosFincasByTypeAndByDistrito(this.tipo,this.distrito).then((data:any)=>{
+      console.log("datos de fincas_poblados = "+ data);
       this.lista_fincas_poblados = data;
       this.lista_respaldo = data;
     });

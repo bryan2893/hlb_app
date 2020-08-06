@@ -144,7 +144,7 @@ export class TrampaAmarillaLocalService {
   insertAtrap(newTrapRecord:TrampaAmarillaSinIdLocalDTO):Promise<TrampaAmarillaSinIdLocalDTO>{
     let sql = 'INSERT INTO trampas_amarillas(id_trampa,num_trampa,tipo,pais,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado,provincia,canton,distrito) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
-      this.db.executeSql(sql,[newTrapRecord.id_trampa,newTrapRecord.num_trampa,newTrapRecord.tipo,newTrapRecord.pais,newTrapRecord.finca_poblado,newTrapRecord.lote_propietario,newTrapRecord.latitud,newTrapRecord.longitud,newTrapRecord.estado,newTrapRecord.sincronizado]).then(()=>{
+      this.db.executeSql(sql,[newTrapRecord.id_trampa,newTrapRecord.num_trampa,newTrapRecord.tipo,newTrapRecord.pais,newTrapRecord.finca_poblado,newTrapRecord.lote_propietario,newTrapRecord.latitud,newTrapRecord.longitud,newTrapRecord.estado,newTrapRecord.sincronizado,newTrapRecord.provincia,newTrapRecord.canton,newTrapRecord.distrito]).then(()=>{
         resolve(newTrapRecord);
       }).catch((error) => {
         reject(error);
@@ -154,7 +154,7 @@ export class TrampaAmarillaLocalService {
     
   }
 
-  updateATrap(id_local:string,trapToAdd:TrampaAmarillaSinIdLocalDTO):Promise<TrampaAmarillaSinIdLocalDTO>{
+  updateATrap(id_local:Number,trapToAdd:TrampaAmarillaSinIdLocalDTO):Promise<TrampaAmarillaSinIdLocalDTO>{
     let sql = 'UPDATE trampas_amarillas set tipo = ?,pais = ?,finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?,sincronizado = ?, provincia = ?, canton = ?, distrito = ? WHERE id_local = ?';
     return new Promise((resolve,reject) => {
       this.db.executeSql(sql,[trapToAdd.tipo,trapToAdd.pais,trapToAdd.finca_poblado,trapToAdd.lote_propietario,trapToAdd.latitud,trapToAdd.longitud,trapToAdd.estado,trapToAdd.sincronizado,trapToAdd.provincia,trapToAdd.canton,trapToAdd.distrito,id_local]).then(()=>{
@@ -174,7 +174,7 @@ export class TrampaAmarillaLocalService {
       generalStatement.push(createTableQuery);
       for(let i=0;i<trapsListToAdd.length;i++){
         let trap:ProvenienteDelServerDTO = trapsListToAdd[i];
-        let valuesArray = [trap.ID_TRAMPA,trap.TIPO,trap.PAIS,trap.NUM_TRAMPA,trap.FINCA_POBLADO,trap.LOTE_PROPIETARIO,trap.LATITUD,trap.LONGITUD,trap.ESTADO,1,trap.PROVINCIA,trap.CANTON,trap.DISTRITO];
+        let valuesArray = [trap.ID_TRAMPA,trap.TIPO,trap.PAIS,trap.NUM_TRAMPA,trap.FINCA_POBLADO,trap.LOTE_PROPIETARIO,trap.LATITUD,trap.LONGITUD,trap.ESTADO,trap.PROVINCIA,trap.CANTON,trap.DISTRITO,1];
         let insertionListStatement = [];
         insertionListStatement.push(sql);
         insertionListStatement.push(valuesArray);
