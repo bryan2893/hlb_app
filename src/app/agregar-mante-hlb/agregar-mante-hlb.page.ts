@@ -87,35 +87,35 @@ export class AgregarManteHlbPage implements OnInit {
 
       if(this.traspatioFincaForm.dirty && this.traspatioFincaForm.valid){
 
-        let hlbMantainRegisterToSave:any = {};
+        let newTraspatioFinca:any = {};
   
-        hlbMantainRegisterToSave['id_traspatio_finca'] = -1;
+        newTraspatioFinca['id_traspatio_finca'] = -1;
   
         //Se obtiene el pais del almacenamiento interno del telefono.
         let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
 
-        let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+        let puedeAgregar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
 
-        if(!puedeSincronizar){
+        if(!puedeAgregar){
           throw new Error("Sincroniza primero y vuelve a intentarlo");
         }
   
         let paisRecuperado:string = parametrosDeConfiguracion.pais;
   
-        hlbMantainRegisterToSave['pais'] = paisRecuperado.toUpperCase();
-        hlbMantainRegisterToSave['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
-        hlbMantainRegisterToSave['provincia'] = this.traspatioFincaForm.controls['provincia'].value.toUpperCase();
-        hlbMantainRegisterToSave['canton'] = this.traspatioFincaForm.controls['canton'].value.toUpperCase();
-        hlbMantainRegisterToSave['distrito'] = this.traspatioFincaForm.controls['distrito'].value.toUpperCase();
-        hlbMantainRegisterToSave['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
-        hlbMantainRegisterToSave['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
-        hlbMantainRegisterToSave['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
-        hlbMantainRegisterToSave['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
-        hlbMantainRegisterToSave['estado'] = 1;
-        hlbMantainRegisterToSave['sincronizado'] = 0;
+        newTraspatioFinca['pais'] = paisRecuperado.toUpperCase();
+        newTraspatioFinca['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
+        newTraspatioFinca['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
+        newTraspatioFinca['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
+        newTraspatioFinca['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
+        newTraspatioFinca['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
+        newTraspatioFinca['estado'] = 1;
+        newTraspatioFinca['provincia'] = this.traspatioFincaForm.controls['provincia'].value.toUpperCase();
+        newTraspatioFinca['canton'] = this.traspatioFincaForm.controls['canton'].value.toUpperCase();
+        newTraspatioFinca['distrito'] = this.traspatioFincaForm.controls['distrito'].value.toUpperCase();
+        newTraspatioFinca['sincronizado'] = 0;
   
-        await this.mantenimientosHlbLocalDbService.insertATraspatioFinca(hlbMantainRegisterToSave);
-        let toast = await this.toastService.showToast("Traspatio/finca insertado correctamente!");
+        await this.mantenimientosHlbLocalDbService.insertATraspatioFinca(newTraspatioFinca);
+        let toast = await this.toastService.showToast("Registro insertado correctamente!");
         toast.present();
   
       }else{

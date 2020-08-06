@@ -129,9 +129,9 @@ export class VerEditarTraspatioFincaPage implements OnInit {
           let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
           let pais:string = parametrosDeConfiguracion.pais;
 
-          let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+          let puedeEditar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
 
-          if(!puedeSincronizar){
+          if(!puedeEditar){
             throw new Error("Sincroniza primero y vuelve a intentarlo");
           }
 
@@ -139,18 +139,18 @@ export class VerEditarTraspatioFincaPage implements OnInit {
 
           traspatioFincaToUpdate['pais'] = pais.toUpperCase();
           traspatioFincaToUpdate['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
-          traspatioFincaToUpdate['provincia'] = this.traspatioFincaForm.controls['provincia'].value.toUpperCase();
-          traspatioFincaToUpdate['canton'] = this.traspatioFincaForm.controls['canton'].value.toUpperCase();
-          traspatioFincaToUpdate['distrito'] = this.traspatioFincaForm.controls['distrito'].value.toUpperCase();
           traspatioFincaToUpdate['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
           traspatioFincaToUpdate['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
           traspatioFincaToUpdate['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
           traspatioFincaToUpdate['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
           traspatioFincaToUpdate['estado'] = 1;
+          traspatioFincaToUpdate['provincia'] = this.traspatioFincaForm.controls['provincia'].value.toUpperCase();
+          traspatioFincaToUpdate['canton'] = this.traspatioFincaForm.controls['canton'].value.toUpperCase();
+          traspatioFincaToUpdate['distrito'] = this.traspatioFincaForm.controls['distrito'].value.toUpperCase();
           traspatioFincaToUpdate['sincronizado'] = 0;
           
           await  this.traspatioFincaLocalService.updateATraspatioFinca(this.traspatioFincaRecord.id_local,traspatioFincaToUpdate);
-          let toast = await this.toastService.showToast("El registro se modificó exitosamente!");
+          let toast = await this.toastService.showToast("Registro modificado exitosamente!");
           await toast.present();
           
         }else{
