@@ -4,7 +4,6 @@ import {ActivatedRoute,Router} from '@angular/router';
 import {ModalController} from '@ionic/angular';
 import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
 import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
-import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
@@ -34,7 +33,6 @@ export class AgregarInspeccionHlbPage implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private inspeccionHlbLocalService:InspeccionHlbLocalService,
-    private traspatioFincaLocalService:TraspatioFincaLocalService,
     private router: Router,
     private previousUrlHolderService:PreviousUrlHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
