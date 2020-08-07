@@ -8,6 +8,9 @@ import { AgregarInspeccionTrampaPageRoutingModule } from './agregar-inspeccion-t
 
 import { AgregarInspeccionTrampaPage } from './agregar-inspeccion-trampa.page';
 
+import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+import {LotesPropietariosPageModule} from '../modals/lotes-propietarios/lotes-propietarios.module';
+
 
 @NgModule({
   imports: [
@@ -15,7 +18,9 @@ import { AgregarInspeccionTrampaPage } from './agregar-inspeccion-trampa.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    AgregarInspeccionTrampaPageRoutingModule
+    AgregarInspeccionTrampaPageRoutingModule,
+    FincasPobladosPageModule,
+    LotesPropietariosPageModule
   ],
   declarations: [AgregarInspeccionTrampaPage]
 })

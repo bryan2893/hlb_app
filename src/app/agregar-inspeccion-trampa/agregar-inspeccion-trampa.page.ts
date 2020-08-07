@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
-import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
+import {ModalController} from '@ionic/angular';
+import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
+import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
@@ -25,14 +27,6 @@ export class AgregarInspeccionTrampaPage implements OnInit {
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
 
-  isSelectPobladoFincaActive = true;
-  isSelectPropietarioLoteActive = false;
-
-  poblados_fincas = [];
-  propietarios_lotes = [];
-
-  //coords:any;
-
   inspTrampaForm: FormGroup;
 
   mostrarComentario = false;
@@ -40,7 +34,6 @@ export class AgregarInspeccionTrampaPage implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
-    private traspatioFincaLocalService:TraspatioFincaLocalService,
     private router: Router,
     private previousUrlHolderService:PreviousUrlHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
@@ -48,7 +41,8 @@ export class AgregarInspeccionTrampaPage implements OnInit {
     private toastService:ToastService,
     private dateService:DateService,
     private authService:AuthService,
-    private trampaAmarillaLocalService:TrampaAmarillaLocalService) {
+    private trampaAmarillaLocalService:TrampaAmarillaLocalService,
+    private modalController:ModalController) {
 
       this.inspTrampaForm = this.formBuilder.group({
         //id_inspec_hlb,fecha_hora se guardan pero no se muestran en la interfaz.
@@ -74,11 +68,6 @@ export class AgregarInspeccionTrampaPage implements OnInit {
 
   changeType(event:any){
     this.tipo = event.target.value;
-    this.isSelectPropietarioLoteActive = false;
-    this.inspTrampaForm.controls['finca_poblado'].patchValue('');
-    this.inspTrampaForm.controls['lote_propietario'].patchValue('');
-    this.poblados_fincas = [];
-    this.propietarios_lotes = [];
     
     if(this.tipo === "TRASPATIO"){
       this.poblado_finca_key = "Poblado";
@@ -90,35 +79,16 @@ export class AgregarInspeccionTrampaPage implements OnInit {
       this.lote_propietario_key = "Lote";
     }
 
-    /*
-    this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
-      this.poblados_fincas = fincasPobladosList;
-      this.isSelectPobladoFincaActive = true;
-    }).catch((error)=>{
-      
-    });
-    */
-
   }
 
   
   ionViewWillEnter(){
-    /*
+    
     if (this.route.snapshot.data['data']) {
-      this.coords = this.route.snapshot.data['data'];
-      this.inspTrampaForm.controls['latitud_trampa'].patchValue(this.coords.latitud);
-      this.inspTrampaForm.controls['longitud_trampa'].patchValue(this.coords.longitud);
+      let coords = this.route.snapshot.data['data'];
+      this.inspTrampaForm.controls['latitud_trampa'].patchValue(coords.latitud);
+      this.inspTrampaForm.controls['longitud_trampa'].patchValue(coords.longitud);
     }
-    */
-
-    /*
-    this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
-      this.poblados_fincas = fincasPobladosList;
-      this.isSelectPobladoFincaActive = true;
-    }).catch((error)=>{
-      
-    });
-    */
 
   }
   
@@ -126,27 +96,6 @@ export class AgregarInspeccionTrampaPage implements OnInit {
   ngOnInit() {
 
   }
-
-  /*
-  validarFormSegunTipo(hlbForm:any):any{
-    let tipo:string = hlbForm.tipo;
-
-    if(tipo === 'traspatio'){
-      return (hlbForm.labor !== '' &&
-      hlbForm.categoria !== ''
-      );
-    }else{
-      return(
-        hlbForm.patron !== ''&&
-        hlbForm.calle !== null &&
-        hlbForm.direccion_calle !== '' &&
-        hlbForm.numero_arbol !== null &&
-        hlbForm.dir_arbol !== ''
-      );
-    }
-
-  }
-  */
 
   async submit(){
 
@@ -217,18 +166,52 @@ export class AgregarInspeccionTrampaPage implements OnInit {
 
   }
 
-  pobladoFincaSelectChange(event:any){
-    let fincaPobladoSelected = event.target.value;
-    if(!fincaPobladoSelected){
-      return;
-    }
-    this.inspTrampaForm.controls['lote_propietario'].patchValue('');
-    this.traspatioFincaLocalService.getPropietariosLotesByFincaPobladoName(fincaPobladoSelected).then((propietariosLotesList:string[])=>{
-      this.propietarios_lotes = propietariosLotesList;
-      this.isSelectPropietarioLoteActive = true;
-    }).catch((error)=>{
-      
+  async openPobladosFincasModal() {
+
+    const modal = await this.modalController.create({
+      component: FincasPobladosPage,
+      componentProps: {
+        "tipo": this.tipo,
+        "distrito": ""
+      }
     });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null && !dataReturned.role) {
+        if (dataReturned.data !== ""){
+          this.inspTrampaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+        }
+      }
+    });
+
+    return await modal.present();
+    
+
+  }
+
+  async openPropieatariosLotesModal() {
+
+    let finca_poblado = "";
+    finca_poblado = this.inspTrampaForm.controls['finca_poblado'].value;
+
+    if(finca_poblado !== ""){
+      const modal = await this.modalController.create({
+        component: LotesPropietariosPage,
+        componentProps: {
+          "finca_poblado":finca_poblado
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.inspTrampaForm.controls['lote_propietario'].patchValue(dataReturned.data);
+          }
+        }
+      });
+  
+      return await modal.present();
+    }
   }
 
   openMap(){
