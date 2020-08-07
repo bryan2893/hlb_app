@@ -76,6 +76,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
   changeType(event:any){
     let tipo = event.target.value;
+    this.tipo = tipo;
     
     if(tipo === "TRASPATIO"){
       this.poblado_finca_key = "Poblado";

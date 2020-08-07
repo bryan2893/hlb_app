@@ -9,7 +9,7 @@
 
 <ion-content>
 
-  <form [formGroup]="inspHlbForm" (ngSubmit)="submit()">
+  <form [formGroup]="inspTraspatioFincaForm" (ngSubmit)="submit()">
 
     <ion-list>
 
@@ -40,12 +40,18 @@
 
       <ion-item>
         <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
-        <ion-input formControlName="finca_poblado" type="text" disabled></ion-input>
+        <ion-input formControlName="finca_poblado" type="text" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-button (click)="openPobladosFincasModal()" slot="end" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
-        <ion-input formControlName="lote_propietario" type="text" disabled></ion-input>
+        <ion-input formControlName="lote_propietario" type="text" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)"></ion-input>
+        <ion-button (click)="openPropieatariosLotesModal()" slot="end" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-item>
