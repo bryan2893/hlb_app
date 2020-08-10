@@ -17,6 +17,7 @@ import {MAP_ACTIONS} from '../../constants/map_actions';
 
 import {USER_ACTIONS} from '../../constants/user_actions';
 import {AuthService} from '../services/auth/auth.service';
+import { Coordenadas } from 'src/DTO/coordenadas.dto';
 
 @Component({
   selector: 'app-ver-editar-inspeccion-hlb',
@@ -86,14 +87,17 @@ export class VerEditarInspeccionHlbPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    let inData = this.route.snapshot.data['data'];
-    if (inData) {
-      if(Object.keys(inData).length === 2){//Quiere decir que viene de la vista mapa
-        this.inspTraspatioFincaForm.controls['latitud'].patchValue(inData.latitud);
-        this.inspTraspatioFincaForm.controls['longitud'].patchValue(inData.longitud);
+    let data:any = this.route.snapshot.data['data'];
+    if (data) {
+      if(data.accion){
+        if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+          let coordenadas:Coordenadas = data.coordenadas;
+          this.inspTraspatioFincaForm.controls['latitud'].patchValue(coordenadas.lat);
+          this.inspTraspatioFincaForm.controls['longitud'].patchValue(coordenadas.lng);
+        }
       }else{
-        this.tipo = inData.tipo;
-        this.hlbInspectionRecord = inData;
+        this.tipo = data.tipo;
+        this.hlbInspectionRecord = data;
       }
     }
   }
@@ -101,7 +105,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
   ionViewDidEnter(){
     let inData = this.route.snapshot.data['data'];
     if (inData) {
-      if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa.
+      if(!inData.accion){
         if (this.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
@@ -109,7 +113,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
            this.poblado_finca_key = "Finca";
            this.lote_propietario_key = "Lote";
         }
-        
+
         this.inspTraspatioFincaForm.controls['consecutivo'].patchValue(inData.consecutivo);
         this.inspTraspatioFincaForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
         this.inspTraspatioFincaForm.controls['codigo_responsable'].patchValue(inData.codigo_responsable);
@@ -149,6 +153,7 @@ export class VerEditarInspeccionHlbPage implements OnInit {
          this.inspTraspatioFincaForm.controls['comentario'].patchValue(inData.comentario);
 
       }
+      
     }
   }
 

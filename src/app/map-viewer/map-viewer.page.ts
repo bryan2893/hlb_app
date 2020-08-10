@@ -53,6 +53,7 @@ export class MapViewerPage implements OnInit {
 
     let loading = await this.loaderService.showLoader("Cargando mapa...");
     await loading.present();
+    console.log("Datos desde la vista anterior---> "+JSON.stringify(this.dataFromPreviousPage));
     if(this.dataFromPreviousPage.tipo === MAP_ACTIONS.AGREGAR){
       await this.goToMyLocation();
     }else{
@@ -103,6 +104,8 @@ export class MapViewerPage implements OnInit {
   }
 
   goToADefineLocation(){
+
+    console.log("Coordenadas definidas--> "+JSON.stringify(this.dataFromPreviousPage.coordenadas));
 
     this.map.animateCamera({
       target:this.dataFromPreviousPage.coordenadas,

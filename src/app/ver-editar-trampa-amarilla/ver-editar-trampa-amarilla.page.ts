@@ -20,6 +20,7 @@ import {AuthService} from '../services/auth/auth.service';
 import {USER_ACTIONS} from '../../constants/user_actions';
 import { Settings } from '../../DTO/settings.dto';
 import {MAP_ACTIONS} from '../../constants/map_actions';
+import {Coordenadas} from '../../DTO/coordenadas.dto';
 
 @Component({
   selector: 'app-ver-editar-trampa-amarilla',
@@ -79,19 +80,24 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   }
 
   async ionViewWillEnter(){
-    let inData = this.route.snapshot.data['data'];
-    if (inData) {
-      if(Object.keys(inData).length === 2){//Quiere decir que viene de la vista mapa
-        this.addTrapForm.controls['latitud'].patchValue(inData.latitud);
-        this.addTrapForm.controls['longitud'].patchValue(inData.longitud);
+
+    let data:any = this.route.snapshot.data['data'];
+    if (data) {
+      if(data.accion){
+        if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+          let coordenadas:Coordenadas = data.coordenadas;
+          this.addTrapForm.controls['latitud'].patchValue(coordenadas.lat);
+          this.addTrapForm.controls['longitud'].patchValue(coordenadas.lng);
+        }
       }
     }
+    
   }
 
   ionViewDidEnter(){
     let inData = this.route.snapshot.data['data'];
     if (inData) {
-      if(!(Object.keys(inData).length === 2)){//Si la vista anterior no es la vista mapa...
+      if(!inData.accion){//Si la vista anterior no es la vista mapa...
         this.trapRecord = inData;
         if (this.trapRecord.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";

@@ -90,12 +90,14 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    if (this.route.snapshot.data['data']) {
-      this.coords = this.route.snapshot.data['data'];
-      this.inspTraspatioFincaForm.controls['latitud'].patchValue(this.coords.latitud);
-      this.inspTraspatioFincaForm.controls['longitud'].patchValue(this.coords.longitud);
+    let data:any = this.route.snapshot.data['data'];
+    if (data) {
+      if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+        this.coords = data.coordenadas;
+        this.inspTraspatioFincaForm.controls['latitud'].patchValue(this.coords.lat);
+        this.inspTraspatioFincaForm.controls['longitud'].patchValue(this.coords.lng);
+      }
     }
-
   }
 
   ngOnInit() {
@@ -271,11 +273,9 @@ export class AgregarInspeccionHlbPage implements OnInit {
   openMap(){
 
     let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
-    let coords = {lat:this.inspTraspatioFincaForm.controls["latitud_trampa"].value,lng:this.inspTraspatioFincaForm.controls["longitud_trampa"].value}
 
-    dataToSendMapViewer["tipo"] = MAP_ACTIONS.VER; //Se indica que el mapa se abra en vista de solo lectura.
+    dataToSendMapViewer["tipo"] = MAP_ACTIONS.AGREGAR; //Se indica que el mapa se abra en vista de solo lectura.
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["coordenadas"] = coords;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');

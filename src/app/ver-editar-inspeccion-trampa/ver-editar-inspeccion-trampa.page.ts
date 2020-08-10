@@ -14,6 +14,7 @@ import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 import {MAP_ACTIONS} from '../../constants/map_actions';
+import {Coordenadas} from '../../DTO/coordenadas.dto';
 
 import {USER_ACTIONS} from '../../constants/user_actions';
 import {AuthService} from '../services/auth/auth.service';
@@ -69,50 +70,62 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
     }
 
     async ionViewWillEnter(){
-      let inData = this.route.snapshot.data['data'];
-      if (inData) {
-        if(Object.keys(inData).length === 2){//Quiere decir que viene de la vista mapa
-          this.inspTrampaForm.controls['latitud'].patchValue(inData.latitud);
-          this.inspTrampaForm.controls['longitud'].patchValue(inData.longitud);
-        }else{
-          this.trapInspectionRecord = inData;
-          this.tipo = inData.tipo;
+
+      let data:any = this.route.snapshot.data['data'];
+      if (data) {
+        if(data.accion){
+          if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+            let coordenadas:Coordenadas = data.coordenadas;
+            this.inspTrampaForm.controls['latitud_trampa'].patchValue(coordenadas.lat);
+            this.inspTrampaForm.controls['longitud_trampa'].patchValue(coordenadas.lng);
+          }
         }
       }
+
     }
 
     ionViewDidEnter(){
+
+
       let inData = this.route.snapshot.data['data'];
+
+      console.log("Inspeccion de trampa ---> "+ JSON.stringify(inData));
+
       if (inData) {
-        if (this.tipo === "TRASPATIO"){
-          this.poblado_finca_key = "Poblado";
-          this.lote_propietario_key = "Propietario";
-        }else{
+        if(!inData.accion){
+          this.trapInspectionRecord = inData;
+          if (this.trapInspectionRecord.tipo === "TRASPATIO"){
+            this.poblado_finca_key = "Poblado";
+            this.lote_propietario_key = "Propietario";
+          }else{
             this.poblado_finca_key = "Finca";
             this.lote_propietario_key = "Lote";
-        }
-  
-        this.inspTrampaForm.controls['consecutivo'].patchValue(inData.consecutivo);
-        this.inspTrampaForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
-        
-        this.inspTrampaForm.controls['codigo_responsable'].patchValue(inData.codigo_responsable);
-        this.inspTrampaForm.controls['nombre_responsable'].patchValue(inData.nombre_responsable);
-        this.inspTrampaForm.controls['tipo'].patchValue(inData.tipo);
-        this.inspTrampaForm.controls['pais'].patchValue(inData.pais);
-        this.inspTrampaForm.controls['num_trampa'].patchValue(inData.num_trampa);
-        this.inspTrampaForm.controls['latitud_trampa'].patchValue(inData.latitud_trampa);
-        this.inspTrampaForm.controls['longitud_trampa'].patchValue(inData.longitud_trampa);
-        this.inspTrampaForm.controls['finca_poblado'].patchValue(inData.finca_poblado);
-        this.inspTrampaForm.controls['lote_propietario'].patchValue(inData.lote_propietario);
-        this.inspTrampaForm.controls['cantidad_total'].patchValue(inData.cantidad_total);
-        this.inspTrampaForm.controls['diagnostico'].patchValue(String(inData.diagnostico));
-        
-        this.inspTrampaForm.controls['cantidad_diagnostico'].patchValue(inData.cantidad_diagnostico);
-        this.inspTrampaForm.controls['notas'].patchValue(inData.notas);
+          }
 
-        this.inspTrampaForm.controls['indica_revision'].patchValue(String(inData.indica_revision));
-        this.inspTrampaForm.controls['comentario'].patchValue(inData.comentario);
-        
+          if(this.trapInspectionRecord){
+            this.inspTrampaForm.controls['consecutivo'].patchValue(inData.consecutivo);
+            this.inspTrampaForm.controls['fecha_hora'].patchValue(this.dateService.getBeautyDate(inData.fecha_hora));
+            
+            this.inspTrampaForm.controls['codigo_responsable'].patchValue(inData.codigo_responsable);
+            this.inspTrampaForm.controls['nombre_responsable'].patchValue(inData.nombre_responsable);
+            this.inspTrampaForm.controls['tipo'].patchValue(inData.tipo);
+            this.inspTrampaForm.controls['pais'].patchValue(inData.pais);
+            this.inspTrampaForm.controls['num_trampa'].patchValue(inData.num_trampa);
+            this.inspTrampaForm.controls['latitud_trampa'].patchValue(inData.latitud_trampa);
+            this.inspTrampaForm.controls['longitud_trampa'].patchValue(inData.longitud_trampa);
+            this.inspTrampaForm.controls['finca_poblado'].patchValue(inData.finca_poblado);
+            this.inspTrampaForm.controls['lote_propietario'].patchValue(inData.lote_propietario);
+            this.inspTrampaForm.controls['cantidad_total'].patchValue(inData.cantidad_total);
+            this.inspTrampaForm.controls['diagnostico'].patchValue(String(inData.diagnostico));
+            
+            this.inspTrampaForm.controls['cantidad_diagnostico'].patchValue(inData.cantidad_diagnostico);
+            this.inspTrampaForm.controls['notas'].patchValue(inData.notas);
+
+            this.inspTrampaForm.controls['indica_revision'].patchValue(String(inData.indica_revision));
+            this.inspTrampaForm.controls['comentario'].patchValue(inData.comentario);
+          }
+
+        }
       }
 
     }
@@ -163,8 +176,8 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
         trapInspectionToSave['num_trampa'] = this.inspTrampaForm.controls['num_trampa'].value;
         trapInspectionToSave['latitud_trampa'] = this.inspTrampaForm.controls['latitud_trampa'].value;
         trapInspectionToSave['longitud_trampa'] = this.inspTrampaForm.controls['longitud_trampa'].value;
-        trapInspectionToSave['finca_poblado'] = this.inspTrampaForm.controls['finca_poblado'].value;
-        trapInspectionToSave['lote_propietario'] = this.inspTrampaForm.controls['lote_propietario'].value;
+        trapInspectionToSave['finca_poblado'] = this.inspTrampaForm.controls['finca_poblado'].value.toUpperCase();
+        trapInspectionToSave['lote_propietario'] = this.inspTrampaForm.controls['lote_propietario'].value.toUpperCase();
         trapInspectionToSave['cantidad_total'] = this.inspTrampaForm.controls['cantidad_total'].value;
         trapInspectionToSave['diagnostico'] = this.inspTrampaForm.controls['diagnostico'].value;
         trapInspectionToSave['cantidad_diagnostico'] = this.inspTrampaForm.controls['cantidad_diagnostico'].value;
@@ -254,12 +267,12 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
 
   openMap(){
 
-    if(!this.inspTrampaForm.get("latitud_trampa").value || !this.inspTrampaForm.get("longitud_trampa").value){
+    if(this.inspTrampaForm.get("latitud_trampa").value === "" || this.inspTrampaForm.get("longitud_trampa").value === ""){
       return;
     }
 
     let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
-    let coords = {lat:this.inspTrampaForm.get("latitud").value,lng:this.inspTrampaForm.get("longitud").value}
+    let coords = {lat:this.inspTrampaForm.get("latitud_trampa").value,lng:this.inspTrampaForm.get("latitud_trampa").value}
 
     let accion = "";
     if (this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)){

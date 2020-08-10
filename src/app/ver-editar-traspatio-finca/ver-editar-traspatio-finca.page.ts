@@ -20,6 +20,7 @@ import {TraspatioFincaConIdLocalDTO} from '../../DTO/traspatio_finca/traspatio-f
 import {AuthService} from '../services/auth/auth.service';
 import {USER_ACTIONS} from '../../constants/user_actions';
 import {MAP_ACTIONS} from '../../constants/map_actions';
+import {Coordenadas} from '../../DTO/coordenadas.dto';
 
 @Component({
   selector: 'app-ver-editar-traspatio-finca',
@@ -80,20 +81,25 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   
     //Antes de que la vista se muestre.
     async ionViewWillEnter(){
-      let inData = this.route.snapshot.data['data'];
-      if (inData) {
-        if(Object.keys(inData).length === 2){//La anterior vista fue la vista mapa.
-          this.traspatioFincaForm.controls['latitud'].patchValue(inData.latitud);
-          this.traspatioFincaForm.controls['longitud'].patchValue(inData.longitud);
+
+      let data:any = this.route.snapshot.data['data'];
+      if (data) {
+        if(data.accion){
+          if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+            let coordenadas:Coordenadas = data.coordenadas;
+            this.traspatioFincaForm.controls['latitud'].patchValue(coordenadas.lat);
+            this.traspatioFincaForm.controls['longitud'].patchValue(coordenadas.lng);
+          }
         }
       }
+
     }
   
     //Cuando la vista se ha mostrado.
     ionViewDidEnter(){
       let inData:any = this.route.snapshot.data['data'];
       if (inData) {
-        if(!(Object.keys(inData).length === 2)){//Ingresa si la anterior vista no es la vista del mapa.
+        if(!inData.accion){//Ingresa si la anterior vista no es la vista del mapa.
           this.traspatioFincaRecord = inData;
           if (this.traspatioFincaRecord.tipo === "TRASPATIO"){
             this.poblado_finca_key = "Poblado";

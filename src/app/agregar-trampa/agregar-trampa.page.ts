@@ -73,10 +73,13 @@ export class AgregarTrampaPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    if (this.route.snapshot.data['data']) {
-      this.coords = this.route.snapshot.data['data'];
-      this.addTrapForm.controls['latitud'].patchValue(this.coords.latitud);
-      this.addTrapForm.controls['longitud'].patchValue(this.coords.longitud);
+    let data:any = this.route.snapshot.data['data'];
+    if (data) {
+      if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+        this.coords = data.coordenadas;
+        this.addTrapForm.controls['latitud'].patchValue(this.coords.lat);
+        this.addTrapForm.controls['longitud'].patchValue(this.coords.lng);
+      }
     }
   }
 
@@ -258,7 +261,6 @@ export class AgregarTrampaPage implements OnInit {
 
     dataToSendMapViewer["tipo"] = MAP_ACTIONS.AGREGAR;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["coordenadas"] = null;
 
     this.mapMetaDataHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');

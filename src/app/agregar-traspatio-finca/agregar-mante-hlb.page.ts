@@ -75,10 +75,13 @@ export class AgregarManteHlbPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    if (this.route.snapshot.data['data']) {
-      this.coords = this.route.snapshot.data['data'];
-      this.traspatioFincaForm.controls['latitud'].patchValue(this.coords.latitud);
-      this.traspatioFincaForm.controls['longitud'].patchValue(this.coords.longitud);
+    let data:any = this.route.snapshot.data['data'];
+    if (data) {
+      if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+        this.coords = data.coordenadas;
+        this.traspatioFincaForm.controls['latitud'].patchValue(this.coords.lat);
+        this.traspatioFincaForm.controls['longitud'].patchValue(this.coords.lng);
+      }
     }
   }
 
@@ -138,7 +141,6 @@ export class AgregarManteHlbPage implements OnInit {
 
     dataToSendMapViewer["tipo"] = MAP_ACTIONS.AGREGAR;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["coordenadas"] = null;
 
     this.mapMetaDataHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
