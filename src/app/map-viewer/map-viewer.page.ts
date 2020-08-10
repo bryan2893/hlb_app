@@ -133,8 +133,8 @@ export class MapViewerPage implements OnInit {
 
   }
 
-  getCurrentPositionAndGetOut(){
-    this.dataContainerService.setData({latitud:this.marker.getPosition().lat,longitud:this.marker.getPosition().lng});
+  comeBackToPreviousPage(){
+    this.dataContainerService.setData({accion:MAP_ACTIONS.DEVUELVE_COORDENADAS,coordenadas:{lat:this.marker.getPosition().lat,lng:this.marker.getPosition().lng}});
     this.router.navigateByUrl(this.dataFromPreviousPage.urlAnterior);
   }
 

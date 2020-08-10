@@ -14,6 +14,7 @@ import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/Inspeccion
 import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 @Component({
   selector: 'app-agregar-inspeccion-hlb',
@@ -268,14 +269,17 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   openMap(){
-    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
 
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
+    let coords = {lat:this.inspTraspatioFincaForm.controls["latitud_trampa"].value,lng:this.inspTraspatioFincaForm.controls["longitud_trampa"].value}
+
+    dataToSendMapViewer["tipo"] = MAP_ACTIONS.VER; //Se indica que el mapa se abra en vista de solo lectura.
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_agregar";
-    dataToSendMapViewer["coordenadas"] = null;
+    dataToSendMapViewer["coordenadas"] = coords;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
+
   }
 
   marcarRegistro(event:any){
