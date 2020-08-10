@@ -8,7 +8,8 @@ import { AgregarInspeccionHlbPageRoutingModule } from './agregar-inspeccion-hlb-
 
 import { AgregarInspeccionHlbPage } from './agregar-inspeccion-hlb.page';
 
-//import {MapViewerPageModule} from '../map-viewer/map-viewer.module';
+import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+import {LotesPropietariosPageModule} from '../modals/lotes-propietarios/lotes-propietarios.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,9 @@ import { AgregarInspeccionHlbPage } from './agregar-inspeccion-hlb.page';
     IonicModule,
     AgregarInspeccionHlbPageRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FincasPobladosPageModule,
+    LotesPropietariosPageModule
   ],
   declarations: [AgregarInspeccionHlbPage]
 })

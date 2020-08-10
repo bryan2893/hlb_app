@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { VerEditarInspeccionTrampaPageRoutingModule } from './ver-editar-inspeccion-trampa-routing.module';
 
 import { VerEditarInspeccionTrampaPage } from './ver-editar-inspeccion-trampa.page';
+import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+import {LotesPropietariosPageModule} from '../modals/lotes-propietarios/lotes-propietarios.module';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { VerEditarInspeccionTrampaPage } from './ver-editar-inspeccion-trampa.pa
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    VerEditarInspeccionTrampaPageRoutingModule
+    VerEditarInspeccionTrampaPageRoutingModule,
+    FincasPobladosPageModule,
+    LotesPropietariosPageModule
   ],
   declarations: [VerEditarInspeccionTrampaPage]
 })

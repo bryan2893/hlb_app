@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Provincias</ion-title>
+    <ion-buttons slot="end" (click)="closeModal('')">
+      <ion-icon size="large" name="close-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar placeholder="buscar" (ionChange)="whenUserPressAKey($event)"></ion-searchbar>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let provincia of lista_provincias" button (click) = "onItemClick(provincia)">
+      <ion-label>
+        <h1>{{provincia}}</h1>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -63,18 +63,20 @@
         Ver ubicacion
       </ion-button>
 
-      <ion-item *ngIf="isSelectPobladoFincaActive">
-        <ion-label>{{poblado_finca_key}}</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="finca_poblado" (ionChange)="pobladoFincaSelectChange($event)" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)">
-          <ion-select-option *ngFor="let poblado_finca of poblados_fincas" value={{poblado_finca}}>{{poblado_finca}}</ion-select-option>
-        </ion-select>
+      <ion-item>
+        <ion-label position="stacked">{{poblado_finca_key}}</ion-label>
+        <ion-input formControlName="finca_poblado" type="text" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)"></ion-input>
+        <ion-button (click)="openPobladosFincasModal()" slot="end" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
-      <ion-item *ngIf="isSelectPropietarioLoteActive">
-        <ion-label>{{lote_propietario_key}}</ion-label>
-        <ion-select value="" okText="Aceptar" cancelText="Cancelar" formControlName="lote_propietario" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)">
-          <ion-select-option *ngFor="let propietario_lote of propietarios_lotes" value={{propietario_lote}}>{{propietario_lote}}</ion-select-option>
-        </ion-select>
+      <ion-item>
+        <ion-label position="stacked">{{lote_propietario_key}}</ion-label>
+        <ion-input formControlName="lote_propietario" type="text" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)"></ion-input>
+        <ion-button (click)="openPropieatariosLotesModal()" slot="end" [disabled] = "!this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-item>

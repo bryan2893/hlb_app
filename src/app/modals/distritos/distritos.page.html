@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Distritos</ion-title>
+    <ion-buttons slot="end" (click)="closeModal('')">
+      <ion-icon size="large" name="close-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-toolbar>
+  <ion-searchbar placeholder="buscar" (ionChange)="whenUserPressAKey($event)"></ion-searchbar>
+</ion-toolbar>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let distrito of lista_distritos" button (click) = "onItemClick(distrito)">
+      <ion-label>
+        <h1>{{distrito}}</h1>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

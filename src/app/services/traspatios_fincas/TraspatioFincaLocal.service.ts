@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
-import {TraspatioFincaNuevo} from '../../../DTO/local/TraspatioFincaNuevo';
-import {TraspatioFincaNubeBajada} from '../../../DTO/server/TraspatioFincaNubeBajada';
+
+import {TraspatioFincaSinIdLocalDTO} from '../../../DTO/traspatio_finca/traspatio-finca-sin-id-local.dto';
+import {ProvenienteDelServerDTO} from '../../../DTO/traspatio_finca/proveniente-del-server.dto';
+import { TraspatioFincaConIdLocalDTO } from 'src/DTO/traspatio_finca/traspatio-finca-con-id-local.dto';
+import { ParaEnviarAlServerDTO } from 'src/DTO/trampa_amarilla/para-enviar-al-server.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +22,11 @@ export class TraspatioFincaLocalService {
   }
 
   createTable(){
-    let sql = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';
+    let sql = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,provincia TEXT,canton TEXT,distrito TEXT,sincronizado INTEGER NOT NULL)';
     return this.db.executeSql(sql,[]);
   }
 
-  getTraspatiosFincasPage(pageNumber:number,rowsPerPage:number){
+  getTraspatiosFincasPage(pageNumber:number,rowsPerPage:number):Promise<TraspatioFincaConIdLocalDTO[]>{
 
     let sql = 'SELECT * FROM traspatios_fincas limit ?,?';
     return new Promise((resolve,reject)=>{
@@ -31,14 +34,14 @@ export class TraspatioFincaLocalService {
           let offset = (pageNumber - 1) * rowsPerPage;
           this.db.executeSql(sql,[offset,rowsPerPage]).then((data)=>{
 
-            let hlbMantainPage = [];
+            let traspatiosFincasPage = [];
             if (data.rows.length > 0) {
               for (var i = 0; i < data.rows.length; i++) { 
-                hlbMantainPage.push(data.rows.item(i));
+                traspatiosFincasPage.push(data.rows.item(i));
               }
             }
 
-            resolve(hlbMantainPage);
+            resolve(traspatiosFincasPage);
 
           }).catch((e) => {
             reject(e);
@@ -48,7 +51,7 @@ export class TraspatioFincaLocalService {
     
   }
 
-  getAllTraspatiosFincas(){
+  getAllTraspatiosFincas():Promise<TraspatioFincaConIdLocalDTO[]>{
 
     let sql = 'SELECT * FROM traspatios_fincas';
     return new Promise((resolve,reject)=>{
@@ -73,21 +76,21 @@ export class TraspatioFincaLocalService {
     
   }
 
-  getNoSincronizedTraspatiosFincasPage(pageNumber:number,rowsPerPage:number){
+  getNoSincronizedTraspatiosFincasPage(pageNumber:number,rowsPerPage:number):Promise<ParaEnviarAlServerDTO[]>{
     
-    let sql = 'SELECT id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado FROM traspatios_fincas where sincronizado = ? limit ?,?';
+    let sql = 'SELECT id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,provincia,canton,distrito FROM traspatios_fincas where sincronizado = ? limit ?,?';
     return new Promise((resolve,reject)=>{
 
           let offset = (pageNumber - 1) * rowsPerPage;
           this.db.executeSql(sql,[0,offset,rowsPerPage]).then((registrosTraspatiosFincas)=>{
 
-            let trapsPage = [];
+            let noSincronizedTrapsPage = [];
             if (registrosTraspatiosFincas.rows.length > 0) {
               for (var i = 0; i < registrosTraspatiosFincas.rows.length; i++) { 
-                trapsPage.push(registrosTraspatiosFincas.rows.item(i));
+                noSincronizedTrapsPage.push(registrosTraspatiosFincas.rows.item(i));
               }
             }
-            resolve(trapsPage);
+            resolve(noSincronizedTrapsPage);
           }).catch((e) => {
             reject(e);
           });
@@ -95,7 +98,7 @@ export class TraspatioFincaLocalService {
     });
   }
 
-  countTraspatiosFincas():any{
+  countTraspatiosFincas():Promise<{cantidad:number}>{
 
     let sql = 'SELECT COUNT(*) AS cantidad FROM traspatios_fincas';
     return new Promise((resolve,reject) => {
@@ -110,7 +113,7 @@ export class TraspatioFincaLocalService {
 
   }
 
-  getPagesQuantity(rowsPerPage:number){
+  getPagesQuantity(rowsPerPage:number):Promise<number>{
     return new Promise((resolve,reject)=>{
       this.countTraspatiosFincas().then((data:any)=>{
         let hlbMantainQuantity = data.cantidad;
@@ -135,7 +138,7 @@ export class TraspatioFincaLocalService {
     })
   }
 
-  countNoSincronizedTraspatiosFincas(){
+  countNoSincronizedTraspatiosFincas():Promise<{cantidad:number}>{
     let sql = 'SELECT COUNT(*) AS cantidad FROM traspatios_fincas where sincronizado = ?';
     return new Promise((resolve,reject) => {
 
@@ -148,7 +151,7 @@ export class TraspatioFincaLocalService {
     });
   }
 
-  getPagesQuantityForNoSincronizedTraspatiosFincas(rowsPerPage:number){
+  getPagesQuantityForNoSincronizedTraspatiosFincas(rowsPerPage:number):Promise<number>{
     return new Promise((resolve,reject)=>{
       this.countNoSincronizedTraspatiosFincas().then((data:any)=>{
         let trapsQuantity = data.cantidad;
@@ -172,12 +175,12 @@ export class TraspatioFincaLocalService {
     });
   }
 
-  insertATraspatioFinca(traspatioFincaRecord:TraspatioFincaNuevo){
+  insertATraspatioFinca(traspatioFincaRecord:TraspatioFincaSinIdLocalDTO):Promise<TraspatioFincaSinIdLocalDTO>{
 
-    let sql = 'INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?)';
+    let sql = 'INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,provincia,canton,distrito,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
 
-      this.db.executeSql(sql,[traspatioFincaRecord.id_traspatio_finca,traspatioFincaRecord.pais,traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.sincronizado]).then(()=>{
+      this.db.executeSql(sql,[traspatioFincaRecord.id_traspatio_finca,traspatioFincaRecord.pais,traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.provincia,traspatioFincaRecord.canton,traspatioFincaRecord.distrito,traspatioFincaRecord.sincronizado]).then(()=>{
               resolve(traspatioFincaRecord);
             }).catch((error) => {
               reject(error);
@@ -186,12 +189,12 @@ export class TraspatioFincaLocalService {
     
   }
 
-  updateATraspatioFinca(id_local:string,traspatioFincaRecord:TraspatioFincaNuevo){
+  updateATraspatioFinca(id_local:Number,traspatioFincaRecord:TraspatioFincaSinIdLocalDTO):Promise<TraspatioFincaSinIdLocalDTO>{
 
-    let sql = 'UPDATE traspatios_fincas set tipo = ?, finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?,sincronizado = ? WHERE id_local = ?';
+    let sql = 'UPDATE traspatios_fincas set tipo = ?, finca_poblado = ?,lote_propietario = ?,latitud = ?,longitud = ?,estado = ?, provincia = ?, canton = ?, distrito = ?, sincronizado = ? WHERE id_local = ?';
     return new Promise((resolve,reject) => {
 
-      this.db.executeSql(sql,[traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.sincronizado,id_local]).then(()=>{
+      this.db.executeSql(sql,[traspatioFincaRecord.tipo,traspatioFincaRecord.finca_poblado,traspatioFincaRecord.lote_propietario,traspatioFincaRecord.latitud,traspatioFincaRecord.longitud,traspatioFincaRecord.estado,traspatioFincaRecord.provincia,traspatioFincaRecord.canton,traspatioFincaRecord.distrito,traspatioFincaRecord.sincronizado,id_local]).then(()=>{
               resolve(traspatioFincaRecord);
             }).catch((error) => {
               reject(error);
@@ -200,16 +203,16 @@ export class TraspatioFincaLocalService {
 
   }
 
-  insertManyTraspatiosFincas(hlbMantains:TraspatioFincaNubeBajada[]){
+  insertManyTraspatiosFincas(traspatiosFincasRecord:ProvenienteDelServerDTO[]):Promise<boolean>{
 
-    let createTableQuery = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,sincronizado INTEGER NOT NULL)';
-    let sql = 'INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,sincronizado) VALUES (?,?,?,?,?,?,?,?,?)';
+    let createTableQuery = 'create table IF NOT EXISTS traspatios_fincas(id_local INTEGER PRIMARY KEY AUTOINCREMENT,id_traspatio_finca INTEGER NOT NULL,pais TEXT NOT NULL,tipo TEXT NOT NULL,finca_poblado TEXT NOT NULL,lote_propietario TEXT NOT NULL,latitud REAL,longitud REAL,estado INTEGER NOT NULL,provincia TEXT,canton TEXT,distrito TEXT,sincronizado INTEGER NOT NULL)';
+    let sql = 'INSERT INTO traspatios_fincas(id_traspatio_finca,pais,tipo,finca_poblado,lote_propietario,latitud,longitud,estado,provincia,canton,distrito,sincronizado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
     return new Promise((resolve,reject) => {
           let generalStatement = [];
           generalStatement.push(createTableQuery);
-          for(let i=0;i<hlbMantains.length;i++){
-            let hlbMantain = hlbMantains[i];
-            let valuesArray = [hlbMantain.ID_TRASPATIO_FINCA,hlbMantain.PAIS,hlbMantain.TIPO,hlbMantain.FINCA_POBLADO,hlbMantain.LOTE_PROPIETARIO,hlbMantain.LATITUD,hlbMantain.LONGITUD,hlbMantain.ESTADO,1];
+          for(let i=0;i<traspatiosFincasRecord.length;i++){
+            let traspatioFincaRecord:ProvenienteDelServerDTO = traspatiosFincasRecord[i];
+            let valuesArray = [traspatioFincaRecord.ID_TRASPATIO_FINCA,traspatioFincaRecord.PAIS,traspatioFincaRecord.TIPO,traspatioFincaRecord.FINCA_POBLADO,traspatioFincaRecord.LOTE_PROPIETARIO,traspatioFincaRecord.LATITUD,traspatioFincaRecord.LONGITUD,traspatioFincaRecord.ESTADO,traspatioFincaRecord.PROVINCIA,traspatioFincaRecord.CANTON,traspatioFincaRecord.DISTRITO,1];
             let insertionListStatement = [];
             insertionListStatement.push(sql);
             insertionListStatement.push(valuesArray);
@@ -217,7 +220,7 @@ export class TraspatioFincaLocalService {
           }
 
           this.db.sqlBatch(generalStatement).then((data)=>{
-            resolve(data);
+            resolve(true);
           }).catch((error)=>{
             reject(error);
           });
@@ -225,7 +228,75 @@ export class TraspatioFincaLocalService {
 
   }
 
-  getTraspatiosFincasByType(tipo:string){//tipo puede ser = 'traspatio', 'productor' ó 'ticofrut'
+  getProvincias():Promise<string[]>{
+    let sql = 'SELECT DISTINCT provincia FROM traspatios_fincas';
+    return new Promise((resolve,reject) => {
+      this.db.executeSql(sql,[]).then((data)=>{
+        let provincias = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) { 
+            provincias.push(data.rows.item(i).provincia);
+          }
+        }
+        resolve(provincias);
+      }).catch((e) => {
+        reject(e);
+      });
+    });
+  }
+
+  getCantonesOfProvincia(provincia:string):Promise<string[]>{
+    let sql = 'SELECT DISTINCT canton FROM traspatios_fincas where provincia = ?';
+    return new Promise((resolve,reject) => {
+      this.db.executeSql(sql,[provincia]).then((data)=>{
+        let cantones = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) { 
+            cantones.push(data.rows.item(i).canton);
+          }
+        }
+        resolve(cantones);
+      }).catch((e) => {
+        reject(e);
+      });
+    });
+  }
+
+  getDistritosOfCanton(canton:string):Promise<string[]>{
+    let sql = 'SELECT DISTINCT distrito FROM traspatios_fincas where canton = ?';
+    return new Promise((resolve,reject) => {
+      this.db.executeSql(sql,[canton]).then((data)=>{
+        let distritos = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) { 
+            distritos.push(data.rows.item(i).distrito);
+          }
+        }
+        resolve(distritos);
+      }).catch((e) => {
+        reject(e);
+      });
+    });
+  }
+
+  getTraspatiosFincasByTypeAndByDistrito(tipo:string,distrito:string):Promise<string[]>{
+    let sql = 'SELECT DISTINCT finca_poblado FROM traspatios_fincas where tipo = ? AND distrito = ?';
+    return new Promise((resolve,reject) => {
+      this.db.executeSql(sql,[tipo,distrito]).then((data)=>{
+        let fincasPoblados = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) { 
+            fincasPoblados.push(data.rows.item(i).finca_poblado);
+          }
+        }
+        resolve(fincasPoblados);
+      }).catch((e) => {
+        reject(e);
+      });
+    });
+  }
+
+  getTraspatiosFincasByType(tipo:string):Promise<string[]>{
     let sql = 'SELECT DISTINCT finca_poblado FROM traspatios_fincas where tipo = ?';
     return new Promise((resolve,reject) => {
       this.db.executeSql(sql,[tipo]).then((data)=>{
@@ -242,13 +313,13 @@ export class TraspatioFincaLocalService {
     });
   }
 
-  getPropietariosLotesByFincaPobladoName(fincaPoblado:string){//fincaPoblado = nombre de una finca o poblado.
+  getPropietariosLotesByFincaPobladoName(fincaPoblado:string):Promise<string[]>{
     let sql = 'SELECT lote_propietario FROM traspatios_fincas where finca_poblado = ?';
     return new Promise((resolve,reject) => {
       this.db.executeSql(sql,[fincaPoblado]).then((data)=>{
         let lotesPropietarios = [];
         if (data.rows.length > 0) {
-          for (var i = 0; i < data.rows.length; i++) { 
+          for (var i = 0; i < data.rows.length; i++) {
             lotesPropietarios.push(data.rows.item(i).lote_propietario);
           }
         }
@@ -259,7 +330,7 @@ export class TraspatioFincaLocalService {
     });
   }
 
-  deleteAllInfo(){
+  deleteAllInfo():Promise<boolean>{
     let sql = 'DELETE FROM traspatios_fincas';
     return new Promise((resolve,reject) => {
       this.db.executeSql(sql,[]).then(()=>{
@@ -270,7 +341,7 @@ export class TraspatioFincaLocalService {
     });
   }
 
-  findTraspatiosFincas(finca_poblado_o_lote_propietario_o_tipo:string){
+  findTraspatiosFincas(finca_poblado_o_lote_propietario_o_tipo:string):Promise<TraspatioFincaConIdLocalDTO[]>{
     let sql = 'SELECT * FROM traspatios_fincas where finca_poblado = ? OR lote_propietario = ? OR tipo = ?';
     return new Promise((resolve,reject) => {
       this.db.executeSql(sql,[finca_poblado_o_lote_propietario_o_tipo,finca_poblado_o_lote_propietario_o_tipo,finca_poblado_o_lote_propietario_o_tipo]).then((data)=>{

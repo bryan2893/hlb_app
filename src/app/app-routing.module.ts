@@ -114,6 +114,22 @@ const routes: Routes = [
       data: DataResolverService
     },
     loadChildren: () => import('./busqueda-traspatios-gps/busqueda-traspatios-gps.module').then( m => m.BusquedaTraspatiosGpsPageModule)
+  },
+  {
+    path: 'lotes-propietarios',
+    loadChildren: () => import('./modals/lotes-propietarios/lotes-propietarios.module').then( m => m.LotesPropietariosPageModule)
+  },
+  {
+    path: 'provincias',
+    loadChildren: () => import('./modals/provincias/provincias.module').then( m => m.ProvinciasPageModule)
+  },
+  {
+    path: 'cantones',
+    loadChildren: () => import('./modals/cantones/cantones.module').then( m => m.CantonesPageModule)
+  },
+  {
+    path: 'distritos',
+    loadChildren: () => import('./modals/distritos/distritos.module').then( m => m.DistritosPageModule)
   }
 
 ];

@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cantones</ion-title>
+    <ion-buttons slot="end" (click)="closeModal('')">
+      <ion-icon size="large" name="close-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-toolbar>
+  <ion-searchbar placeholder="buscar" (ionChange)="whenUserPressAKey($event)"></ion-searchbar>
+</ion-toolbar>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let canton of lista_cantones" button (click) = "onItemClick(canton)">
+      <ion-label>
+        <h1>{{canton}}</h1>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

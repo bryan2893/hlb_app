@@ -3,6 +3,9 @@ export interface TrampaAmarillaNuevo{
     num_trampa: Number;
     tipo:String;
     pais:String;
+    provincia:String;
+    canton:String;
+    distrito:String;
     finca_poblado:String;
     lote_propietario:String;
     latitud: Number;

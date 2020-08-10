@@ -8,13 +8,18 @@ import { VerEditarInspeccionHlbPageRoutingModule } from './ver-editar-inspeccion
 
 import { VerEditarInspeccionHlbPage } from './ver-editar-inspeccion-hlb.page';
 
+import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+import {LotesPropietariosPageModule} from '../modals/lotes-propietarios/lotes-propietarios.module';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    VerEditarInspeccionHlbPageRoutingModule
+    VerEditarInspeccionHlbPageRoutingModule,
+    FincasPobladosPageModule,
+    LotesPropietariosPageModule
   ],
   declarations: [VerEditarInspeccionHlbPage]
 })

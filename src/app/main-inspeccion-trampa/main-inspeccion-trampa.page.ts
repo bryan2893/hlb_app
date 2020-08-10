@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {DateService} from '../services/date/date.service';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 
 @Component({
   selector: 'app-main-inspeccion-trampa',
@@ -22,7 +22,7 @@ export class MainInspeccionTrampaPage implements OnInit {
   private pageCounter = 1;
   pagesQuantity = 0;
   inspeccionTrampasList = [];
-  actions = ACTIONS;
+  actions = USER_ACTIONS;
 
   constructor(private inspeccionTrampaLocalService: InspeccionTrampaLocalService,
     private dataContainerService:DataContainerService,

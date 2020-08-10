@@ -9,7 +9,11 @@ import { AgregarManteHlbPageRoutingModule } from './agregar-mante-hlb-routing.mo
 
 import { AgregarManteHlbPage } from './agregar-mante-hlb.page';
 
+import {ProvinciasPageModule} from '../modals/provincias/provincias.module';
+import {CantonesPageModule} from '../modals/cantones/cantones.module';
+import {DistritosPageModule} from '../modals/distritos/distritos.module';
 import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblados.module';
+import {LotesPropietariosPageModule} from '../modals/lotes-propietarios/lotes-propietarios.module';
 
 @NgModule({
   imports: [
@@ -19,7 +23,11 @@ import {FincasPobladosPageModule} from '../modals/fincas-poblados/fincas-poblado
     AgregarManteHlbPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    FincasPobladosPageModule
+    ProvinciasPageModule,
+    CantonesPageModule,
+    DistritosPageModule,
+    FincasPobladosPageModule,
+    LotesPropietariosPageModule
   ],
   declarations: [AgregarManteHlbPage]
 })

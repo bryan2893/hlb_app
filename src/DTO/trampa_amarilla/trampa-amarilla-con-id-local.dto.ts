@@ -1,0 +1,16 @@
+export interface TrampaAmarillaConIdLocalDTO{
+    id_local:Number;
+    id_trampa:Number;
+    num_trampa: Number;
+    tipo:String;
+    pais:String;
+    finca_poblado:String;
+    lote_propietario:String;
+    latitud: Number;
+    longitud: Number;
+    estado:Number;
+    provincia:String;
+    canton:String;
+    distrito:String;
+    sincronizado:Number;
+}

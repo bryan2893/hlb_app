@@ -7,4 +7,7 @@ export interface TraspatioFincaNubeBajada{
     LATITUD: Number;
     LONGITUD: Number;
     ESTADO:Number;
+    PROVINCIA:String;
+    CANTON:String;
+    DISTRITO:String;
 }

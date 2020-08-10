@@ -8,11 +8,11 @@ import {TraspatioFincaLocalService} from '../../services/traspatios_fincas/Trasp
   styleUrls: ['./fincas-poblados.page.scss'],
 })
 export class FincasPobladosPage implements OnInit {
-  modalTitle:string;
 
   lista_fincas_poblados = [];
   lista_respaldo = [];
   tipo:string;
+  distrito:string;
   tituloCabecera:string;
   
 
@@ -20,14 +20,21 @@ export class FincasPobladosPage implements OnInit {
     private traspatiosFincasLocalService:TraspatioFincaLocalService) { }
 
   ngOnInit() {
-
-    this.tituloCabecera = this.navParams.data.cabecera;
     this.tipo = this.navParams.data.tipo;
+    this.distrito = this.navParams.data.distrito;
 
-    this.traspatiosFincasLocalService.getTraspatiosFincasByType(this.tipo).then((data:any)=>{
-      this.lista_fincas_poblados = data;
-      this.lista_respaldo = data;
-    });
+    if(this.distrito !== ""){
+      this.traspatiosFincasLocalService.getTraspatiosFincasByTypeAndByDistrito(this.tipo,this.distrito).then((data:any)=>{
+        this.lista_fincas_poblados = data;
+        this.lista_respaldo = data;
+      });
+    }else{
+      //Obtener todos los poblados sin importar el distrito al que pertenece...
+      this.traspatiosFincasLocalService.getTraspatiosFincasByType(this.tipo).then((data:any)=>{
+        this.lista_fincas_poblados = data;
+        this.lista_respaldo = data;
+      });
+    }
 
   }
 
