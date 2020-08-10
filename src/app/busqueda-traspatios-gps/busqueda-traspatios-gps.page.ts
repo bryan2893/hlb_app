@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
-import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import { PreviousUrlHolderService } from '../services/data/previous-url-holder.service';
 import {ActivatedRoute,Router} from '@angular/router';
 import {LoaderService} from '../services/loader.service';
@@ -80,7 +80,7 @@ export class BusquedaTraspatiosGpsPage implements OnInit {
   }
 
   openMap(){
-    let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
 
     dataToSendMapViewer["urlAnterior"] = this.router.url;
     dataToSendMapViewer["tipo"] = "vista_agregar";

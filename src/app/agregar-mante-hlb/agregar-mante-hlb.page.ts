@@ -12,7 +12,7 @@ import {PreviousUrlHolderService} from '../services/data/previous-url-holder.ser
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
-import {PreviousUrlStructure} from 'src/DTO/previuousUrlStructure.dto';
+import {MapMetaData} from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 
@@ -133,7 +133,7 @@ export class AgregarManteHlbPage implements OnInit {
   }
 
   openMap(){
-    let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
 
     dataToSendMapViewer["urlAnterior"] = this.router.url;
     dataToSendMapViewer["tipo"] = "vista_agregar";

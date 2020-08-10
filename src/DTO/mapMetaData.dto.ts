@@ -1,6 +1,6 @@
 import { Coordenadas } from './coordenadas.dto';
 
-export interface PreviousUrlStructure{
+export interface MapMetaData{
     tipo:string;
     coordenadas:Coordenadas;
     urlAnterior:string;

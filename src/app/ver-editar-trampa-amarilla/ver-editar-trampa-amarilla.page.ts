@@ -12,7 +12,7 @@ import { PreviousUrlHolderService } from '../services/data/previous-url-holder.s
 import { AlmacenamientoNativoService } from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
-import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import { DateService } from '../services/date/date.service';
 import {TrampaAmarillaConIdLocalDTO} from '../../DTO/trampa_amarilla/trampa-amarilla-con-id-local.dto';
 
@@ -288,7 +288,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   }
 
   openMap(){
-    let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
     let coords = {lat:this.addTrapForm.get("latitud").value,lng:this.addTrapForm.get("longitud").value}
 
     dataToSendMapViewer["urlAnterior"] = this.router.url;

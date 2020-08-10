@@ -11,7 +11,7 @@ import {ToastService} from '../services/toast-service/toast.service';
 import {AuthService} from '../services/auth/auth.service';
 import { UserLoged } from 'src/DTO/UserLoged.dto';
 import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/InspeccionHlbLocal.service';
-import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 
@@ -268,7 +268,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   openMap(){
-    let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
 
     dataToSendMapViewer["urlAnterior"] = this.router.url;
     dataToSendMapViewer["tipo"] = "vista_agregar";

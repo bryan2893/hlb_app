@@ -10,7 +10,7 @@ import {Router,ActivatedRoute} from '@angular/router';
 import {LoaderService} from '../services/loader.service';
 
 import {DataContainerService} from '../services/data/data-container.service';
-import {PreviousUrlStructure} from '../../DTO/previuousUrlStructure.dto';
+import {MapMetaData} from '../../DTO/mapMetaData.dto';
 
 @Component({
   selector: 'app-map-viewer',
@@ -23,7 +23,7 @@ export class MapViewerPage implements OnInit {
   map:GoogleMap;
   marker:Marker;
 
-  dataFromPreviousPage:PreviousUrlStructure;
+  dataFromPreviousPage:MapMetaData;
 
   previousUrlToComeBack:string;//url donde se debe regresar con las coordenadas obtenidas.
 

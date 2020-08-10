@@ -12,7 +12,7 @@ import { AlmacenamientoNativoService } from '../services/almacenamiento-interno/
 import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
 import { TraspatioFincaLocalService } from '../services/traspatios_fincas/TraspatioFincaLocal.service';
-import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 import {TraspatioFincaConIdLocalDTO} from '../../DTO/traspatio_finca/traspatio-finca-con-id-local.dto';
@@ -165,7 +165,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     }
   
     openMap(){
-      let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+      let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
       let coords = {lat:this.traspatioFincaForm.get("latitud").value,lng:this.traspatioFincaForm.get("longitud").value}
   
       dataToSendMapViewer["urlAnterior"] = this.router.url;

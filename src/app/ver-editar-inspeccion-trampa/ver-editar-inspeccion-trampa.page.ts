@@ -10,7 +10,7 @@ import {ToastService} from '../services/toast-service/toast.service';
 import { UserLoged } from 'src/DTO/UserLoged.dto';
 import {InspeccionTrampaLocalService} from '../services/inspeccion_trampas/InspeccionTrampaLocal.service';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
-import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
+import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 
@@ -255,7 +255,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
     if(!this.inspTrampaForm.get("latitud_trampa").value || !this.inspTrampaForm.get("longitud_trampa").value){
       return;
     }
-    let dataToSendMapViewer:PreviousUrlStructure = {urlAnterior:"",tipo:"",coordenadas:null};
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
     let coords = {lat:this.inspTrampaForm.get("latitud_trampa").value,lng:this.inspTrampaForm.get("longitud_trampa").value}
 
     dataToSendMapViewer["urlAnterior"] = this.router.url;
