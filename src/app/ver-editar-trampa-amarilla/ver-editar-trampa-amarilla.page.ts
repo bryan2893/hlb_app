@@ -1,17 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import {ModalController} from '@ionic/angular';
+import {ProvinciasPage} from '../modals/provincias/provincias.page';
+import {CantonesPage} from '../modals/cantones/cantones.page';
+import {DistritosPage} from '../modals/distritos/distritos.page';
+import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
+import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
 import { TrampaAmarillaLocalService } from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
 import { PreviousUrlHolderService } from '../services/data/previous-url-holder.service';
 import { AlmacenamientoNativoService } from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import { AlertService } from '../services/alert/alert.service';
 import { ToastService } from '../services/toast-service/toast.service';
-import { TraspatioFincaLocalService } from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import { DateService } from '../services/date/date.service';
+import {TrampaAmarillaConIdLocalDTO} from '../../DTO/trampa_amarilla/trampa-amarilla-con-id-local.dto';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 import { Settings } from '../../DTO/settings.dto';
 
 @Component({
@@ -21,17 +27,12 @@ import { Settings } from '../../DTO/settings.dto';
 })
 export class VerEditarTrampaAmarillaPage implements OnInit {
 
-  tipo:string;
+
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
-  isSelectPobladoFincaActive = true;
-  isSelectPropietarioLoteActive = true;
-  poblados_fincas = [];
-  propietarios_lotes = [];
   addTrapForm: FormGroup;
-  trapRecord:any;
-  seObtienenListasPorPrimeraVez = true;
-  actions = ACTIONS;
+  trapRecord:TrampaAmarillaConIdLocalDTO;
+  actions = USER_ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -41,7 +42,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
     private alertService:AlertService,
     private toastService:ToastService,
     private trampaAmarillaLocalService:TrampaAmarillaLocalService,
-    private traspatioFincaLocalService:TraspatioFincaLocalService,
+    private modalController:ModalController,
     private authService:AuthService,
     private dateService:DateService) {
 
@@ -53,39 +54,27 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
         lote_propietario:['',Validators.required],
         latitud:['',Validators.required],
         longitud:['',Validators.required],
-        estado:['',Validators.required]
+        estado:['',Validators.required],
+        provincia:['',Validators.required],
+        canton:['',Validators.required],
+        distrito:['',Validators.required]
       });
   }
 
   changeType(event:any){
-    if(!this.seObtienenListasPorPrimeraVez){
 
-      this.tipo = event.target.value;
-      this.isSelectPropietarioLoteActive = false;
-      this.addTrapForm.controls['finca_poblado'].patchValue('');
-      this.addTrapForm.controls['lote_propietario'].patchValue('');
-      this.poblados_fincas = [];
-      this.propietarios_lotes = [];
+      let tipo = event.target.value;
       
-      if(this.tipo === "TRASPATIO"){
+      if(tipo === "TRASPATIO"){
         this.poblado_finca_key = "Poblado";
         this.lote_propietario_key = "Propietario";
       }
 
-      if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
+      if(tipo === "PRODUCTOR" || tipo === "TICOFRUT"){
         this.poblado_finca_key = "Finca";
         this.lote_propietario_key = "Lote";
       }
 
-      /*
-      this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
-        this.poblados_fincas = fincasPobladosList;
-        this.isSelectPobladoFincaActive = true;
-      }).catch((error)=>{
-      });
-      */
-
-    }
   }
 
   async ionViewWillEnter(){
@@ -94,16 +83,6 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
       if(Object.keys(inData).length === 2){//Quiere decir que viene de la vista mapa
         this.addTrapForm.controls['latitud'].patchValue(inData.latitud);
         this.addTrapForm.controls['longitud'].patchValue(inData.longitud);
-      }else{
-        this.trapRecord = inData;
-        this.tipo = inData.tipo;
-
-        //let fincas_poblados:any = await this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo);
-        //this.poblados_fincas = fincas_poblados;
-
-        let propietariosLotes:any = await this.traspatioFincaLocalService.getPropietariosLotesByFincaPobladoName(this.trapRecord.finca_poblado);
-        this.propietarios_lotes = propietariosLotes;
-
       }
     }
   }
@@ -111,8 +90,9 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   ionViewDidEnter(){
     let inData = this.route.snapshot.data['data'];
     if (inData) {
-      if(!(Object.keys(inData).length === 2)){//Quiere decir que viene de la vista mapa
-        if (this.tipo === "TRASPATIO"){
+      if(!(Object.keys(inData).length === 2)){//Si la vista anterior no es la vista mapa...
+        this.trapRecord = inData;
+        if (this.trapRecord.tipo === "TRASPATIO"){
           this.poblado_finca_key = "Poblado";
           this.lote_propietario_key = "Propietario";
         }else{
@@ -128,9 +108,11 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
         this.addTrapForm.controls['latitud'].patchValue(inData.latitud);
         this.addTrapForm.controls['longitud'].patchValue(inData.longitud);
         this.addTrapForm.controls['estado'].patchValue(inData.estado);
+        this.addTrapForm.controls['provincia'].patchValue(inData.provincia);
+        this.addTrapForm.controls['canton'].patchValue(inData.canton);
+        this.addTrapForm.controls['distrito'].patchValue(inData.distrito);
       }
 
-      this.seObtienenListasPorPrimeraVez = false;//Se indica que de ahora en adelante la carga de listas de traspatios/fincas y lotes/propietarios no se cargan por primera vez.
     }
 
   }
@@ -164,10 +146,13 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
         trampaToSave['latitud'] = this.addTrapForm.controls['latitud'].value;
         trampaToSave['longitud'] = this.addTrapForm.controls['longitud'].value;
         trampaToSave['estado'] = this.addTrapForm.controls['estado'].value;
+        trampaToSave['provincia'] = this.addTrapForm.controls['provincia'].value;
+        trampaToSave['canton'] = this.addTrapForm.controls['canton'].value;
+        trampaToSave['distrito'] = this.addTrapForm.controls['distrito'].value;
         trampaToSave['sincronizado'] = 0;
         
         await  this.trampaAmarillaLocalService.updateATrap(this.trapRecord.id_local,trampaToSave);
-        let toast = await this.toastService.showToast("El registro se modificó exitosamente!");
+        let toast = await this.toastService.showToast("Registro modificado exitosamente!");
         await toast.present();
         
       }else{
@@ -176,28 +161,130 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
       }
 
     }catch(error){
-      let alert = await this.alertService.presentAlert(JSON.stringify(error));
+      let alert = await this.alertService.presentAlert(error);
       await alert.present();
     }
   }
 
-  pobladoFincaSelectChange(event:any){
-    if(!this.seObtienenListasPorPrimeraVez){
-      let fincaPobladoSelected = event.target.value;
-      if(!fincaPobladoSelected){
-        return;
+  async openProvinciasModal() {
+    const modal = await this.modalController.create({
+      component: ProvinciasPage,
+      componentProps: {
       }
-      this.addTrapForm.controls['lote_propietario'].patchValue('');
-      this.traspatioFincaLocalService.getPropietariosLotesByFincaPobladoName(fincaPobladoSelected).then((propietariosLotesList:string[])=>{
-        this.propietarios_lotes = propietariosLotesList;
-        this.isSelectPropietarioLoteActive = true;
-      }).catch((error)=>{
-        this.alertService.presentAlert(error).then((alert)=>{
-          alert.present();
-        });
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null && !dataReturned.role) {
+        if (dataReturned.data !== ""){
+          this.addTrapForm.controls['provincia'].patchValue(dataReturned.data);
+        }
+      }
+    });
+
+    return await modal.present();
+  }
+
+  async openCantonesModal() {
+
+    let provincia = "";
+    provincia = this.addTrapForm.controls['provincia'].value;
+
+    if(provincia !== ""){
+      const modal = await this.modalController.create({
+        component: CantonesPage,
+        componentProps: {
+          "provincia": provincia
+        }
       });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.addTrapForm.controls['canton'].patchValue(dataReturned.data);
+          }
+        }
+      });
+  
+      return await modal.present();
     }
-    
+  }
+
+  async openDistritosModal() {
+
+    let canton = "";
+    canton = this.addTrapForm.controls['canton'].value;
+
+    if(canton !== ""){
+      const modal = await this.modalController.create({
+        component: DistritosPage,
+        componentProps: {
+          "canton": canton
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.addTrapForm.controls['distrito'].patchValue(dataReturned.data);
+          }
+        }
+      });
+  
+      return await modal.present();
+    }
+
+  }
+
+  async openPobladosFincasModal() {
+
+    let distrito = "";
+    distrito = this.addTrapForm.controls['distrito'].value;
+
+    if(distrito !== ""){
+      const modal = await this.modalController.create({
+        component: FincasPobladosPage,
+        componentProps: {
+          "tipo": this.addTrapForm.controls['tipo'].value.toUpperCase(),
+          "distrito": distrito
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.addTrapForm.controls['finca_poblado'].patchValue(dataReturned.data);
+          }
+        }
+      });
+  
+      return await modal.present();
+    }
+
+  }
+
+  async openPropieatariosLotesModal() {
+
+    let finca_poblado = "";
+    finca_poblado = this.addTrapForm.controls['finca_poblado'].value;
+
+    if(finca_poblado !== ""){
+      const modal = await this.modalController.create({
+        component: LotesPropietariosPage,
+        componentProps: {
+          "finca_poblado":finca_poblado
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.addTrapForm.controls['lote_propietario'].patchValue(dataReturned.data);
+          }
+        }
+      });
+  
+      return await modal.present();
+    }
   }
 
   openMap(){

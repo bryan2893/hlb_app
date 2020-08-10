@@ -23,7 +23,7 @@ export class DistritosPage implements OnInit {
   ngOnInit() {
     this.canton = this.navParams.data.canton;
 
-    this.traspatiosFincasLocalService.getDistritos(this.canton).then((data:any)=>{
+    this.traspatiosFincasLocalService.getDistritosOfCanton(this.canton).then((data:any)=>{
       this.lista_distritos = data;
       this.lista_respaldo = data;
     });

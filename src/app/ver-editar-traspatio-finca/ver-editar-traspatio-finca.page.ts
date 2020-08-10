@@ -15,10 +15,10 @@ import { TraspatioFincaLocalService } from '../services/traspatios_fincas/Traspa
 import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
-import {TraspatioFincaNuevo} from '../../DTO/local/TraspatioFincaNuevo';
+import {TraspatioFincaConIdLocalDTO} from '../../DTO/traspatio_finca/traspatio-finca-con-id-local.dto';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 
 @Component({
   selector: 'app-ver-editar-traspatio-finca',
@@ -27,7 +27,7 @@ import {ACTIONS} from '../../constants/user_actions';
 })
 export class VerEditarTraspatioFincaPage implements OnInit {
 
-  tipo:string;
+  //tipo:string;
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
   isSelectPobladoFincaActive = true;
@@ -35,8 +35,8 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   poblados_fincas = [];
   propietarios_lotes = [];
   traspatioFincaForm: FormGroup;
-  traspatioFincaRecord:any;//al inicair la vista se iguala esta variable a un registro de traspatio/finca.
-  actions = ACTIONS;
+  traspatioFincaRecord:TraspatioFincaConIdLocalDTO;//al inicair la vista se iguala esta variable a un registro de traspatio/finca.
+  actions = USER_ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -92,9 +92,9 @@ export class VerEditarTraspatioFincaPage implements OnInit {
     ionViewDidEnter(){
       let inData:any = this.route.snapshot.data['data'];
       if (inData) {
-        if(!(Object.keys(inData).length === 2)){//Igresa si la anterior vista no es la vista del mapa.
+        if(!(Object.keys(inData).length === 2)){//Ingresa si la anterior vista no es la vista del mapa.
           this.traspatioFincaRecord = inData;
-          if (this.tipo === "TRASPATIO"){
+          if (this.traspatioFincaRecord.tipo === "TRASPATIO"){
             this.poblado_finca_key = "Poblado";
             this.lote_propietario_key = "Propietario";
           }else{
@@ -129,9 +129,9 @@ export class VerEditarTraspatioFincaPage implements OnInit {
           let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
           let pais:string = parametrosDeConfiguracion.pais;
 
-          let puedeSincronizar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
+          let puedeEditar:Boolean = await this.dateService.isValidDateRestriction(Number(parametrosDeConfiguracion.dias_permitidos));
 
-          if(!puedeSincronizar){
+          if(!puedeEditar){
             throw new Error("Sincroniza primero y vuelve a intentarlo");
           }
 
@@ -139,18 +139,18 @@ export class VerEditarTraspatioFincaPage implements OnInit {
 
           traspatioFincaToUpdate['pais'] = pais.toUpperCase();
           traspatioFincaToUpdate['tipo'] = this.traspatioFincaForm.controls['tipo'].value.toUpperCase();
-          traspatioFincaToUpdate['provincia'] = this.traspatioFincaForm.controls['provincia'].value.toUpperCase();
-          traspatioFincaToUpdate['canton'] = this.traspatioFincaForm.controls['canton'].value.toUpperCase();
-          traspatioFincaToUpdate['distrito'] = this.traspatioFincaForm.controls['distrito'].value.toUpperCase();
           traspatioFincaToUpdate['finca_poblado'] = this.traspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
           traspatioFincaToUpdate['lote_propietario'] = this.traspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
           traspatioFincaToUpdate['latitud'] = this.traspatioFincaForm.controls['latitud'].value;
           traspatioFincaToUpdate['longitud'] = this.traspatioFincaForm.controls['longitud'].value;
           traspatioFincaToUpdate['estado'] = 1;
+          traspatioFincaToUpdate['provincia'] = this.traspatioFincaForm.controls['provincia'].value.toUpperCase();
+          traspatioFincaToUpdate['canton'] = this.traspatioFincaForm.controls['canton'].value.toUpperCase();
+          traspatioFincaToUpdate['distrito'] = this.traspatioFincaForm.controls['distrito'].value.toUpperCase();
           traspatioFincaToUpdate['sincronizado'] = 0;
           
           await  this.traspatioFincaLocalService.updateATraspatioFinca(this.traspatioFincaRecord.id_local,traspatioFincaToUpdate);
-          let toast = await this.toastService.showToast("El registro se modificó exitosamente!");
+          let toast = await this.toastService.showToast("Registro modificado exitosamente!");
           await toast.present();
           
         }else{
@@ -180,14 +180,14 @@ export class VerEditarTraspatioFincaPage implements OnInit {
       const modal = await this.modalController.create({
         component: ProvinciasPage,
         componentProps: {
-          "tipo": this.tipo,
-          "cabecera":this.poblado_finca_key + 's'
         }
       });
   
       modal.onDidDismiss().then((dataReturned) => {
-        if (dataReturned !== null) {
-          this.traspatioFincaForm.controls['provincia'].patchValue(dataReturned.data);
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.traspatioFincaForm.controls['provincia'].patchValue(dataReturned.data);
+          }
         }
       });
   
@@ -208,8 +208,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['canton'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned.data !== ""){
+              this.traspatioFincaForm.controls['canton'].patchValue(dataReturned.data);
+            }
           }
         });
     
@@ -231,8 +233,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['distrito'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned.data !== ""){
+              this.traspatioFincaForm.controls['distrito'].patchValue(dataReturned.data);
+            }
           }
         });
     
@@ -250,14 +254,16 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         const modal = await this.modalController.create({
           component: FincasPobladosPage,
           componentProps: {
-            "tipo": this.tipo,
+            "tipo": this.traspatioFincaForm.controls['tipo'].value.toUpperCase(),
             "distrito": distrito
           }
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned.data !== ""){
+              this.traspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+            }
           }
         });
     
@@ -280,8 +286,10 @@ export class VerEditarTraspatioFincaPage implements OnInit {
         });
     
         modal.onDidDismiss().then((dataReturned) => {
-          if (dataReturned !== null) {
-            this.traspatioFincaForm.controls['lote_propietario'].patchValue(dataReturned.data);
+          if (dataReturned !== null && !dataReturned.role) {
+            if (dataReturned.data !== ""){
+              this.traspatioFincaForm.controls['lote_propietario'].patchValue(dataReturned.data);
+            }
           }
         });
     

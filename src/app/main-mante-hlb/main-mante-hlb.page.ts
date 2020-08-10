@@ -5,7 +5,7 @@ import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 
 @Component({
   selector: 'app-main-mante-hlb',
@@ -20,7 +20,7 @@ export class MainManteHlbPage implements OnInit {
   private pageCounter = 1;
   pagesQuantity = 0;
   mantains = [];
-  actions = ACTIONS;
+  actions = USER_ACTIONS;
 
   constructor(private traspatioFincaLocalService:TraspatioFincaLocalService,
     private dataContainerService:DataContainerService,

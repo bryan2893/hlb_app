@@ -1,10 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Lotes/propietarios</ion-title>
+    <ion-buttons slot="end" (click)="closeModal('')">
+      <ion-icon size="large" name="close-outline"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
+
   <ion-toolbar>
     <ion-searchbar placeholder="buscar" (ionChange)="whenUserPressAKey($event)"></ion-searchbar>
   </ion-toolbar>
+  
 </ion-header>
 
 <ion-content>

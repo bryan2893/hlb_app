@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HTTP,HTTPResponse } from '@ionic-native/http/ngx';
-import {TraspatioFincaNubeSubida} from '../../../DTO/server/TraspatioFincaNubeSubida';
 import {SyncInfoService} from '../syncInfo/sync-info.service';
 import {Settings} from '../../../DTO/settings.dto';
 import {AlmacenamientoNativoService} from '../../services/almacenamiento-interno/almacenamiento-nativo.service';
+import {SyncInfo} from '../../../DTO/SyncInfo.dto';
+import {ParaEnviarAlServerDTO} from '../../../DTO/traspatio_finca/para-enviar-al-server.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class TraspatioFincaNubeService {
     this.http.setDataSerializer('json');
   }
   
-  getTraspatiosFincasPage(pageNumber:number,amountPerPage:number,pais:string){
+  getTraspatiosFincasPage(pageNumber:number,amountPerPage:number,pais:string):Promise<HTTPResponse>{
     return new Promise((resolve,reject)=>{
 
       this.almacenamientoNativoService.obtenerParametrosDeConfiguracion().then((parametros:Settings)=>{
@@ -39,12 +40,12 @@ export class TraspatioFincaNubeService {
     });
   }
 
-  syncListOfTraspatiosFincas(listaDetraspatiosFincas:TraspatioFincaNubeSubida[]){
+  syncListOfTraspatiosFincas(listaDetraspatiosFincas:ParaEnviarAlServerDTO[]):Promise<HTTPResponse>{
     return new Promise((resolve,reject)=>{
 
       this.almacenamientoNativoService.obtenerParametrosDeConfiguracion().then((parametros:Settings)=>{
 
-        this.syncInfoService.getSyncInfo().then((info)=>{
+        this.syncInfoService.getSyncInfo().then((info:SyncInfo)=>{
 
           let paqueteDeSincronizacion = {
             registros:listaDetraspatiosFincas,
@@ -56,7 +57,7 @@ export class TraspatioFincaNubeService {
           this.http.post(parametros.link_de_sincronizacion + this.urlToUpload, paqueteDeSincronizacion,{}).then((response:HTTPResponse) => {
             resolve(response);
           }).catch((error)=>{
-            reject(JSON.stringify(error));
+            reject(error);
           });
   
         }).catch((error) =>{
@@ -70,7 +71,7 @@ export class TraspatioFincaNubeService {
     });
   }
 
-  countRecords(pais:string){
+  countRecords(pais:string):Promise<number>{
     return new Promise((resolve,reject)=>{
 
       this.almacenamientoNativoService.obtenerParametrosDeConfiguracion().then((parametros:Settings)=>{
@@ -89,7 +90,7 @@ export class TraspatioFincaNubeService {
     });
   }
 
-  getPagesQuantity(rowsPerPage:number,pais:string){
+  getPagesQuantity(rowsPerPage:number,pais:string):Promise<number>{
     return new Promise((resolve,reject)=>{
       this.countRecords(pais).then((response:number)=>{
         let quantity = response;

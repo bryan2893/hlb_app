@@ -6,7 +6,7 @@ import {DataContainerService} from '../services/data/data-container.service';
 import {Router} from '@angular/router';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 
 @Component({
   selector: 'app-main-trampas-amarillas',
@@ -21,7 +21,7 @@ export class MainTrampasAmarillasPage implements OnInit {
   private pageCounter = 1;
   pagesQuantity = 0;
   traps = [];
-  actions = ACTIONS;
+  actions = USER_ACTIONS;
 
   constructor(private trampaAmarillaLocalService: TrampaAmarillaLocalService,
     private dataContainerService:DataContainerService,
@@ -38,6 +38,7 @@ export class MainTrampasAmarillasPage implements OnInit {
       this.pagesQuantity = pagesQuantity;
     }).then(()=>{
       this.trampaAmarillaLocalService.getTrapsPage(this.pageCounter,this.rowsPerPage).then((trapsList)=>{
+        console.log("datos de trampas amarillas ---> "+JSON.stringify(trapsList));
         this.addMoreTrapItems(trapsList);
         this.pageCounter += 1;
       });

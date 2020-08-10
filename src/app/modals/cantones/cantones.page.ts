@@ -23,7 +23,7 @@ export class CantonesPage implements OnInit {
   ngOnInit() {
     this.provincia = this.navParams.data.provincia;
 
-    this.traspatiosFincasLocalService.getCantones(this.provincia).then((data:any)=>{
+    this.traspatiosFincasLocalService.getCantonesOfProvincia(this.provincia).then((data:any)=>{
       this.lista_cantones = data;
       this.lista_respaldo = data;
     });

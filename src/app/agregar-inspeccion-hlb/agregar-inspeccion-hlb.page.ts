@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Validators,FormBuilder,FormGroup} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
-import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
+import {ModalController} from '@ionic/angular';
+import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
+import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
 import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
@@ -24,31 +26,23 @@ export class AgregarInspeccionHlbPage implements OnInit {
   poblado_finca_key = "Poblado";
   lote_propietario_key = "Propietario";
 
-  isSelectPobladoFincaActive = true;
-  isSelectPropietarioLoteActive = false;
-
-  poblados_fincas = [];
-  propietarios_lotes = [];
-
   coords:any;
-
-  inspHlbForm: FormGroup;
-
+  inspTraspatioFincaForm: FormGroup;
   mostrarComentario = false;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private inspeccionHlbLocalService:InspeccionHlbLocalService,
-    private traspatioFincaLocalService:TraspatioFincaLocalService,
     private router: Router,
     private previousUrlHolderService:PreviousUrlHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
     private toastService:ToastService,
     private dateService:DateService,
-    private authService:AuthService) {
+    private authService:AuthService,
+    private modalController:ModalController) {
 
-    this.inspHlbForm = this.formBuilder.group({
+    this.inspTraspatioFincaForm = this.formBuilder.group({
       //id_inspec_hlb se guarda pero no se muestra...
       //fecha_hora se guardan pero no se muestran en la interfaz
       //codigo_responsable,nombre_responsable se obtiene del usuario que esta logueado.
@@ -79,48 +73,27 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   changeType(event:any){
-    this.tipo = event.target.value;
-    this.isSelectPropietarioLoteActive = false;
-    this.inspHlbForm.controls['finca_poblado'].patchValue('');
-    this.inspHlbForm.controls['lote_propietario'].patchValue('');
-    this.poblados_fincas = [];
-    this.propietarios_lotes = [];
+    let tipo = event.target.value;
+    this.tipo = tipo;
     
-    if(this.tipo === "TRASPATIO"){
+    if(tipo === "TRASPATIO"){
       this.poblado_finca_key = "Poblado";
       this.lote_propietario_key = "Propietario";
     }
 
-    if(this.tipo === "PRODUCTOR" || this.tipo === "TICOFRUT"){
+    if(tipo === "PRODUCTOR" || tipo === "TICOFRUT"){
       this.poblado_finca_key = "Finca";
       this.lote_propietario_key = "Lote";
     }
-
-    /*
-    this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
-      this.poblados_fincas = fincasPobladosList;
-      this.isSelectPobladoFincaActive = true;
-    }).catch((error)=>{
-      
-    });
-    */
 
   }
 
   ionViewWillEnter(){
     if (this.route.snapshot.data['data']) {
       this.coords = this.route.snapshot.data['data'];
-      this.inspHlbForm.controls['latitud'].patchValue(this.coords.latitud);
-      this.inspHlbForm.controls['longitud'].patchValue(this.coords.longitud);
+      this.inspTraspatioFincaForm.controls['latitud'].patchValue(this.coords.latitud);
+      this.inspTraspatioFincaForm.controls['longitud'].patchValue(this.coords.longitud);
     }
-
-    /*
-    this.traspatioFincaLocalService.getTraspatiosFincasByType(this.tipo).then((fincasPobladosList:string[])=>{
-      this.poblados_fincas = fincasPobladosList;
-      this.isSelectPobladoFincaActive = true;
-    }).catch((error)=>{
-    });
-    */
 
   }
 
@@ -150,7 +123,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
     try{
 
-      if(this.inspHlbForm.dirty && this.inspHlbForm.valid){
+      if(this.inspTraspatioFincaForm.dirty && this.inspTraspatioFincaForm.valid){
 
         let parametrosDeConfiguracion:Settings = await this.almacenamientoNativoService.obtenerParametrosDeConfiguracion();
 
@@ -170,26 +143,26 @@ export class AgregarInspeccionHlbPage implements OnInit {
         hlbInspectionToSave['fecha_hora'] = this.dateService.getCurrentDateTime();
         hlbInspectionToSave['codigo_responsable'] = usuario.username;
         hlbInspectionToSave['nombre_responsable'] = usuario.fullName;
-        hlbInspectionToSave['tipo'] = this.inspHlbForm.controls['tipo'].value.toUpperCase();
+        hlbInspectionToSave['tipo'] = this.inspTraspatioFincaForm.controls['tipo'].value.toUpperCase();
         hlbInspectionToSave['pais'] = pais.toUpperCase();
-        hlbInspectionToSave['finca_poblado'] = this.inspHlbForm.controls['finca_poblado'].value.toUpperCase();
-        hlbInspectionToSave['lote_propietario'] = this.inspHlbForm.controls['lote_propietario'].value.toUpperCase();
-        hlbInspectionToSave['ciclo'] = this.inspHlbForm.controls['ciclo'].value;
+        hlbInspectionToSave['finca_poblado'] = this.inspTraspatioFincaForm.controls['finca_poblado'].value.toUpperCase();
+        hlbInspectionToSave['lote_propietario'] = this.inspTraspatioFincaForm.controls['lote_propietario'].value.toUpperCase();
+        hlbInspectionToSave['ciclo'] = this.inspTraspatioFincaForm.controls['ciclo'].value;
 
         if(!(hlbInspectionToSave['tipo'] === 'TRASPATIO')){
           hlbInspectionToSave['labor'] = 'na';
           hlbInspectionToSave['categoria'] = 'na';
         }else{
-          hlbInspectionToSave['labor'] = this.inspHlbForm.controls['labor'].value;//viene en mayúscula
-          hlbInspectionToSave['categoria'] = this.inspHlbForm.controls['categoria'].value;//viene en mayúscula
+          hlbInspectionToSave['labor'] = this.inspTraspatioFincaForm.controls['labor'].value;//viene en mayúscula
+          hlbInspectionToSave['categoria'] = this.inspTraspatioFincaForm.controls['categoria'].value;//viene en mayúscula
         }
 
-        hlbInspectionToSave['variedad'] = this.inspHlbForm.controls['variedad'].value;
-        hlbInspectionToSave['sintomatologia'] = this.inspHlbForm.controls['sintomatologia'].value;
-        hlbInspectionToSave['estado'] = this.inspHlbForm.controls['estado'].value;
-        hlbInspectionToSave['diagnostico'] = this.inspHlbForm.controls['diagnostico'].value;
-        hlbInspectionToSave['latitud'] = this.inspHlbForm.controls['latitud'].value;
-        hlbInspectionToSave['longitud'] = this.inspHlbForm.controls['longitud'].value;
+        hlbInspectionToSave['variedad'] = this.inspTraspatioFincaForm.controls['variedad'].value;
+        hlbInspectionToSave['sintomatologia'] = this.inspTraspatioFincaForm.controls['sintomatologia'].value;
+        hlbInspectionToSave['estado'] = this.inspTraspatioFincaForm.controls['estado'].value;
+        hlbInspectionToSave['diagnostico'] = this.inspTraspatioFincaForm.controls['diagnostico'].value;
+        hlbInspectionToSave['latitud'] = this.inspTraspatioFincaForm.controls['latitud'].value;
+        hlbInspectionToSave['longitud'] = this.inspTraspatioFincaForm.controls['longitud'].value;
 
         if(!(hlbInspectionToSave['tipo'] === 'PRODUCTOR' || hlbInspectionToSave['tipo'] === 'TICOFRUT')){
           hlbInspectionToSave['patron'] = 'na';
@@ -198,27 +171,27 @@ export class AgregarInspeccionHlbPage implements OnInit {
           hlbInspectionToSave['numero_arbol'] = 0;
           hlbInspectionToSave['dir_arbol'] = 'na';
         }else{
-          hlbInspectionToSave['patron'] = this.inspHlbForm.controls['patron'].value;
-          hlbInspectionToSave['calle'] = this.inspHlbForm.controls['calle'].value;
-          hlbInspectionToSave['direccion_calle'] = this.inspHlbForm.controls['direccion_calle'].value;
-          hlbInspectionToSave['numero_arbol'] = this.inspHlbForm.controls['numero_arbol'].value;
-          hlbInspectionToSave['dir_arbol'] = this.inspHlbForm.controls['dir_arbol'].value;
+          hlbInspectionToSave['patron'] = this.inspTraspatioFincaForm.controls['patron'].value;
+          hlbInspectionToSave['calle'] = this.inspTraspatioFincaForm.controls['calle'].value;
+          hlbInspectionToSave['direccion_calle'] = this.inspTraspatioFincaForm.controls['direccion_calle'].value;
+          hlbInspectionToSave['numero_arbol'] = this.inspTraspatioFincaForm.controls['numero_arbol'].value;
+          hlbInspectionToSave['dir_arbol'] = this.inspTraspatioFincaForm.controls['dir_arbol'].value;
         }
 
         
 
-        if(this.inspHlbForm.controls['notas'].value === ''){
+        if(this.inspTraspatioFincaForm.controls['notas'].value === ''){
           hlbInspectionToSave['notas'] = 'na';
         }else{
-          hlbInspectionToSave['notas'] = this.inspHlbForm.controls['notas'].value;
+          hlbInspectionToSave['notas'] = this.inspTraspatioFincaForm.controls['notas'].value;
         }
 
-        hlbInspectionToSave['indica_revision'] = this.inspHlbForm.controls['indica_revision'].value;
+        hlbInspectionToSave['indica_revision'] = this.inspTraspatioFincaForm.controls['indica_revision'].value;
 
-        if(this.inspHlbForm.controls['comentario'].value === ''){
+        if(this.inspTraspatioFincaForm.controls['comentario'].value === ''){
           hlbInspectionToSave['comentario'] = 'na';
         }else{
-          hlbInspectionToSave['comentario'] = this.inspHlbForm.controls['comentario'].value;
+          hlbInspectionToSave['comentario'] = this.inspTraspatioFincaForm.controls['comentario'].value;
         }
 
         hlbInspectionToSave['sincronizado'] = 0;
@@ -246,17 +219,52 @@ export class AgregarInspeccionHlbPage implements OnInit {
     }
   }
 
-  pobladoFincaSelectChange(event:any){
-    let fincaPobladoSelected = event.target.value;
-    if(!fincaPobladoSelected){
-      return;
-    }
-    this.inspHlbForm.controls['lote_propietario'].patchValue('');
-    this.traspatioFincaLocalService.getPropietariosLotesByFincaPobladoName(fincaPobladoSelected).then((propietariosLotesList:string[])=>{
-      this.propietarios_lotes = propietariosLotesList;
-      this.isSelectPropietarioLoteActive = true;
-    }).catch((error)=>{
+  async openPobladosFincasModal() {
+
+    const modal = await this.modalController.create({
+      component: FincasPobladosPage,
+      componentProps: {
+        "tipo": this.tipo,
+        "distrito": ""
+      }
     });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned !== null && !dataReturned.role) {
+        if (dataReturned.data !== ""){
+          this.inspTraspatioFincaForm.controls['finca_poblado'].patchValue(dataReturned.data);
+        }
+      }
+    });
+
+    return await modal.present();
+    
+
+  }
+
+  async openPropieatariosLotesModal() {
+
+    let finca_poblado = "";
+    finca_poblado = this.inspTraspatioFincaForm.controls['finca_poblado'].value;
+
+    if(finca_poblado !== ""){
+      const modal = await this.modalController.create({
+        component: LotesPropietariosPage,
+        componentProps: {
+          "finca_poblado":finca_poblado
+        }
+      });
+  
+      modal.onDidDismiss().then((dataReturned) => {
+        if (dataReturned !== null && !dataReturned.role) {
+          if (dataReturned.data !== ""){
+            this.inspTraspatioFincaForm.controls['lote_propietario'].patchValue(dataReturned.data);
+          }
+        }
+      });
+  
+      return await modal.present();
+    }
   }
 
   openMap(){
@@ -272,7 +280,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
 
   marcarRegistro(event:any){
     if(event.target.value === '0'){
-      this.inspHlbForm.controls['comentario'].patchValue('');
+      this.inspTraspatioFincaForm.controls['comentario'].patchValue('');
       this.mostrarComentario = false;
     }else{
       this.mostrarComentario = true;
