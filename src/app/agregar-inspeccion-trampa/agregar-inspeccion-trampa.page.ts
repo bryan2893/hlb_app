@@ -15,6 +15,7 @@ import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAm
 import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 @Component({
   selector: 'app-agregar-inspeccion-trampa',
@@ -209,7 +210,6 @@ export class AgregarInspeccionTrampaPage implements OnInit {
           }
         }
       });
-  
       return await modal.present();
     }
   }
@@ -221,10 +221,10 @@ export class AgregarInspeccionTrampaPage implements OnInit {
     }
 
     let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
-    let coords = {lat:this.inspTrampaForm.get("latitud_trampa").value,lng:this.inspTrampaForm.get("longitud_trampa").value}
+    let coords = {lat:this.inspTrampaForm.controls["latitud_trampa"].value,lng:this.inspTrampaForm.controls["longitud_trampa"].value}
 
+    dataToSendMapViewer["tipo"] = MAP_ACTIONS.VER; //Se indica que el mapa se abra en vista de solo lectura.
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_editar";
     dataToSendMapViewer["coordenadas"] = coords;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
