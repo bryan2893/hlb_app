@@ -18,7 +18,7 @@ import {Settings} from '../../DTO/settings.dto';
 import {TraspatioFincaConIdLocalDTO} from '../../DTO/traspatio_finca/traspatio-finca-con-id-local.dto';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 
 @Component({
   selector: 'app-ver-editar-traspatio-finca',
@@ -36,7 +36,7 @@ export class VerEditarTraspatioFincaPage implements OnInit {
   propietarios_lotes = [];
   traspatioFincaForm: FormGroup;
   traspatioFincaRecord:TraspatioFincaConIdLocalDTO;//al inicair la vista se iguala esta variable a un registro de traspatio/finca.
-  actions = ACTIONS;
+  actions = USER_ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,

@@ -17,7 +17,7 @@ import { DateService } from '../services/date/date.service';
 import {TrampaAmarillaConIdLocalDTO} from '../../DTO/trampa_amarilla/trampa-amarilla-con-id-local.dto';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 import { Settings } from '../../DTO/settings.dto';
 
 @Component({
@@ -32,7 +32,7 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   lote_propietario_key = "Propietario";
   addTrapForm: FormGroup;
   trapRecord:TrampaAmarillaConIdLocalDTO;
-  actions = ACTIONS;
+  actions = USER_ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,

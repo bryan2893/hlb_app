@@ -6,10 +6,10 @@ import {
   Marker,
   MyLocation
 } from '@ionic-native/google-maps/ngx';
-import {DataContainerService} from '../services/data/data-container.service';
 import {Router,ActivatedRoute} from '@angular/router';
 import {LoaderService} from '../services/loader.service';
 
+import {DataContainerService} from '../services/data/data-container.service';
 import {PreviousUrlStructure} from '../../DTO/previuousUrlStructure.dto';
 
 @Component({

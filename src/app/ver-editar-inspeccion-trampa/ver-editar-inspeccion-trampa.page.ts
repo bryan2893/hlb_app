@@ -14,7 +14,7 @@ import { PreviousUrlStructure } from 'src/DTO/previuousUrlStructure.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
 
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 import {AuthService} from '../services/auth/auth.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
   inspTrampaForm: FormGroup;
   trapInspectionRecord:any;
   mostrarComentario = false;
-  actions = ACTIONS;
+  actions = USER_ACTIONS;
 
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,

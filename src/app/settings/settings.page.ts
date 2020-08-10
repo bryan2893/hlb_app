@@ -6,7 +6,7 @@ import {ToastService} from '../services/toast-service/toast.service';
 import {AlertService} from '../services/alert/alert.service';
 
 import {AuthService} from '../services/auth/auth.service';
-import {ACTIONS} from '../../constants/user_actions';
+import {USER_ACTIONS} from '../../constants/user_actions';
 
 @Component({
   selector: 'app-settings',
@@ -16,7 +16,7 @@ import {ACTIONS} from '../../constants/user_actions';
 export class SettingsPage implements OnInit {
 
   seetingsForm: FormGroup;
-  actions = ACTIONS;
+  actions = USER_ACTIONS;
 
   constructor(private almacenamientoNativoService: AlmacenamientoNativoService,
     private formBuilder: FormBuilder,
