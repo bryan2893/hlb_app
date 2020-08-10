@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import {DataResolverService} from './services/data/data-resolver.service';
-import {PreviousUrlResolver} from './services/data/previous-url-resolver.service';
+import {MapMetaDataResolverService} from './services/data/map-metadata-resolver.service';
 import {LoginPageGuardService} from './guards/login-page-guard.service';
 
 const routes: Routes = [
@@ -47,13 +47,13 @@ const routes: Routes = [
     resolve:{
       data: DataResolverService
     },
-    loadChildren: () => import('./agregar-mante-hlb/agregar-mante-hlb.module').then( m => m.AgregarManteHlbPageModule)
+    loadChildren: () => import('./agregar-traspatio-finca/agregar-mante-hlb.module').then( m => m.AgregarManteHlbPageModule)
   },
   
   {
     path: 'map-viewer',
     resolve:{
-      data: PreviousUrlResolver
+      data: MapMetaDataResolverService
     },
     loadChildren: () => import('./map-viewer/map-viewer.module').then( m => m.MapViewerPageModule)
   },

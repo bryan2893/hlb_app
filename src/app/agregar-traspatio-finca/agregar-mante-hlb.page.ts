@@ -8,7 +8,7 @@ import {DistritosPage} from '../modals/distritos/distritos.page';
 import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
 import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
 import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
-import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
+import {MapMetaDataHolderService} from '../services/data/map-metadata-container.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
@@ -34,7 +34,7 @@ export class AgregarManteHlbPage implements OnInit {
     public modalController:ModalController,
     private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router:Router,
-    private previousUrlHolderService: PreviousUrlHolderService,
+    private previousUrlHolderService: MapMetaDataHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
     private toastService:ToastService,
@@ -139,7 +139,7 @@ export class AgregarManteHlbPage implements OnInit {
     dataToSendMapViewer["tipo"] = "vista_agregar";
     dataToSendMapViewer["coordenadas"] = null;
 
-    this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
+    this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
   }
 

@@ -3,17 +3,18 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class PreviousUrlHolderService {
+export class MapMetaDataHolderService {
 
   private data:any;
 
   constructor() { }
 
-  setDataForPreviousUrl(data:any){
+  setMapMetaData(data:any){
     this.data = data;
   }
 
-  getDataFromPreviousUrl(){
+  getMapMetaDataFromPreviousPage(){
     return this.data;
   }
+  
 }

@@ -4,7 +4,7 @@ import {ActivatedRoute,Router} from '@angular/router';
 import {ModalController} from '@ionic/angular';
 import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page';
 import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
-import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
+import {MapMetaDataHolderService} from '../services/data/map-metadata-container.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
@@ -34,7 +34,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
     private route:ActivatedRoute,
     private inspeccionHlbLocalService:InspeccionHlbLocalService,
     private router: Router,
-    private previousUrlHolderService:PreviousUrlHolderService,
+    private previousUrlHolderService:MapMetaDataHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
     private toastService:ToastService,
@@ -274,7 +274,7 @@ export class AgregarInspeccionHlbPage implements OnInit {
     dataToSendMapViewer["tipo"] = "vista_agregar";
     dataToSendMapViewer["coordenadas"] = null;
 
-    this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
+    this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
   }
 

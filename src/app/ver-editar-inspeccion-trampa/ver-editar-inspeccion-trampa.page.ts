@@ -9,7 +9,7 @@ import {AlertService} from '../services/alert/alert.service';
 import {ToastService} from '../services/toast-service/toast.service';
 import { UserLoged } from 'src/DTO/UserLoged.dto';
 import {InspeccionTrampaLocalService} from '../services/inspeccion_trampas/InspeccionTrampaLocal.service';
-import {PreviousUrlHolderService} from '../services/data/previous-url-holder.service';
+import {MapMetaDataHolderService} from '../services/data/map-metadata-container.service';
 import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
@@ -37,7 +37,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
     private route: ActivatedRoute,
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
     private router: Router,
-    private previousUrlHolderService: PreviousUrlHolderService,
+    private previousUrlHolderService: MapMetaDataHolderService,
     private almacenamientoNativoService: AlmacenamientoNativoService,
     private alertService: AlertService,
     private toastService: ToastService,
@@ -262,7 +262,7 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
     dataToSendMapViewer["tipo"] = "vista_editar";
     dataToSendMapViewer["coordenadas"] = coords;
 
-    this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
+    this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
   }
 

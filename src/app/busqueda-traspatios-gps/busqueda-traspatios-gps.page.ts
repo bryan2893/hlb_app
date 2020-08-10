@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TraspatioFincaLocalService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import { MapMetaData } from 'src/DTO/mapMetaData.dto';
-import { PreviousUrlHolderService } from '../services/data/previous-url-holder.service';
+import { MapMetaDataHolderService } from '../services/data/map-metadata-container.service';
 import {ActivatedRoute,Router} from '@angular/router';
 import {LoaderService} from '../services/loader.service';
 import { AlertService } from '../services/alert/alert.service';
@@ -20,7 +20,7 @@ export class BusquedaTraspatiosGpsPage implements OnInit {
   vieneDelMapa = false;
 
   constructor(private traspatioFincaLocalService:TraspatioFincaLocalService,
-    private previousUrlHolderService:PreviousUrlHolderService,
+    private previousUrlHolderService:MapMetaDataHolderService,
     private router:Router,
     private route:ActivatedRoute,
     private loaderService:LoaderService,
@@ -86,7 +86,7 @@ export class BusquedaTraspatiosGpsPage implements OnInit {
     dataToSendMapViewer["tipo"] = "vista_agregar";
     dataToSendMapViewer["coordenadas"] = null;
 
-    this.previousUrlHolderService.setDataForPreviousUrl(dataToSendMapViewer);
+    this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
     this.mantains = [];
     this.vieneDelMapa = true;
