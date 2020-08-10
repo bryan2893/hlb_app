@@ -19,6 +19,7 @@ import {TrampaAmarillaConIdLocalDTO} from '../../DTO/trampa_amarilla/trampa-amar
 import {AuthService} from '../services/auth/auth.service';
 import {USER_ACTIONS} from '../../constants/user_actions';
 import { Settings } from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 @Component({
   selector: 'app-ver-editar-trampa-amarilla',
@@ -288,15 +289,24 @@ export class VerEditarTrampaAmarillaPage implements OnInit {
   }
 
   openMap(){
+
     let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
     let coords = {lat:this.addTrapForm.get("latitud").value,lng:this.addTrapForm.get("longitud").value}
 
+    let accion = "";
+    if (this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_TRAMPAS)){
+      accion = MAP_ACTIONS.EDITAR;
+    }else{
+      accion = MAP_ACTIONS.VER;
+    }
+
+    dataToSendMapViewer["tipo"] = accion;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_editar";
     dataToSendMapViewer["coordenadas"] = coords;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
+
   }
 
 }

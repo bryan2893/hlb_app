@@ -13,6 +13,7 @@ import {MapMetaDataHolderService} from '../services/data/map-metadata-container.
 import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 import {USER_ACTIONS} from '../../constants/user_actions';
 import {AuthService} from '../services/auth/auth.service';
@@ -252,14 +253,23 @@ export class VerEditarInspeccionTrampaPage implements OnInit {
   }
 
   openMap(){
+
     if(!this.inspTrampaForm.get("latitud_trampa").value || !this.inspTrampaForm.get("longitud_trampa").value){
       return;
     }
-    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
-    let coords = {lat:this.inspTrampaForm.get("latitud_trampa").value,lng:this.inspTrampaForm.get("longitud_trampa").value}
 
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
+    let coords = {lat:this.inspTrampaForm.get("latitud").value,lng:this.inspTrampaForm.get("longitud").value}
+
+    let accion = "";
+    if (this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)){
+      accion = MAP_ACTIONS.EDITAR;
+    }else{
+      accion = MAP_ACTIONS.VER;
+    }
+
+    dataToSendMapViewer["tipo"] = accion;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_editar";
     dataToSendMapViewer["coordenadas"] = coords;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);

@@ -13,6 +13,7 @@ import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import { UserLoged } from 'src/DTO/UserLoged.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 import {USER_ACTIONS} from '../../constants/user_actions';
 import {AuthService} from '../services/auth/auth.service';
@@ -324,8 +325,15 @@ export class VerEditarInspeccionHlbPage implements OnInit {
     let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
     let coords = {lat:this.inspTraspatioFincaForm.get("latitud").value,lng:this.inspTraspatioFincaForm.get("longitud").value}
 
+    let accion = "";
+    if (this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRASPATIOS_FINCAS)){
+      accion = MAP_ACTIONS.EDITAR;
+    }else{
+      accion = MAP_ACTIONS.VER;
+    }
+
+    dataToSendMapViewer["tipo"] = accion;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_editar";
     dataToSendMapViewer["coordenadas"] = coords;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
