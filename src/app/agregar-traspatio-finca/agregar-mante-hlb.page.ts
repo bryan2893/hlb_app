@@ -15,6 +15,7 @@ import {ToastService} from '../services/toast-service/toast.service';
 import {MapMetaData} from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 @Component({
   selector: 'app-agregar-mante-hlb',
@@ -34,7 +35,7 @@ export class AgregarManteHlbPage implements OnInit {
     public modalController:ModalController,
     private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router:Router,
-    private previousUrlHolderService: MapMetaDataHolderService,
+    private mapMetaDataHolderService: MapMetaDataHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
     private toastService:ToastService,
@@ -133,13 +134,13 @@ export class AgregarManteHlbPage implements OnInit {
   }
 
   openMap(){
-    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
+    let dataToSendMapViewer:MapMetaData = {tipo:"",urlAnterior:"",coordenadas:null};
 
+    dataToSendMapViewer["tipo"] = MAP_ACTIONS.AGREGAR;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_agregar";
     dataToSendMapViewer["coordenadas"] = null;
 
-    this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
+    this.mapMetaDataHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
   }
 
