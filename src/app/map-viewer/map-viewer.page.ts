@@ -11,6 +11,7 @@ import {LoaderService} from '../services/loader.service';
 
 import {DataContainerService} from '../services/data/data-container.service';
 import {MapMetaData} from '../../DTO/mapMetaData.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 @Component({
   selector: 'app-map-viewer',
@@ -25,8 +26,6 @@ export class MapViewerPage implements OnInit {
 
   dataFromPreviousPage:MapMetaData;
 
-  previousUrlToComeBack:string;//url donde se debe regresar con las coordenadas obtenidas.
-
   constructor(private dataContainerService: DataContainerService,
     private router:Router,
     private route: ActivatedRoute,
@@ -40,8 +39,6 @@ export class MapViewerPage implements OnInit {
   }
 
   ngOnInit() {
-    //this.latitud = this.navParams.data.latitud;
-    //this.longitud = this.navParams.data.longitud;
     try{
       this.loadMap();
     }catch(error){
@@ -56,7 +53,7 @@ export class MapViewerPage implements OnInit {
 
     let loading = await this.loaderService.showLoader("Cargando mapa...");
     await loading.present();
-    if(this.dataFromPreviousPage.tipo === "vista_agregar"){
+    if(this.dataFromPreviousPage.tipo === MAP_ACTIONS.AGREGAR){
       await this.goToMyLocation();
     }else{
       this.goToADefineLocation();
@@ -74,17 +71,17 @@ export class MapViewerPage implements OnInit {
         target:location.latLng,
         zoom:17,
         tilt:30,
-        duration:1000
+        duration:700
       });
 
       //Agregar un marcador
       let marker: Marker = this.map.addMarkerSync({
-        icon:'blue',
+        icon:'green',
         //title: '@ionic-native/google-maps plugin!',
         snippet: 'Tu posicion actual',
         position: location.latLng,
         draggable: true,
-        animation: GoogleMapsAnimation.BOUNCE
+        //animation: GoogleMapsAnimation.BOUNCE
       });
 
       this.marker = marker;
@@ -105,23 +102,31 @@ export class MapViewerPage implements OnInit {
 
   }
 
-  //normalmente se utiliza cuando la vista anterior a esta es de editar donde las coordenadas ya se encuentran guardadas.
   goToADefineLocation(){
 
     this.map.animateCamera({
       target:this.dataFromPreviousPage.coordenadas,
       zoom:17,
       tilt:30,
-      duration:1000
+      duration:700
     });
 
+    let elMarcadorPuedeMoverse:boolean;
+
+    if(this.dataFromPreviousPage.tipo === MAP_ACTIONS.EDITAR){
+      elMarcadorPuedeMoverse = true;
+    }
+    if(this.dataFromPreviousPage.tipo === MAP_ACTIONS.VER){
+      elMarcadorPuedeMoverse = false;
+    }
+
     let marker: Marker = this.map.addMarkerSync({
-      icon:'blue',
+      icon:'green',
       //title: '@ionic-native/google-maps plugin!',
-      snippet: 'Tu posicion actual',
+      snippet: 'Posición registrada',
       position: this.dataFromPreviousPage.coordenadas,
-      draggable: true,
-      animation: GoogleMapsAnimation.BOUNCE
+      draggable: elMarcadorPuedeMoverse
+      //animation: GoogleMapsAnimation.BOUNCE
     });
 
     this.marker = marker;
