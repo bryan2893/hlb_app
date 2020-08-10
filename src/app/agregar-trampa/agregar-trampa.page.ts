@@ -3,7 +3,6 @@ import {Validators,FormBuilder,FormGroup, FormControl} from '@angular/forms';
 import {ActivatedRoute,Router} from '@angular/router';
 import {ModalController} from '@ionic/angular';
 import {TrampaAmarillaLocalService as MantenimientosTrampasLocalDbService} from '../services/trampas_amarillas/TrampaAmarillaLocal.service';
-import {TraspatioFincaLocalService as MantenimientosHlbLocalDbService} from '../services/traspatios_fincas/TraspatioFincaLocal.service';
 import {MapMetaDataHolderService} from '../services/data/map-metadata-container.service';
 import {AlmacenamientoNativoService} from '../services/almacenamiento-interno/almacenamiento-nativo.service';
 import {AlertService} from '../services/alert/alert.service';
@@ -16,6 +15,7 @@ import {FincasPobladosPage} from '../modals/fincas-poblados/fincas-poblados.page
 import {LotesPropietariosPage} from '../modals/lotes-propietarios/lotes-propietarios.page';
 import { Settings } from '../../DTO/settings.dto';
 import {DateService} from '../services/date/date.service';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 @Component({
   selector: 'app-agregar-trampa',
@@ -35,9 +35,8 @@ export class AgregarTrampaPage implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
     private mantenimientosTrampasLocalDbService:MantenimientosTrampasLocalDbService,
-    private mantenimientosHlbLocalDbService:MantenimientosHlbLocalDbService,
     private router: Router,
-    private previousUrlHolderService:MapMetaDataHolderService,
+    private mapMetaDataHolderService:MapMetaDataHolderService,
     private almacenamientoNativoService:AlmacenamientoNativoService,
     private alertService:AlertService,
     private toastService:ToastService,
@@ -255,13 +254,13 @@ export class AgregarTrampaPage implements OnInit {
 
   openMap(){
 
-    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
+    let dataToSendMapViewer:MapMetaData = {tipo:"",urlAnterior:"",coordenadas:null};
 
+    dataToSendMapViewer["tipo"] = MAP_ACTIONS.AGREGAR;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_agregar";
     dataToSendMapViewer["coordenadas"] = null;
 
-    this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
+    this.mapMetaDataHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
 
   }
