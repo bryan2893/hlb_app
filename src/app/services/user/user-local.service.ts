@@ -18,7 +18,7 @@ export class UserLocalService {
       this.db = db;
     }
   }
-
+  
   createTable(){
     let sql = 'create table IF NOT EXISTS usuarios(nombre_completo TEXT NOT NULL,usuario TEXT NOT NULL,contraseña TEXT NOT NULL,accion TEXT NOT NULL)';
     return this.db.executeSql(sql,[]);

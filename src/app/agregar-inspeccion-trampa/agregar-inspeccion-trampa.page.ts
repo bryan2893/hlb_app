@@ -15,6 +15,8 @@ import {TrampaAmarillaLocalService} from '../services/trampas_amarillas/TrampaAm
 import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
+import { Coordenadas } from 'src/DTO/coordenadas.dto';
 
 @Component({
   selector: 'app-agregar-inspeccion-trampa',
@@ -30,6 +32,7 @@ export class AgregarInspeccionTrampaPage implements OnInit {
   inspTrampaForm: FormGroup;
 
   mostrarComentario = false;
+  coords:Coordenadas;
 
   constructor(private formBuilder: FormBuilder,
     private route:ActivatedRoute,
@@ -84,10 +87,13 @@ export class AgregarInspeccionTrampaPage implements OnInit {
   
   ionViewWillEnter(){
     
-    if (this.route.snapshot.data['data']) {
-      let coords = this.route.snapshot.data['data'];
-      this.inspTrampaForm.controls['latitud_trampa'].patchValue(coords.latitud);
-      this.inspTrampaForm.controls['longitud_trampa'].patchValue(coords.longitud);
+    let data:any = this.route.snapshot.data['data'];
+    if (data) {
+      if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+        this.coords = data.coordenadas;
+        this.inspTrampaForm.controls['latitud'].patchValue(this.coords.lat);
+        this.inspTrampaForm.controls['longitud'].patchValue(this.coords.lng);
+      }
     }
 
   }
@@ -209,23 +215,21 @@ export class AgregarInspeccionTrampaPage implements OnInit {
           }
         }
       });
-  
       return await modal.present();
     }
   }
 
   openMap(){
-
-    if(!this.inspTrampaForm.get("latitud_trampa").value || !this.inspTrampaForm.get("longitud_trampa").value){
+    if(this.inspTrampaForm.controls["latitud_trampa"].value === "" || this.inspTrampaForm.controls["longitud_trampa"].value === ""){
       return;
     }
 
-    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
-    let coords = {lat:this.inspTrampaForm.get("latitud_trampa").value,lng:this.inspTrampaForm.get("longitud_trampa").value}
+    this.coords = {lat:this.inspTrampaForm.controls["latitud_trampa"].value,lng:this.inspTrampaForm.controls["longitud_trampa"].value}
 
+    let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:this.coords};
+
+    dataToSendMapViewer["tipo"] = MAP_ACTIONS.VER;
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_editar";
-    dataToSendMapViewer["coordenadas"] = coords;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');

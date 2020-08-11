@@ -58,7 +58,7 @@
         <ion-input formControlName="longitud_trampa" type="number" disabled></ion-input>
       </ion-item>
 
-      <ion-button *ngIf="this.authService.logedUserhavePermission(this.actions.EDITAR_REGISTROS_INSP_TRAMPAS)" (click)="openMap()">
+      <ion-button (click)="openMap()">
         <!--<ion-icon slot="icon-only" name="location-outline"></ion-icon>-->
         Ver ubicacion
       </ion-button>

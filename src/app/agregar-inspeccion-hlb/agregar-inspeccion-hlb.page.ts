@@ -14,6 +14,7 @@ import {InspeccionHlbLocalService} from '../services/inspecciones_hlb/Inspeccion
 import { MapMetaData } from 'src/DTO/mapMetaData.dto';
 import {DateService} from '../services/date/date.service';
 import {Settings} from '../../DTO/settings.dto';
+import {MAP_ACTIONS} from '../../constants/map_actions';
 
 @Component({
   selector: 'app-agregar-inspeccion-hlb',
@@ -89,12 +90,14 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    if (this.route.snapshot.data['data']) {
-      this.coords = this.route.snapshot.data['data'];
-      this.inspTraspatioFincaForm.controls['latitud'].patchValue(this.coords.latitud);
-      this.inspTraspatioFincaForm.controls['longitud'].patchValue(this.coords.longitud);
+    let data:any = this.route.snapshot.data['data'];
+    if (data) {
+      if(data.accion === MAP_ACTIONS.DEVUELVE_COORDENADAS){
+        this.coords = data.coordenadas;
+        this.inspTraspatioFincaForm.controls['latitud'].patchValue(this.coords.lat);
+        this.inspTraspatioFincaForm.controls['longitud'].patchValue(this.coords.lng);
+      }
     }
-
   }
 
   ngOnInit() {
@@ -268,14 +271,15 @@ export class AgregarInspeccionHlbPage implements OnInit {
   }
 
   openMap(){
+
     let dataToSendMapViewer:MapMetaData = {urlAnterior:"",tipo:"",coordenadas:null};
 
+    dataToSendMapViewer["tipo"] = MAP_ACTIONS.AGREGAR; //Se indica que el mapa se abra en vista de solo lectura.
     dataToSendMapViewer["urlAnterior"] = this.router.url;
-    dataToSendMapViewer["tipo"] = "vista_agregar";
-    dataToSendMapViewer["coordenadas"] = null;
 
     this.previousUrlHolderService.setMapMetaData(dataToSendMapViewer);
     this.router.navigateByUrl('/map-viewer');
+
   }
 
   marcarRegistro(event:any){
