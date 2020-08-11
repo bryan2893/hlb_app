@@ -4,7 +4,7 @@ import {Validators,FormBuilder,FormGroup, FormControl} from '@angular/forms';
 import {Router} from '@angular/router';
 import {UserLocalService} from '../services/user/user-local.service';
 import {AlertService} from '../services/alert/alert.service';
-import { Usuario } from 'src/DTO/local/Usuario';
+import { UsuarioLocalDTO } from 'src/DTO/usuario/usuario-local.dto';
 import {AuthService} from '../services/auth/auth.service';
 import {LoaderService} from '../services/loader.service';
 
@@ -46,9 +46,9 @@ export class HomePage {
 
         if(tipoLogueo === "normal"){
 
-          let usuario:Usuario = await this.userLocalService.getAUserByCredentials(username,password);
+          let usuario:UsuarioLocalDTO = await this.userLocalService.getAUserByCredentials(username,password);
           //Loguear usuario en el servicio.
-          userLogued = await this.userLocalService.buildUserLogued(usuario.usuario);
+          userLogued = await this.userLocalService.buildUserLogued(usuario.user_id);
 
         }else{//es tipo "super"
 

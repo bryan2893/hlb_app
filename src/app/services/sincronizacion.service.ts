@@ -10,9 +10,12 @@ import {InspeccionHlbNubeService} from './inspecciones_hlb/InspeccionHlbNube.ser
 import {InspeccionTrampaLocalService} from './inspeccion_trampas/InspeccionTrampaLocal.service';
 import {InspeccionTrampaNubeService} from './inspeccion_trampas/InspeccionTrampaNube.service';
 import {UserLocalService} from '../services/user/user-local.service';
+import {UserNubeService} from '../services/user/user-nube.service';
 
 import {DateService} from './date/date.service';
 import {USER_ACTIONS} from '../../constants/user_actions';
+import {UsuarioProvenienteDelServerDTO} from '../../DTO/usuario/usuario-proveniente-del-server.dto';
+import { HTTPResponse } from '@ionic-native/http/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +34,11 @@ export class SincronizacionService {
     private inspeccionTrampaLocalService:InspeccionTrampaLocalService,
     private inspeccionTrampaNubeService:InspeccionTrampaNubeService,
     private dateService:DateService,
-    private userLocalService:UserLocalService) { }
+    private userLocalService:UserLocalService,
+    private userNubeService:UserNubeService) { }
 
   //Creacion de usuarios fake
+  /*
   obtenerUsuariosFake(){
     let usuarios = [{nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:USER_ACTIONS.AGREGAR_REGISTROS_TRAMPAS},
                     {nombre_completo:'Carlos Koper',usuario:'ckoper',contraseña:'123',accion:USER_ACTIONS.AGREGAR_REGISTROS_TRASPATIOS_FINCAS},
@@ -61,6 +66,7 @@ export class SincronizacionService {
     return usuarios;
     
   }
+  */
 
   async sincronizarTodo(){
     try{
@@ -164,8 +170,10 @@ export class SincronizacionService {
       }
 
       //Se descargan los registros de usuarios.
-      await this.userLocalService.insertManyUsers(this.obtenerUsuariosFake());
-      console.log("Se insertaron los usuarios usuarios");
+      let respuestaDescargaDeUsuarios:HTTPResponse = await this.userNubeService.getUsuarios();
+      let listaDeUsuarios:UsuarioProvenienteDelServerDTO[] = JSON.parse(respuestaDescargaDeUsuarios.data);
+      await this.userLocalService.insertManyUsers(listaDeUsuarios);
+      console.log("Se insertaron los usuarios");
       
       //Al terminar la sincronizacion se registra la fecha actual de sincronización.
       let currentDate = this.dateService.getCurrentDateOnly();

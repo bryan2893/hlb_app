@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import {UserLoged} from '../../../DTO/UserLoged.dto';
-import {Usuario} from '../../../DTO/local/Usuario';
+import {UsuarioProvenienteDelServerDTO} from '../../../DTO/usuario/usuario-proveniente-del-server.dto';
+import {UsuarioLocalDTO} from '../../../DTO/usuario/usuario-local.dto';
 import {AlmacenamientoNativoService} from '../almacenamiento-interno/almacenamiento-nativo.service';
 
 @Injectable({
@@ -18,15 +19,22 @@ export class UserLocalService {
       this.db = db;
     }
   }
-  
+
+  /*
+  USER_ID: string,
+  CLAVE: string,
+  NOMBRE: string,
+  APELLIDO_1: string,
+  ACTION_ID: string
+  */
   createTable(){
-    let sql = 'create table IF NOT EXISTS usuarios(nombre_completo TEXT NOT NULL,usuario TEXT NOT NULL,contraseña TEXT NOT NULL,accion TEXT NOT NULL)';
+    let sql = 'create table IF NOT EXISTS usuarios(user_id TEXT NOT NULL,clave TEXT NOT NULL,nombre TEXT NOT NULL,apellido_1 TEXT NOT NULL,action_id TEXT NOT NULL)';
     return this.db.executeSql(sql,[]);
   }
 
-  getAUserByCredentials(usuario:string,contraseña:string):Promise<Usuario>{
+  getAUserByCredentials(usuario:string,contraseña:string):Promise<UsuarioLocalDTO>{
 
-    let sql = 'SELECT * FROM usuarios where usuario = ? AND contraseña = ? limit 1';
+    let sql = 'SELECT user_id,clave,nombre,apellido_1 FROM usuarios where user_id = ? AND clave = ? limit 1';
     return new Promise((resolve,reject)=>{
 
         this.db.executeSql(sql,[usuario,contraseña]).then((data)=>{
@@ -47,16 +55,16 @@ export class UserLocalService {
     
   }
 
-  insertManyUsers(usuariosDesdeLaNube:Usuario[]){
+  insertManyUsers(usuariosDesdeLaNube:UsuarioProvenienteDelServerDTO[]){
 
-    let createTableQuery = 'create table IF NOT EXISTS usuarios(nombre_completo TEXT NOT NULL,usuario TEXT NOT NULL,contraseña TEXT NOT NULL,accion TEXT NOT NULL)';
-    let sql = 'INSERT INTO usuarios(nombre_completo,usuario,contraseña,accion) VALUES (?,?,?,?)';
+    let createTableQuery = 'create table IF NOT EXISTS usuarios(user_id TEXT NOT NULL,clave TEXT NOT NULL,nombre TEXT NOT NULL,apellido_1 TEXT NOT NULL,action_id TEXT NOT NULL)';
+    let sql = 'INSERT INTO usuarios(user_id,clave,nombre,apellido_1,action_id) VALUES (?,?,?,?,?)';
     return new Promise((resolve,reject) => {
           let generalStatement = [];
           generalStatement.push(createTableQuery);
           for(let i=0;i<usuariosDesdeLaNube.length;i++){
             let usuario = usuariosDesdeLaNube[i];
-            let valuesArray = [usuario.nombre_completo,usuario.usuario,usuario.contraseña,usuario.accion];
+            let valuesArray = [usuario.USER_ID,usuario.CLAVE,usuario.NOMBRE,usuario.APELLIDO_1,usuario.ACTION_ID];
             let insertionListStatement = [];
             insertionListStatement.push(sql);
             insertionListStatement.push(valuesArray);
@@ -73,31 +81,31 @@ export class UserLocalService {
   }
 
   buildUserLogued(usuario:string):Promise<UserLoged>{
-    let sql = 'SELECT * FROM usuarios where usuario = ?';
+    let sql = 'SELECT * FROM usuarios where user_id = ?';
     return new Promise((resolve,reject)=>{
 
         this.db.executeSql(sql,[usuario]).then((data)=>{
         
-        let userBuilded = null;
+        let userLogued = null;
         if (data.rows.length > 0) {
-          userBuilded = {};
+          userLogued = {};
           let firstRow = data.rows.item(0);
-          userBuilded["fullName"] = firstRow.nombre_completo;
-          userBuilded["username"] = firstRow.usuario;
-          userBuilded["password"] = firstRow.contraseña;
-          userBuilded["actions"] = [];
-          userBuilded["token"] = "";
+          userLogued["fullName"] = firstRow.nombre +" "+ firstRow.apellido_1;
+          userLogued["username"] = firstRow.user_id;
+          userLogued["password"] = firstRow.clave;
+          userLogued["actions"] = [];
+          userLogued["token"] = "";
           for (var i = 0; i < data.rows.length; i++) {
             let userRow = data.rows.item(i);
-            userBuilded.actions.push(userRow.accion);
+            userLogued.actions.push(userRow.action_id);
           }
         }
 
-        if(userBuilded === null){
+        if(userLogued === null){
           reject(new Error("Usuario '"+usuario+"' no existe!"));
         }
 
-        resolve(userBuilded);
+        resolve(userLogued);
 
         }).catch((e) => {
           reject(e);

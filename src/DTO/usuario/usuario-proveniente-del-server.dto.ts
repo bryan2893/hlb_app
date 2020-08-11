@@ -1,4 +1,4 @@
-export interface UsuarioProvenienteDelServer{
+export interface UsuarioProvenienteDelServerDTO{
     USER_ID: string,
     CLAVE: string,
     NOMBRE: string,
